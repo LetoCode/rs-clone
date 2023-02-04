@@ -1,6 +1,7 @@
 import notFoundPage from "../pages/notFoundPage";
 import homePage from "../pages/home";
 import moviePage from "../pages/movie";
+import testApi from "../pages/testKinopoiskApi";
 
 const ROUTER_PATHS: Paths = {
    '404': {
@@ -14,6 +15,10 @@ const ROUTER_PATHS: Paths = {
    'movie': {
       cb: moviePage,
       title: 'PoiskKino'
+   },
+   'testapi': {
+      cb: testApi,
+      title: 'testKinopoiskApi'
    }
 
 }
