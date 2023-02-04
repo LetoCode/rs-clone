@@ -3,7 +3,7 @@ import { getRequestOptions, getRequestURL } from "./reqBuilder";
 
 //получить список премьер
 export async function getPremieres(year: string, month: string): Promise<respPremieres | string> {
-   const params: string = `?year=${year}&month=${month.toUpperCase()}`;
+   const params = `?year=${year}&month=${month.toUpperCase()}`;
    const requestParams = {
       APItarget: 'premieres',
       params,
@@ -87,8 +87,8 @@ export async function getAwards(id: string): Promise<respAwards | string> {
 }
 
 //Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
-export async function getTOP250(page: number = 1): Promise<respTop | string> {
-   const params: string = `?type=TOP_250_BEST_FILMS&page=${page}`;
+export async function getTOP250(page = 1): Promise<respTop | string> {
+   const params = `?type=TOP_250_BEST_FILMS&page=${page}`;
    const requestParams = {
       APItarget: 'top250',
       params,
@@ -100,8 +100,8 @@ export async function getTOP250(page: number = 1): Promise<respTop | string> {
 }
 
 //Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
-export async function getTOP100(page: number = 1): Promise<respTop | string> {
-   const params: string = `?type=TOP_100_POPULAR_FILM&page=${page}`;
+export async function getTOP100(page = 1): Promise<respTop | string> {
+   const params = `?type=TOP_100_POPULAR_FILM&page=${page}`;
    const requestParams = {
       APItarget: 'top100',
       params,
@@ -113,8 +113,8 @@ export async function getTOP100(page: number = 1): Promise<respTop | string> {
 }
 
 //Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
-export async function getTOPAwait(page: number = 1): Promise<respTop | string> {
-   const params: string = `?type=TOP_AWAIT_FILMS&page=${page}`;
+export async function getTOPAwait(page = 1): Promise<respTop | string> {
+   const params = `?type=TOP_AWAIT_FILMS&page=${page}`;
    const requestParams = {
       APItarget: 'topAwait',
       params,
@@ -164,8 +164,8 @@ WALLPAPER - обои
 COVER - обложки
 SCREENSHOT - скриншоты
 */
-export async function getImages(id: string, page: number = 1, imageType: filmImagesTypes = 'STILL'): Promise<respImages | string> {
-   const params: string = `?type=${imageType.toUpperCase()}&page=${page}`;
+export async function getImages(id: string, page = 1, imageType: filmImagesTypes = 'STILL'): Promise<respImages | string> {
+   const params = `?type=${imageType.toUpperCase()}&page=${page}`;
    const requestParams = {
       APItarget: 'images',
       id,
@@ -178,8 +178,8 @@ export async function getImages(id: string, page: number = 1, imageType: filmIma
 }
 
 //Возвращает список рецензии зрителей с пагинацией. Каждая страница содержит не более чем 20 рецензий.
-export async function getReviews(id: string, page: number = 1, sortType: reviewsSortTypes = 'DATE_DESC'): Promise<respReviews | string> {
-   const params: string = `?order=${sortType.toUpperCase()}&page=${page}`;
+export async function getReviews(id: string, page = 1, sortType: reviewsSortTypes = 'DATE_DESC'): Promise<respReviews | string> {
+   const params = `?order=${sortType.toUpperCase()}&page=${page}`;
    const requestParams = {
       APItarget: 'reviews',
       id,
@@ -227,7 +227,7 @@ export async function getFilmsWithFilters(
    //На данный момент можно указать не более одного жанра.
    // /v2.2/films?countries=1&genres=1&order=RATING&type=ALL&ratingFrom=8&ratingTo=10&yearFrom=1000&yearTo=3000&imdbId=11&keyword=gold&page=1'
 
-   let params: string = '?';
+   let params = '?';
    params += `order=${filmsOrder}&`;
    params += `type=${filmsType}&`;
    params += `page=${page}&`;
@@ -265,8 +265,8 @@ export async function getSequelsAndPrequels(id: string): Promise<SequelAndPreque
 
 
 //Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
-export async function getFilmsByKeyWord(keyword: string, page: number = 1): Promise<FilmsByKeyWord | string> {
-   const params: string = `?keyword=${keyword}&page=${page}`;
+export async function getFilmsByKeyWord(keyword: string, page = 1): Promise<FilmsByKeyWord | string> {
+   const params = `?keyword=${keyword}&page=${page}`;
    const requestParams = {
       APItarget: 'searchByKey',
       params
@@ -280,7 +280,7 @@ export async function getFilmsByKeyWord(keyword: string, page: number = 1): Prom
 
 //Получить данные об атерах, режиссерах и пр.
 export async function getStaff(filmId: string): Promise<FilmStaffItem[] | string> {
-   const params: string = `?filmId=${filmId}`;
+   const params = `?filmId=${filmId}`;
    const requestParams = {
       APItarget: 'staff',
       params
@@ -304,8 +304,8 @@ export async function getPersonById(id: string): Promise<PersonByID | string> {
 }
 
 //Получить данные об атерах, режиссерах и пр. по Имени
-export async function getPersonsByName(name: string, page: number = 1): Promise<PersonsByName | string> {
-   const params: string = `?name=${name}&page=${page}`;
+export async function getPersonsByName(name: string, page = 1): Promise<PersonsByName | string> {
+   const params = `?name=${name}&page=${page}`;
    const requestParams = {
       APItarget: 'personsByName',
       params

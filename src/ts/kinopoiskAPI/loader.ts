@@ -1,7 +1,7 @@
 
 
 export async function getFromAPI<T>(url: string, requestOptions: requestOptions): Promise<T | string> {
-   let data: string = '';
+   let data = '';
    try {
       const res: Response = await fetch(url, requestOptions);
       if (res.ok) {

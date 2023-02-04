@@ -1,5 +1,5 @@
-export const DOMAIN: string = 'https://kinopoiskapiunofficial.tech/api';
-export const API_KEY: string = '66723cba-ea77-458f-80d5-57e3db4430c1';
+export const DOMAIN = 'https://kinopoiskapiunofficial.tech/api';
+export const API_KEY = '66723cba-ea77-458f-80d5-57e3db4430c1';
 
 export const KINOPOISK_URLS: kinopoiskURLs = {
    'premieres': 'v2.2/films/premieres',

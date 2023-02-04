@@ -14,11 +14,11 @@ export function getRequestURL(
    { APItarget, params = '', id }:
       { APItarget: keyof kinopoiskURLs, params?: string, id?: string })
    : string {
-   let endpoint: string = KINOPOISK_URLS[APItarget];
+   const endpoint: string = KINOPOISK_URLS[APItarget];
    let newEndpoint: string = endpoint;
    if (id) {
       newEndpoint = endpoint.replace('{id}', id);
    }
-   const url: string = `${DOMAIN}/${newEndpoint}${params}`;
+   const url = `${DOMAIN}/${newEndpoint}${params}`;
    return url;
 }

@@ -255,7 +255,9 @@ interface respFilters {
 
 //Films with filters
 interface respfilmsWithFilters {
-
+   total: number,
+   totalPages: number,
+   items: respFilmItem[]
 }
 
 interface argumentForFilmSearch {

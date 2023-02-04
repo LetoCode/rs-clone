@@ -31,7 +31,7 @@ function createTestPage(): HTMLElement {
 
 async function clickOnTestButton(cb: Function) {
    const containerText: HTMLElement = document.querySelector('.test-container__text') as HTMLElement;
-   let viewData: string = 'ERROR may be?';
+   let viewData = 'ERROR may be?';
    let data: Promise<Response>;
    if (containerText) {
       if (cb.name === 'getTOP250' || cb.name === 'getTOP100' || cb.name === 'getTOPAwait') {
