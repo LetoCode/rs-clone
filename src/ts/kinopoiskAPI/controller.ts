@@ -1,7 +1,7 @@
 import { getFromAPI } from "./loader";
 import { getRequestOptions, getRequestURL } from "./reqBuilder";
 
-//получить список премьер
+//get list of premiers
 export async function getPremieres(year: string, month: string): Promise<respPremieres | string> {
    const params = `?year=${year}&month=${month.toUpperCase()}`;
    const requestParams = {
@@ -14,7 +14,7 @@ export async function getPremieres(year: string, month: string): Promise<respPre
    return data;
 }
 
-//получить данные о фильме
+//get film data
 export async function getFilm(id: string): Promise<respFilm | string> {
    const requestParams = {
       APItarget: 'film',
@@ -26,7 +26,7 @@ export async function getFilm(id: string): Promise<respFilm | string> {
    return data;
 }
 
-//получить данные о сезонах сериала
+//get data about series seasons
 export async function getSeasons(id: string): Promise<respSeasons | string> {
    const requestParams = {
       APItarget: 'seasons',
@@ -38,7 +38,7 @@ export async function getSeasons(id: string): Promise<respSeasons | string> {
    return data;
 }
 
-//получить данные о фактах
+//get data about facts
 export async function getFacts(id: string): Promise<respFacts | string> {
    const requestParams = {
       APItarget: 'facts',
@@ -50,7 +50,7 @@ export async function getFacts(id: string): Promise<respFacts | string> {
    return data;
 }
 
-//получить данные о прокате в разных странах.
+//get rental data in different countries
 export async function getDistributions(id: string): Promise<respDistributions | string> {
    const requestParams = {
       APItarget: 'distributions',
@@ -62,7 +62,7 @@ export async function getDistributions(id: string): Promise<respDistributions | 
    return data;
 }
 
-//получить данные о бюджете и сборах
+//get budget and fees data
 export async function getBoxOffice(id: string): Promise<respBoxOffice | string> {
    const requestParams = {
       APItarget: 'boxOffice',
@@ -74,7 +74,7 @@ export async function getBoxOffice(id: string): Promise<respBoxOffice | string> 
    return data;
 }
 
-//получить данные о наградах и премиях фильма
+//get data about movie awards and prizes
 export async function getAwards(id: string): Promise<respAwards | string> {
    const requestParams = {
       APItarget: 'awards',
@@ -86,7 +86,7 @@ export async function getAwards(id: string): Promise<respAwards | string> {
    return data;
 }
 
-//Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
+//Returns a list of paginated movies. Each page contains no more than 20 films.
 export async function getTOP250(page = 1): Promise<respTop | string> {
    const params = `?type=TOP_250_BEST_FILMS&page=${page}`;
    const requestParams = {
@@ -99,7 +99,7 @@ export async function getTOP250(page = 1): Promise<respTop | string> {
    return data;
 }
 
-//Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
+//Returns a list of paginated movies. Each page contains no more than 20 films.
 export async function getTOP100(page = 1): Promise<respTop | string> {
    const params = `?type=TOP_100_POPULAR_FILM&page=${page}`;
    const requestParams = {
@@ -112,7 +112,7 @@ export async function getTOP100(page = 1): Promise<respTop | string> {
    return data;
 }
 
-//Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
+//Returns a list of paginated movies. Each page contains no more than 20 films.
 export async function getTOPAwait(page = 1): Promise<respTop | string> {
    const params = `?type=TOP_AWAIT_FILMS&page=${page}`;
    const requestParams = {
@@ -126,7 +126,7 @@ export async function getTOPAwait(page = 1): Promise<respTop | string> {
 }
 
 
-//трейлеры,тизеры,видео для фильма по kinopoisk film id
+//trailers, teasers, videos for the film by kinopoisk film id
 export async function getVideos(id: string): Promise<respVideos | string> {
    const requestParams = {
       APItarget: 'videos',
@@ -139,7 +139,7 @@ export async function getVideos(id: string): Promise<respVideos | string> {
 }
 
 
-//похожие фильмы
+//similar films
 export async function getSimilars(id: string): Promise<respSimilars | string> {
    const requestParams = {
       APItarget: 'similars',
@@ -151,18 +151,18 @@ export async function getSimilars(id: string): Promise<respSimilars | string> {
    return data;
 }
 
-//возвращает изображения связанные с фильмом с пагинацией. 
-//Каждая страница содержит не более чем 20 фильмов.
-/*Доступные изображения:
-STILL - кадры
-SHOOTING - изображения со съемок
-POSTER - постеры
-FAN_ART - фан-арты
-PROMO - промо
-CONCEPT - концепт-арты
-WALLPAPER - обои
-COVER - обложки
-SCREENSHOT - скриншоты
+//returns images associated with a paginated movie.
+//Each page contains no more than 20 movies.
+/*Available images:
+STILL - frames
+SHOOTING - images from filming
+POSTER - posters
+FAN_ART - fan-arts
+PROMO - promo
+CONCEPT - concept-art
+WALLPAPER - wallpaper
+COVER - covers
+SCREENSHOT - screenshots
 */
 export async function getImages(id: string, page = 1, imageType: filmImagesTypes = 'STILL'): Promise<respImages | string> {
    const params = `?type=${imageType.toUpperCase()}&page=${page}`;
@@ -177,7 +177,7 @@ export async function getImages(id: string, page = 1, imageType: filmImagesTypes
    return data;
 }
 
-//Возвращает список рецензии зрителей с пагинацией. Каждая страница содержит не более чем 20 рецензий.
+//Returns a list of viewer reviews with pagination. Each page contains no more than 20 reviews.
 export async function getReviews(id: string, page = 1, sortType: reviewsSortTypes = 'DATE_DESC'): Promise<respReviews | string> {
    const params = `?order=${sortType.toUpperCase()}&page=${page}`;
    const requestParams = {
@@ -191,7 +191,7 @@ export async function getReviews(id: string, page = 1, sortType: reviewsSortType
    return data;
 }
 
-//Возвращает список id стран и жанров, которые могут быть использованы в /api/v2.2/films
+//Returns a list of id's of countries and genres that can be used in /api/v2.2/films
 export async function getFilters(): Promise<respFilters | string> {
    const requestParams = {
       APItarget: 'filters',
@@ -203,10 +203,10 @@ export async function getFilters(): Promise<respFilters | string> {
 }
 
 
-//Возвращает список фильмов с пагинацией. 
-//Каждая страница содержит не более чем 20 фильмов. 
-//Данный эндпоинт не возращает более 400 фильмов. 
-//Используй /api/v2.2/films/filters чтобы получить id стран и жанров.
+//Returns a list of paginated movies.
+//Each page contains no more than 20 movies.
+//This endpoint does not return more than 400 movies.
+//Use /api/v2.2/films/filters to get country and genre ids.
 export async function getFilmsWithFilters(
    { country,
       genres,
@@ -221,12 +221,10 @@ export async function getFilmsWithFilters(
       page = 1 }: argumentForFilmSearch
 ): Promise<respfilmsWithFilters | string> {
 
-   // список id стран разделенные запятой. Например countries=1,2,3. 
-   //На данный момент можно указать не более одной страны.
-   // список id жанров разделенные запятой. Например genres=1,2,3. 
-   //На данный момент можно указать не более одного жанра.
-   // /v2.2/films?countries=1&genres=1&order=RATING&type=ALL&ratingFrom=8&ratingTo=10&yearFrom=1000&yearTo=3000&imdbId=11&keyword=gold&page=1'
-
+   // list of id countries separated by a comma. For example countries=1,2,3.
+   //At the moment, you can specify no more than one country.
+   // comma-separated list of genre ids. For example genres=1,2,3.
+   //At the moment, you can specify no more than one genre.
    let params = '?';
    params += `order=${filmsOrder}&`;
    params += `type=${filmsType}&`;
@@ -251,7 +249,7 @@ export async function getFilmsWithFilters(
 }
 
 
-//сиквелы и приквелы
+//sequels and prequels
 export async function getSequelsAndPrequels(id: string): Promise<SequelAndPrequel[] | string> {
    const requestParams = {
       APItarget: 'sequelAndPrequel',
@@ -264,7 +262,7 @@ export async function getSequelsAndPrequels(id: string): Promise<SequelAndPreque
 }
 
 
-//Возвращает список фильмов с пагинацией. Каждая страница содержит не более чем 20 фильмов.
+//Returns a list of paginated movies. Each page contains no more than 20 films.
 export async function getFilmsByKeyWord(keyword: string, page = 1): Promise<FilmsByKeyWord | string> {
    const params = `?keyword=${keyword}&page=${page}`;
    const requestParams = {
@@ -278,7 +276,7 @@ export async function getFilmsByKeyWord(keyword: string, page = 1): Promise<Film
 }
 
 
-//Получить данные об атерах, режиссерах и пр.
+//Get data about actors, directors, etc.
 export async function getStaff(filmId: string): Promise<FilmStaffItem[] | string> {
    const params = `?filmId=${filmId}`;
    const requestParams = {
@@ -291,7 +289,7 @@ export async function getStaff(filmId: string): Promise<FilmStaffItem[] | string
    return data;
 }
 
-//Получить данные об атерах, режиссерах и пр.по ID
+//Get data about actors, directors, etc. by ID
 export async function getPersonById(id: string): Promise<PersonByID | string> {
    const requestParams = {
       APItarget: 'personById',
@@ -303,7 +301,7 @@ export async function getPersonById(id: string): Promise<PersonByID | string> {
    return data;
 }
 
-//Получить данные об атерах, режиссерах и пр. по Имени
+//Get data about actors, directors, etc. by Name
 export async function getPersonsByName(name: string, page = 1): Promise<PersonsByName | string> {
    const params = `?name=${name}&page=${page}`;
    const requestParams = {
