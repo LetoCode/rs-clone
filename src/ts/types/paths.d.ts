@@ -1,6 +1,11 @@
 interface Paths {
    [key: string]: {
-      cb: Function,
+      cb: () => void,
       title: string
    }
+}
+
+interface Path {
+   cb: () => void,
+   title: string
 }
