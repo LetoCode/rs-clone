@@ -1,0 +1,36 @@
+.header__container {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    justify-content: space-between;
+}
+
+.logo__img {
+    height: 40px;
+}
+
+.header__nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav__item {
+    &:hover {
+        color: $color-text-active;
+    }
+}
+
+.header__right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.header__search {
+    background-color: $color-primary;
+    color: $color-text;
+    width: 300px;
+    height: 44px;
+    padding: 10px 16px;
+    border-radius: 8px;
+}
