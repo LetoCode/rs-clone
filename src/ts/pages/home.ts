@@ -28,7 +28,7 @@ function createHomePage(): HTMLElement {
 
 export default homePage;
 
-function createSelection(selection: HTMLElement, data: string | respPremieres) {
+function createSelection(selection: HTMLElement, data: string | respPremieres): void {
    const postersData = JSON.parse(JSON.stringify(data));
    for (let i = 0; i < 6; i++) {
       const currData = postersData.items[i];

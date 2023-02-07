@@ -1,8 +1,7 @@
 function showHeader(): HTMLElement {
-   const footerElement: HTMLElement = document.createElement('header');
-   footerElement.className = 'header';
-   // footerElement.textContent = 'I am HEADER';
-   footerElement.innerHTML = `
+   const headerElement: HTMLElement = document.createElement('header');
+   headerElement.className = 'header';
+   headerElement.innerHTML = `
    <div class="container">
       <div class="header__container">
          <div class="header__logo">
@@ -22,8 +21,7 @@ function showHeader(): HTMLElement {
       </div>
    </div>
    `;
-
-   return footerElement;
+   return headerElement;
 }
 
 export default showHeader;
