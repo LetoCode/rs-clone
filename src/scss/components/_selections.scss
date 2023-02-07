@@ -1,0 +1,28 @@
+.selection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.selection__poster {
+    height: 234px;
+    width: 168px;
+    margin-top: 20px;
+}
+
+.poster__img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.poster__title {
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.poster__desc {
+    font-size: 1.4rem;
+    color: $color-light;
+}
