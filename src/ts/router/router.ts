@@ -1,6 +1,6 @@
 import ROUTER_PATHS from "../const/router-paths";
 
-function handleRoute(pathname: string): void {
+export function handleRoute(pathname: string): void {
    console.log(pathname);
    pathname = pathname.replace(/^\//, '').replace(/$\//, '')
    const endpoints: string[] = pathname.split('/');

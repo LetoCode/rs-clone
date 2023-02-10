@@ -21,12 +21,12 @@ interface respFilmItem {
    nameRu: string,
    nameEn: string,
    year: number,
-   poserUrl: string,
+   posterUrl: string,
    posterUrlPreview: string,
    countries: respCountry[],
    duration: number,
    premiereRu: string,
-   genre: respGenre[]
+   genres: respGenre[]
 }
 
 
