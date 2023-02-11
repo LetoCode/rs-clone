@@ -113,7 +113,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 }
 
 function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[]): void {
-   const data = dataArr.filter((el) => 
+   const data = dataArr.filter((el) =>
       (el.nameRu || el.nameEn) && (el.posterUrl || el.posterUrlPreview) && el.year && el.genres[0].genre);
    console.log(data);
 
@@ -136,7 +136,7 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
       const posterImg = document.createElement('img');
       const posterTitle = document.createElement('p');
       const posterDesc = document.createElement('p');
-      
+
       const moviePath = `/movie?${film.kinopoiskId}`;
       sectionItems.append(poster);
       poster.className = 'section__poster';
@@ -145,15 +145,15 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
       });
 
       posterImg.className = 'poster__img';
-       if (film.posterUrlPreview) posterImg.src = film.posterUrlPreview;
+      if (film.posterUrlPreview) posterImg.src = film.posterUrlPreview;
       else posterImg.src = film.posterUrl;
       posterAnchor.append(posterImg);
 
       posterAnchor.className = 'poster__link';
-      posterAnchor.setAttribute('href', `/movie?${currData.kinopoiskId}`);
+      posterAnchor.setAttribute('href', `/movie?${film.kinopoiskId}`);
       posterAnchor.addEventListener('click', (event) => {
          event.preventDefault();
-         router(`/movie?${currData.kinopoiskId}`);
+         router(`/movie?${film.kinopoiskId}`);
       });
       poster.append(posterAnchor);
 
