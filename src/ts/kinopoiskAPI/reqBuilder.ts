@@ -12,8 +12,7 @@ export function getRequestOptions(): requestOptions {
 
 export function getRequestURL(
    { APItarget, params = '', id }:
-      { APItarget: keyof kinopoiskURLs, params?: string, id?: string })
-   : string {
+      { APItarget: keyof kinopoiskURLs, params?: string, id?: string }): string {
    const endpoint: string = KINOPOISK_URLS[APItarget];
    let newEndpoint: string = endpoint;
    if (id) {

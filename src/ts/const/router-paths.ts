@@ -14,7 +14,7 @@ const ROUTER_PATHS: Paths = {
    },
    'movie': {
       cb: moviePage,
-      title: 'PoiskKino'
+      title: 'movie'
    },
    'testapi': {
       cb: testApi,

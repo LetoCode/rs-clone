@@ -6,7 +6,7 @@ function showHeader(): HTMLElement {
       <div class="header__container">
          <div class="header__logo">
               <a href="/">
-                 <img class="logo__img" src="logo.svg" alt="logo">
+                 <img class="logo__img" src="../logo.svg" alt="logo">
               </a>
          </div>
          <nav class="header__nav">

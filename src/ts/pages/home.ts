@@ -1,5 +1,6 @@
 import * as App from "../app/app";
 import { getPremieres } from "../kinopoiskAPI/controller";
+import { router } from "../router/router";
 
 function homePage(): void {
    App.showPage(createHomePage)
@@ -33,6 +34,7 @@ function createSelection(selection: HTMLElement, data: string | respPremieres): 
    for (let i = 0; i < 6; i++) {
       const currData = postersData.items[i];
       const poster = document.createElement('div');
+      const posterAnchor: HTMLElement = document.createElement('a');
       const posterImg = document.createElement('img');
       const posterTitle = document.createElement('p');
       const posterDesc = document.createElement('p');
@@ -40,9 +42,17 @@ function createSelection(selection: HTMLElement, data: string | respPremieres): 
       selection.append(poster);
       poster.className = 'selection__poster';
 
-      poster.append(posterImg);
       posterImg.className = 'poster__img';
       posterImg.src = currData.posterUrl;
+      posterAnchor.append(posterImg);
+
+      posterAnchor.className = 'poster__link';
+      posterAnchor.setAttribute('href', `/movie?${currData.kinopoiskId}`);
+      posterAnchor.addEventListener('click', (event) => {
+         event.preventDefault();
+         router(`/movie?${currData.kinopoiskId}`);
+      });
+      poster.append(posterAnchor);
 
       poster.append(posterTitle);
       posterTitle.className = 'poster__title';

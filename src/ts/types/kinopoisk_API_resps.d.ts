@@ -206,14 +206,29 @@ interface respVideoItem {
 //Similars 
 interface respSimilars {
    total: number,
-   items: respVideoItem[]
+   items: respSimilarItem[]
+}
+
+interface respSimilarItem {
+   filmId: string,
+   nameEn: string,
+   nameOriginal: string,
+   nameRu: string,
+   posterUrl: string,
+   posterUrlPreview: string,
+   relationType: string,
 }
 
 //Images 
 interface respImages {
    total: number,
    totalPages: number,
-   items: respVideoItem[]
+   items: respImageItem[]
+}
+
+interface respImageItem {
+   imageUrl: string,
+   previewUrl: string
 }
 
 type filmImagesTypes =
@@ -234,9 +249,20 @@ interface respReviews {
    totalPositiveReviews: number,
    totalNegativeReviews: number,
    totalNeutralReviews: number,
-   items: respVideoItem[],
+   items: respReviewItem[],
 }
 
+
+interface respReviewItem {
+   author: string,
+   date: string,
+   description: string,
+   kinopoiskId: number,
+   negativeRating: number,
+   positiveRating: number,
+   title: string,
+   type: string
+}
 
 type reviewsSortTypes =
    DATE_ASC |
@@ -249,8 +275,18 @@ type reviewsSortTypes =
 
 //Filters
 interface respFilters {
-   genres: respGenre[],
-   countries: respCountry[]
+   genres: respGenreForFilter[],
+   countries: respCountryForFilter[]
+}
+
+interface respCountryForFilter {
+   id: number,
+   country: string
+}
+
+interface respGenreForFilter {
+   id: number,
+   genre: string
 }
 
 //Films with filters

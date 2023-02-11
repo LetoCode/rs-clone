@@ -164,7 +164,7 @@ WALLPAPER - wallpaper
 COVER - covers
 SCREENSHOT - screenshots
 */
-export async function getImages(id: string, page = 1, imageType: filmImagesTypes = 'STILL'): Promise<respImages | string> {
+export async function getImages(id: string, page = 1, imageType: filmImagesTypes = 'SHOOTING'): Promise<respImages | string> {
    const params = `?type=${imageType.toUpperCase()}&page=${page}`;
    const requestParams = {
       APItarget: 'images',
