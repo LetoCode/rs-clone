@@ -1,6 +1,7 @@
 import * as App from "../app/app";
 import { getFilm, getFilmsWithFilters, getPremieres } from "../kinopoiskAPI/controller";
-import { handleRoute } from "../router/router";
+import { router, handleRoute } from "../router/router";
+
 
 function homePage(): void {
    App.showPage(createHomePage)
@@ -131,6 +132,7 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
       const film = data[i];
 
       const poster = document.createElement('div');
+      const posterAnchor: HTMLElement = document.createElement('a');
       const posterImg = document.createElement('img');
       const posterTitle = document.createElement('p');
       const posterDesc = document.createElement('p');
@@ -142,10 +144,18 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
          handleRoute(moviePath);
       });
 
-      poster.append(posterImg);
       posterImg.className = 'poster__img';
-      if (film.posterUrlPreview) posterImg.src = film.posterUrlPreview;
+       if (film.posterUrlPreview) posterImg.src = film.posterUrlPreview;
       else posterImg.src = film.posterUrl;
+      posterAnchor.append(posterImg);
+
+      posterAnchor.className = 'poster__link';
+      posterAnchor.setAttribute('href', `/movie?${currData.kinopoiskId}`);
+      posterAnchor.addEventListener('click', (event) => {
+         event.preventDefault();
+         router(`/movie?${currData.kinopoiskId}`);
+      });
+      poster.append(posterAnchor);
 
       poster.append(posterTitle);
       posterTitle.className = 'poster__title';
