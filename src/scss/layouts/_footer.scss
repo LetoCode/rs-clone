@@ -1,0 +1,33 @@
+.footer {
+    background: $color-bg-dark;
+    padding: 20px 0;
+    color: $color-text-footer;
+}
+
+.footer__cols {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer__left {
+    display: flex;
+    gap: 15px;
+}
+
+.footer__rss {
+    height: 24px;
+    margin-left: 15px;
+}
+
+.github {
+    font-size: 1.4rem;
+    &:hover {
+        color: $color-text;
+    }
+}
+
+.github__img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
