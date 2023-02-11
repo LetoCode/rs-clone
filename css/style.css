@@ -103,7 +103,8 @@ body {
   font-weight: 400;
   font-size: 1.7rem;
   line-height: 24px;
-  background: #001424;
+  background: linear-gradient(180deg, rgb(0, 20, 36) 0%, rgb(7, 25, 48) 100%) fixed;
+  height: 100%;
 }
 
 .wrapper {
@@ -111,8 +112,6 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  max-width: 1104px;
-  margin: 0 auto;
 }
 
 .container {
@@ -126,7 +125,6 @@ body {
 
 .main {
   flex: 1 1 auto;
-  height: 100%;
 }
 
 .footer {
@@ -178,6 +176,8 @@ h2 {
   height: 100%;
   display: flex;
   gap: 50px;
+  max-width: 1104px;
+  margin: 0 auto;
 }
 
 .test-buttons__button {
@@ -197,10 +197,11 @@ h2 {
 
 .movie {
   font-size: 14px;
+  padding: 0px 10px 0px 10px;
 }
 
 .movie__top {
-  min-height: 100vh;
+  margin-bottom: -110px;
 }
 
 .top__image {
@@ -208,14 +209,12 @@ h2 {
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center 5%;
+  border-radius: 20px;
   box-shadow: 30px 0px 100px 80px #001424 inset, -30px 0px 80px 80px #001424 inset;
 }
 
-.top__block.is-top-image {
-  transform: translateY(-150px);
-}
-
 .top__block {
+  transform: translateY(-150px);
   display: flex;
   gap: 30px;
 }
@@ -223,9 +222,11 @@ h2 {
 .top__poster {
   flex: 1 1 30%;
   width: 30%;
+  border-radius: 5px;
 }
 .top__poster img {
   width: 100%;
+  border-radius: 5px;
 }
 
 .top__info {
@@ -251,6 +252,7 @@ h2 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .info__nameRu {
@@ -321,6 +323,178 @@ h2 {
   color: rgba(255, 255, 255, 0.6);
 }
 
+.body-block {
+  display: flex;
+}
+
+.body-block-left {
+  flex: 0 0 15%;
+}
+
+.body-block-right {
+  flex: 0 0 85%;
+}
+
+.movie__trailer {
+  position: relative;
+  min-width: 290px;
+  aspect-ratio: 16/9;
+  width: 70%;
+  margin-bottom: 70px;
+}
+.movie__trailer iframe {
+  -o-object-fit: cover;
+     object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.movie__trailer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -30px;
+  width: 90%;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(131, 58, 180) 0%, rgb(253, 29, 29) 100%, rgb(252, 176, 69) 100%);
+}
+
+.block-menu {
+  display: flex;
+  gap: 10px;
+  margin: 25px 0px 25px 0px;
+}
+
+.actors__menu {
+  justify-content: space-between;
+}
+
+.aside-menu {
+  margin-top: 25px;
+  position: sticky;
+  padding-top: 20px;
+  top: 0;
+}
+
+.aside-menu__item {
+  font-weight: 500;
+  margin: 0 0 10px 0;
+  font-size: 120%;
+  letter-spacing: 0.5px;
+}
+
+.btn {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 17px 0 0;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: inline-block;
+  border-radius: 25px;
+}
+
+.btn._active {
+  background: linear-gradient(0deg, rgb(142, 120, 255) 0%, rgb(252, 125, 123) 100%);
+  color: #fff;
+}
+
+.btn._addition {
+  color: #8300ff;
+}
+
+.btn__show-all-series {
+  display: inline-block;
+  line-height: 30px;
+  text-align: center;
+  width: 135px;
+  white-space: nowrap;
+  background: linear-gradient(0deg, rgb(142, 120, 255) 0%, rgb(252, 125, 123) 100%);
+  color: #fff;
+  position: absolute;
+  top: 15px;
+  right: -10px;
+}
+
+.serial._hidden {
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.serial {
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+}
+
+.serial__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  width: 100%;
+}
+
+.seasons__container {
+  width: 100%;
+}
+
+.serial__header {
+  width: 100%;
+  font-weight: 700;
+  font-size: 200%;
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.seasons__header {
+  font-size: 150%;
+  padding: 0px;
+  margin: 0px;
+  color: #f60;
+}
+
+.seasons__subtitle {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.seasons__subtitle,
+.episode__number,
+.episode__headerEn {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: arial, sans-serif;
+  font-size: 85%;
+  font-weight: normal;
+}
+
+.episode__header {
+  font-size: 110%;
+  padding: 0px;
+}
+
+.episodes__container {
+  padding-top: 10px;
+  width: 100%;
+}
+
+.episode__container {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.6);
+  margin-bottom: 2px;
+}
+
+.episode__names {
+  flex: 1 1 auto;
+}
+
+.episode__date {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: arial, sans-serif;
+  font-size: 100%;
+  font-weight: normal;
+}
+
 .not-found {
   width: 100%;
   min-height: 100%;
@@ -338,20 +512,92 @@ h2 {
   font-size: 300%;
 }
 
-.selection {
+.footer {
+  background: #001424;
+  padding: 20px 0;
+  color: #677f99;
+  margin-top: 20px;
+}
+
+.footer__cols {
   display: flex;
   justify-content: space-between;
 }
 
-.selection__poster {
-  height: 234px;
+.footer__left {
+  display: flex;
+  gap: 15px;
+}
+
+.footer__rss {
+  height: 24px;
+  margin-left: 15px;
+}
+
+.github {
+  font-size: 1.4rem;
+}
+.github:hover {
+  color: #ffffff;
+}
+
+.github__img {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+}
+
+.greeting {
+  width: 100%;
+  height: 384px;
+  border-radius: 12px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  cursor: pointer;
+  margin: 20px auto 40px;
+}
+
+.greeting__info {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 40px;
+}
+
+.greeting__title {
+  font-size: 4rem;
+  line-height: normal;
+}
+
+.greeting__params {
+  font-size: 1.4rem;
+  color: #777777;
+}
+
+.section__items {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section__poster {
   width: 168px;
   margin-top: 20px;
+  transition: 0.5s;
+}
+.section__poster:hover {
+  margin-top: 10px;
+  cursor: pointer;
 }
 
 .poster__img {
   width: 100%;
-  height: 100%;
+  height: 240px;
   border-radius: 8px;
 }
 
