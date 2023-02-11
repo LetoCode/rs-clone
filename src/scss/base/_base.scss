@@ -9,7 +9,8 @@ body {
    font-weight: 400;
    font-size: 1.7rem;
    line-height: 24px;
-   background: $color-bg;
+   background: $color-bg fixed;
+   height: 100%;
 }
 
 .wrapper {
@@ -17,8 +18,6 @@ body {
    height: 100%;
    display: flex;
    flex-direction: column;
-   max-width: 1104px;
-   margin: 0 auto;
 }
 
 .container {

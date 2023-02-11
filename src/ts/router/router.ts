@@ -23,5 +23,3 @@ export const router = (pathname: string): void => {
    window.history.pushState({}, '', window.location.origin + pathname);
    handleRoute(pathname);
 };
-
-
