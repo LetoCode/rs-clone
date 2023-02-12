@@ -48,8 +48,9 @@ export function addTableRow(
    table.append(row);
 }
 
-export function addCard(className: string, imageLink: string, header: string, info: string): HTMLElement {
+export function addCard(className: string, imageLink: string, header: string, info: string, link: string = ''): HTMLElement {
    const card: HTMLElement = addElement('div', className);
+
    const imgContainer: HTMLElement = addElement('div', `${className}__image`);
    const attrArr: { attr: string, attrValue: string }[] = [{ attr: 'src', attrValue: imageLink }, { attr: 'alt', attrValue: '' }]
    const img = addElement('img', '', '', attrArr);
@@ -66,6 +67,11 @@ export function addCard(className: string, imageLink: string, header: string, in
    infoContainer.append(text);
    card.append(infoContainer);
 
+   if (link) {
+      const a: HTMLElement = addElement('a', `${className}__link`, '', [{ attr: 'href', attrValue: link }]);
+      a.append(card);
+      return a;
+   }
    return card;
 }
 

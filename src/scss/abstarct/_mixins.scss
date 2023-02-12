@@ -1,15 +1,40 @@
 @mixin media-laptop {
-    @media (max-width: $content-width) { @content; }
+    @media (max-width: $content-width) {
+        @content;
+    }
 }
 
 @mixin media-tablet {
-    @media (max-width: $tablet-width) { @content; }
+    @media (max-width: $tablet-width) {
+        @content;
+    }
 }
-  
+
 @mixin media-mobile {
-    @media (max-width: $mobile-big-width) { @content; }
+    @media (max-width: $mobile-big-width) {
+        @content;
+    }
 }
 
 @mixin media-mobilesmall {
-    @media (max-width: $mobile-small-width) { @content; }
+    @media (max-width: $mobile-small-width) {
+        @content;
+    }
+}
+
+@mixin underLine {
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -20px;
+        width: 90%;
+        height: 2px;
+        background: linear-gradient(
+            90deg,
+            rgba(131, 58, 180, 1) 0%,
+            rgba(253, 29, 29, 1) 100%,
+            rgba(252, 176, 69, 1) 100%
+        );
+    }
 }
