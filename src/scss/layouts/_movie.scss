@@ -1,12 +1,13 @@
 $RATING_100: 250;
+$COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
 
 .movie {
-   //font-family: "Graphik Kinopoisk LC Web SB";
    font-size: 14px;
+   padding: 0px 10px 0px 10px;
 }
 
 .movie__top {
-   min-height: 100vh;
+   margin-bottom: -110px;
 }
 
 .top__image {
@@ -14,23 +15,24 @@ $RATING_100: 250;
    background-size: 100% auto;
    background-repeat: no-repeat;
    background-position: center 5%;
-   box-shadow: 30px 0px 100px 80px $color-bg inset, -30px 0px 80px 80px $color-bg inset;
-}
-
-.top__block.is-top-image {
-   transform: translateY(-150px);
+   border-radius: 20px;
+   box-shadow: 30px 0px 100px 80px $color-bg-dark inset, -30px 0px 80px 80px $color-bg-dark inset;
 }
 
 .top__block {
+   transform: translateY(-150px);
    display: flex;
    gap: 30px;
+   // margin-bottom: 50px;
 }
 
 .top__poster {
    flex: 1 1 30%;
    width: 30%;
+   border-radius: 5px;
    & img {
       width: 100%;
+      border-radius: 5px;
    }
 }
 
@@ -49,13 +51,14 @@ $RATING_100: 250;
       width: 160px;
       font-size: 13px;
       line-height: 18px;
-      color: rgba(255, 255, 255, 0.6);
+      color: $COLOR_OPTIONAL;
    }
    & .col_2 {
       padding-left: 60px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      cursor: pointer;
    }
 }
 
@@ -70,7 +73,7 @@ $RATING_100: 250;
 .info__nameEn {
    margin-bottom: 25px;
 
-   color: rgba(255, 255, 255, 0.6);
+   color: $COLOR_OPTIONAL;
    font-weight: 400;
    line-height: 20px;
    font-size: 150%;
@@ -125,5 +128,210 @@ $RATING_100: 250;
 }
 
 .rating-header {
-   color: rgba(255, 255, 255, 0.6);
+   color: $COLOR_OPTIONAL;
+}
+
+//===============================================body-block==========================================
+
+.body-block {
+   display: flex;
+}
+
+.body-block-left {
+   flex: 0 0 15%;
+}
+
+.body-block-right {
+   flex: 0 0 85%;
+}
+
+//================================================trailer===============================================
+.movie__trailer {
+   position: relative;
+   min-width: 290px;
+   // padding-bottom: 56%;
+   aspect-ratio: 16 / 9;
+   width: 70%;
+   margin-bottom: 70px;
+
+   iframe {
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+   }
+
+   &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -30px;
+      width: 90%;
+      height: 1px;
+      background: linear-gradient(
+         90deg,
+         rgba(131, 58, 180, 1) 0%,
+         rgba(253, 29, 29, 1) 100%,
+         rgba(252, 176, 69, 1) 100%
+      );
+   }
+}
+
+//================================================menu==================================================
+
+.block-menu {
+   display: flex;
+   gap: 10px;
+   margin: 25px 0px 25px 0px;
+}
+
+.actors__menu {
+   justify-content: space-between;
+}
+
+.aside-menu {
+   margin-top: 25px;
+   position: sticky;
+   padding-top: 20px;
+   top: 0;
+}
+
+.aside-menu__item {
+   font-weight: 500;
+   margin: 0 0 10px 0;
+   font-size: 120%;
+   letter-spacing: 0.5px;
+}
+//==============================================button==================================================
+
+.actors__btn_all {
+}
+
+.btn {
+   font-size: 14px;
+   font-weight: 500;
+   margin: 0 17px 0 0;
+   padding: 10px 20px;
+   cursor: pointer;
+   display: inline-block;
+   border-radius: 25px;
+}
+
+.btn._active {
+   //background: #8300ff;
+   background: linear-gradient(0deg, rgb(142, 120, 255) 0%, rgb(252, 125, 123) 100%);
+   color: #fff;
+}
+
+.btn._addition {
+   color: #8300ff;
+}
+
+.btn__show-all-series {
+   display: inline-block;
+   line-height: 30px;
+   text-align: center;
+   width: 135px;
+   white-space: nowrap;
+   background: linear-gradient(0deg, rgb(142, 120, 255) 0%, rgb(252, 125, 123) 100%);
+   color: #fff;
+
+   position: absolute; //look .serial
+   top: 15px;
+   right: -10px;
+}
+//===================================================serials seasons =================================================================
+.serial._hidden {
+   max-height: 600px;
+   overflow: hidden;
+}
+
+.serial {
+   margin: 0 auto;
+   width: 100%;
+
+   position: relative; //look .btn__show-all-series
+}
+
+.serial__container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 40px;
+   width: 100%;
+}
+
+.seasons__container {
+   width: 100%;
+}
+
+.serial__header {
+   width: 100%;
+   font-weight: 700;
+   font-size: 200%;
+   margin-bottom: 35px;
+   position: relative;
+
+   // &::after {
+   //    content: "";
+   //    position: absolute;
+   //    left: 0;
+   //    bottom: -10px;
+   //    width: 80%;
+   //    height: 2px;
+   //    background: linear-gradient(
+   //       90deg,
+   //       rgba(131, 58, 180, 1) 0%,
+   //       rgba(253, 29, 29, 1) 100%,
+   //       rgba(252, 176, 69, 1) 100%
+   //    );
+   // }
+}
+
+.seasons__header {
+   font-size: 150%;
+   padding: 0px;
+   margin: 0px;
+   color: #f60;
+}
+.seasons__subtitle {
+   border-bottom: 2px solid $COLOR_OPTIONAL;
+}
+
+.seasons__subtitle,
+.episode__number,
+.episode__headerEn {
+   color: $COLOR_OPTIONAL;
+   font-family: arial, sans-serif;
+   font-size: 85%;
+   font-weight: normal;
+}
+
+.episode__header {
+   font-size: 110%;
+   padding: 0px;
+}
+
+.episodes__container {
+   padding-top: 10px;
+   width: 100%;
+}
+
+.episode__container {
+   display: flex;
+   justify-content: space-between;
+   border-bottom: 1px dotted $COLOR_OPTIONAL;
+   margin-bottom: 2px;
+}
+
+.episode__names {
+   flex: 1 1 auto;
+}
+
+.episode__date {
+   color: $COLOR_OPTIONAL;
+   font-family: arial, sans-serif;
+   font-size: 100%;
+   font-weight: normal;
 }

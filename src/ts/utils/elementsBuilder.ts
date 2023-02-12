@@ -69,16 +69,9 @@ export function addCard(className: string, imageLink: string, header: string, in
    return card;
 }
 
-// export function addCircle(value: number, maxValue: number) {
-//    const svg = document.createElement('svg');
-//    svg.className = 'svg-container';
-
-//    const percent: number = value / maxValue * 100;
-//    const RATING_SVG = (rating: number) => `<circle class="circle circle1" cx=70 cy=70 r=70></circle>
-//                            <circle class="circle circle2" cx=70 cy=70 r=70 style.stroke-dashoffset = "${440 - (440 * rating)}"></circle>`
-//    if (percent) {
-//       svg.innerHTML = RATING_SVG(percent);
-//    }
-
-//    return svg;
-// }
+export function addMenuElement(linkName: string, link: string): HTMLElement {
+   const li: HTMLElement = addElement('li', 'aside-menu__item');
+   const a: HTMLElement = addElement('a', 'aside-menu__link', linkName, [{ attr: 'href', attrValue: link }]);
+   li.append(a);
+   return li;
+}

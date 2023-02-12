@@ -1,8 +1,9 @@
 import * as App from "../app/app";
 import * as Controller from "../kinopoiskAPI/controller";
 import { router } from "../router/router";
-import { addCard, addElement, addTableRow } from "../utils/elementsBuilder";
+import { addCard, addElement, addMenuElement, addTableRow } from "../utils/elementsBuilder";
 import { RATING_SVG_IMDB, RATING_SVG_KP } from "./components/ratingCircle";
+import { showAllSeasons } from "./handlers/movieHandlers";
 
 const MAX_REVIEWS: number = 5;
 const MAX_FILM_IMGS: number = 5;
@@ -29,11 +30,9 @@ function createMoviePage(): HTMLElement {
 
    (async () => {
       const filmFilters: respFilters = await Controller.getFilters() as respFilters;
-      //!TODO Change then
-      const filmData: respFilm = await Controller.getFilm('77044') as respFilm;
+      //const filmData: respFilm = await Controller.getFilm('77044') as respFilm;
+      const filmData: respFilm = await Controller.getFilm(id) as respFilm;
       if (!filmData) router('/404');
-
-      //const filmData: respFilm = await Controller.getFilm(id) as respFilm;
       const filmVideos: respVideos = await Controller.getVideos(id) as respVideos;
       const filmImages: respImages = await Controller.getImages(id, 1, 'STILL') as respImages;
       const filmStaff: FilmStaffItem[] = await Controller.getStaff(id) as FilmStaffItem[];
@@ -50,56 +49,64 @@ function createMoviePage(): HTMLElement {
       //const film1: respfilmsWithFilters = await Controller.getFilmsWithFilters({ keyword: 'друзья', page: 1 }) as respfilmsWithFilters;
 
       console.log('filmData =', filmData)
-      console.log('filmVideos =', filmVideos)
-      console.log('filmImages =', filmImages)
-      console.log('filmStaff =', filmStaff)
-      console.log('filmBoxOffice =', filmBoxOffice)
-      console.log('filmDistributions =', filmDistributions)
+      // console.log('filmVideos =', filmVideos)
+      // console.log('filmImages =', filmImages)
+      // console.log('filmStaff =', filmStaff)
+      // console.log('filmBoxOffice =', filmBoxOffice)
+      // console.log('filmDistributions =', filmDistributions)
       // console.log('filmDFacts =', filmFacts)
       // console.log('filmReviews =', filmReviews)
       // console.log('filmSimilar =', filmSimilar)
       // console.log('filmFilters =', filmFilters)
       const movieContainer: HTMLElement = addElement('div', 'container movie');
 
-      const topBlock: DocumentFragment = getTopBlock(filmData, filmStaff, filmBoxOffice, filmDistributions, filmFilters, filmImages);
+      const asideMenu: HTMLElement = addElement('nav', 'aside-menu');
+      const asideList: HTMLElement = addElement('ul', 'aside-menu__list');
+      asideMenu.append(asideList);
+
+      const topBlock: DocumentFragment = getTopBlock(filmData, filmStaff, filmBoxOffice, filmDistributions, filmFilters, filmImages, asideList);
       movieContainer.append(topBlock);
 
+      const [bodyBlock, leftAside, rightBody]: [DocumentFragment, HTMLElement, HTMLElement] = getBodyBlock();
+      movieContainer.append(bodyBlock);
+
       if (filmVideos.total > 0) {
-         const trailerBlock: DocumentFragment = getTrailerBlock(filmVideos, id);
-         movieContainer.append(trailerBlock);
+         const trailerBlock: DocumentFragment = getTrailerBlock(filmVideos, asideList);
+         rightBody.append(trailerBlock);
       }
 
-      // if (filmData.serial) {
-      //    //!TODO Change then
-      //    const filmSeasons: respSeasons = await Controller.getSeasons('77044') as respSeasons;
-      //    // const filmSeasons: respSeasons = await Controller.getSeasons(id) as respSeasons;
-      //    console.log(filmSeasons);
-      //    if (filmSeasons.total) {
-      //       const serialsBlock: DocumentFragment = getSeasonsBlock(filmSeasons);
-      //       movieContainer.append(serialsBlock);
-      //    }
-      // }
+      //if (filmData.serial) {
+      //!TODO Change then
+      const filmSeasons: respSeasons = await Controller.getSeasons('77044') as respSeasons;
+      //const filmSeasons: respSeasons = await Controller.getSeasons(id) as respSeasons;
+      console.log(filmSeasons);
+      if (filmSeasons.total) {
+         const serialsBlock: DocumentFragment = getSeasonsBlock(filmSeasons, asideList);
+         rightBody.append(serialsBlock);
+      }
+      //}
 
-      // const actorsBlock: DocumentFragment = getActorsBlock(filmStaff);
-      // movieContainer.append(actorsBlock);
+      // const actorsBlock: DocumentFragment = getActorsBlock(filmStaff, asideList);
+      // rightBody.append(actorsBlock);
 
-      // const aboutBlock: DocumentFragment = getAboutBlock(filmData, filmFacts);
-      // movieContainer.append(aboutBlock);
+      // const aboutBlock: DocumentFragment = getAboutBlock(filmData, filmFacts, asideList);
+      // rightBody.append(aboutBlock);
 
       // if (filmReviews.total) {
-      //    const reviewsBlock: DocumentFragment = getReviewsBlock(filmReviews);
-      //    movieContainer.append(reviewsBlock);
+      //    const reviewsBlock: DocumentFragment = getReviewsBlock(filmReviews, asideList);
+      //    rightBody.append(reviewsBlock);
       // }
       // if (filmImages.total) {
-      //    const imagesBlock: DocumentFragment = getImagesBlock(filmImages);
-      //    movieContainer.append(imagesBlock);
+      //    const imagesBlock: DocumentFragment = getImagesBlock(filmImages, asideList);
+      //    rightBody.append(imagesBlock);
       // }
 
       // if (filmSimilar.total) {
-      //    const similarBlock: DocumentFragment = getSimilarBlock(filmSimilar);
-      //    movieContainer.append(similarBlock);
+      //    const similarBlock: DocumentFragment = getSimilarBlock(filmSimilar, asideList);
+      //    rightBody.append(similarBlock);
       // }
 
+      leftAside.append(asideMenu);
       mainElement.append(movieContainer);
 
    })();
@@ -113,13 +120,13 @@ function getTopBlock(
    filmBoxOffice: respBoxOffice,
    filmDistributions: respDistributions,
    filmFilters: respFilters,
-   filmImages: respImages): DocumentFragment {
+   filmImages: respImages,
+   asideList: HTMLElement): DocumentFragment {
 
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__top top');
-   let isTopImage: boolean = false;
+   const el: HTMLElement = addElement('div', 'movie__top top', '', [{ attr: 'name', attrValue: 'filmName' }]);
+   asideList.append(addMenuElement('Фильм', '#filmName'));
    if (filmImages.total) {
-      isTopImage = true;
       const randomImageIndex = Math.floor(Math.random() * filmImages.total);
       const topImage: HTMLElement = addElement('div', 'top__image');
       topImage.style.backgroundImage = `url("${filmImages.items[randomImageIndex].imageUrl}")`
@@ -130,33 +137,39 @@ function getTopBlock(
       el.appendChild(topImage);
    }
 
-   const topBlock: HTMLElement = addElement('div', `top__block ${isTopImage ? 'is-top-image' : ''}`);
+   const topBlock: HTMLElement = addElement('div', 'top__block');
    const topPoster: HTMLElement = addElement('div', 'top__poster');
    const topInfo: HTMLElement = addElement('div', 'top__info info');
    embedPoster(topPoster, filmData);
    embedTopInfo(topInfo, filmData, filmStaff, filmBoxOffice, filmDistributions, filmFilters);
 
-   const topRatingItems: HTMLElement = addElement('div', 'top__rating-items rating-items');
-   const ratingImdbContainer: HTMLElement = addElement('div', 'rating__imdb ');
-   const ratingImdbCircle: HTMLElement = addElement('div', 'rating__imdb-circle', RATING_SVG_IMDB);
-   const circleImdb: HTMLElement = ratingImdbCircle.querySelector('.circle') as HTMLElement;
-   const percentImdb: number = filmData.ratingImdb / 10;
-   circleImdb.style.strokeDashoffset = `${RATING_100 - percentImdb * RATING_100}`;
-   const ratingImdbNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingImdb));
-   const ratingImdbHeader: HTMLElement = addElement('div', 'rating-header', 'IMDb');
-   ratingImdbContainer.append(ratingImdbCircle, ratingImdbNumber, ratingImdbHeader);
+   if (filmData.ratingImdb || filmData.ratingKinopoisk) {
+      const topRatingItems: HTMLElement = addElement('div', 'top__rating-items rating-items');
+      if (filmData.ratingImdb) {
+         const ratingImdbContainer: HTMLElement = addElement('div', 'rating__imdb');
+         const ratingImdbCircle: HTMLElement = addElement('div', 'rating__imdb-circle', RATING_SVG_IMDB);
+         const circleImdb: HTMLElement = ratingImdbCircle.querySelector('.circle') as HTMLElement;
+         const percentImdb: number = filmData.ratingImdb / 10;
+         circleImdb.style.strokeDashoffset = `${RATING_100 - percentImdb * RATING_100}`;
+         const ratingImdbNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingImdb));
+         const ratingImdbHeader: HTMLElement = addElement('div', 'rating-header', 'IMDb');
+         ratingImdbContainer.append(ratingImdbCircle, ratingImdbNumber, ratingImdbHeader);
+         topRatingItems.append(ratingImdbContainer);
+      }
+      if (filmData.ratingKinopoisk) {
+         const ratingKpContainer: HTMLElement = addElement('div', 'rating__kp');
+         const ratingKpCircle: HTMLElement = addElement('div', 'rating__kp-circle', RATING_SVG_KP);
+         const circleKp: HTMLElement = ratingKpCircle.querySelector('.circle') as HTMLElement;
+         const percentKp: number = filmData.ratingKinopoisk / 10;
+         circleKp.style.strokeDashoffset = `${RATING_100 - percentKp * RATING_100}`;
+         const ratingKpNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingKinopoisk));
+         const ratingKpHeader: HTMLElement = addElement('div', 'rating-header', 'KP');
+         ratingKpContainer.append(ratingKpCircle, ratingKpNumber, ratingKpHeader);
+         topRatingItems.append(ratingKpContainer);
+      }
+      topInfo.append(topRatingItems);
+   }
 
-   const ratingKpContainer: HTMLElement = addElement('div', 'rating__kp');
-   const ratingKpCircle: HTMLElement = addElement('div', 'rating__kp-circle', RATING_SVG_KP);
-   const circleKp: HTMLElement = ratingKpCircle.querySelector('.circle') as HTMLElement;
-   const percentKp: number = filmData.ratingKinopoisk / 10;
-   circleKp.style.strokeDashoffset = `${RATING_100 - percentKp * RATING_100}`;
-   const ratingKpNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingKinopoisk));
-   const ratingKpHeader: HTMLElement = addElement('div', 'rating-header', 'KP');
-   ratingKpContainer.append(ratingKpCircle, ratingKpNumber, ratingKpHeader);
-   topRatingItems.append(ratingImdbContainer, ratingKpContainer);
-
-   topInfo.append(topRatingItems);
    topBlock.append(topPoster, topInfo);
 
    el.appendChild(topBlock);
@@ -164,18 +177,35 @@ function getTopBlock(
    return fragment;
 }
 
-function getActorsBlock(filmStaff: FilmStaffItem[]): DocumentFragment {
+function getBodyBlock(): [DocumentFragment, HTMLElement, HTMLElement] {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__actors actors');
+   const el: HTMLElement = addElement('div', 'body-block');
+   const left: HTMLElement = addElement('div', 'body-block-left');
+   const right: HTMLElement = addElement('div', 'body-block-right');
+
+   el.append(left, right);
+   fragment.appendChild(el);
+   return [fragment, left, right];
+}
+
+function getActorsBlock(filmStaff: FilmStaffItem[], asideList: HTMLElement): DocumentFragment {
+   const fragment: DocumentFragment = new DocumentFragment();
+   const el: HTMLElement = addElement('div', 'movie__actors actors', '', [{ attr: 'name', attrValue: 'filmActors' }]);
+   asideList.append(addMenuElement('Создатели', '#filmActors'));
+
    const actorsBlock: HTMLElement = addElement('div', 'actors__block');
-   const actorsMenu: HTMLElement = addElement('div', 'actors__menu menu-actors');
+   const actorsMenu: HTMLElement = addElement('div', 'actors__menu block-menu');
    const actorsItems: HTMLElement = addElement('div', 'actors__items');
    actorsBlock.append(actorsMenu, actorsItems);
 
-   const buttonActors: HTMLElement = addElement('button', 'btn actors__btn', 'Актеры');
-   const buttonCreators: HTMLElement = addElement('button', 'btn actors__btn', 'Создатели');
-   const buttonAll: HTMLElement = addElement('button', 'btn actors__btn', 'Смотреть всех');
-   actorsMenu.append(buttonActors, buttonCreators, buttonAll);
+   const buttonActors: HTMLElement = addElement('button', 'btn actors__btn', 'Актеры', [{ attr: 'type', attrValue: 'button' }]);
+   const buttonCreators: HTMLElement = addElement('button', 'btn actors__btn', 'Создатели', [{ attr: 'type', attrValue: 'button' }]);
+   const buttonGroup1: HTMLElement = addElement('div', 'btn-group-actors');
+   buttonGroup1.append(buttonActors, buttonCreators);
+   const buttonGroup2: HTMLElement = addElement('div', 'btn-group-actors');
+   const buttonAll: HTMLElement = addElement('button', 'btn actors__btn actors__btn_all _addition', 'Смотреть всех', [{ attr: 'type', attrValue: 'button' }]);
+   buttonGroup2.append(buttonAll);
+   actorsMenu.append(buttonGroup1, buttonGroup2);
 
    const actors: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'ACTOR');
    //const creators: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'ACTOR' || el.professionKey.toUpperCase() === 'DIRECTOR');
@@ -193,9 +223,14 @@ function getActorsBlock(filmStaff: FilmStaffItem[]): DocumentFragment {
    return fragment;
 }
 
-function getTrailerBlock(filmVideos: respVideos, id: string): DocumentFragment {
+function getTrailerBlock(filmVideos: respVideos, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__trailer trailer');
+   const el: HTMLElement = addElement('div', 'movie__trailer trailer', '', [{ attr: 'name', attrValue: 'filmTrailer' }]);
+   asideList.append(addMenuElement('Трейлер', '#filmTrailer'));
+
+   const menu: HTMLElement = addElement('div', 'trailer__menu block-menu');
+   const button: HTMLElement = addElement('button', 'btn trailer__btn _active', 'Трейлер', [{ attr: 'type', attrValue: 'button' }]);
+   menu.append(button);
 
    const youTubeIdx = filmVideos.items.findIndex(el => el.site.toLocaleUpperCase() === 'YOUTUBE');
    if (youTubeIdx >= 0) {
@@ -203,6 +238,7 @@ function getTrailerBlock(filmVideos: respVideos, id: string): DocumentFragment {
       if (youTubeEndpoint) {
          el.innerHTML = youtubeFrame(youTubeEndpoint);
          fragment.appendChild(el);
+         el.insertAdjacentElement('beforebegin', menu);
          return fragment;
       }
    }
@@ -211,15 +247,19 @@ function getTrailerBlock(filmVideos: respVideos, id: string): DocumentFragment {
       const kinopoiskEndpoint: string = filmVideos.items[kinopoiskWidgetIdx].url;
       el.innerHTML = kinopoiskFrame(kinopoiskEndpoint);
       fragment.appendChild(el);
+      el.insertAdjacentElement('beforebegin', menu);
       return fragment;
    }
+
    return fragment;
 }
 
 
-function getAboutBlock(filmData: respFilm, filmFacts: respFacts): DocumentFragment {
+function getAboutBlock(filmData: respFilm, filmFacts: respFacts, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__about about');
+   const el: HTMLElement = addElement('div', 'movie__about about', '', [{ attr: 'name', attrValue: 'filmAbout' }]);
+   asideList.append(addMenuElement('О фильме', '#filmAbout'));
+
    if (filmData.description) {
       const header: HTMLElement = addElement('h4', 'about__header', 'О фильме');
       const content: HTMLElement = addElement('p', 'about__content', filmData.description);
@@ -254,36 +294,52 @@ function getAboutBlock(filmData: respFilm, filmFacts: respFacts): DocumentFragme
 }
 
 
-function getSeasonsBlock(filmSeasons: respSeasons): DocumentFragment {
+function getSeasonsBlock(filmSeasons: respSeasons, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__serial serial');
+   const el: HTMLElement = addElement('div', 'movie__serial serial _hidden', '', [{ attr: 'name', attrValue: 'filmSeasons' }]);
+   asideList.append(addMenuElement('Сезоны', '#filmSeasons'));
+
    const serialContainer: HTMLElement = addElement('div', 'serial__container');
-   const serialHeader: HTMLElement = addElement('div', 'serial__header', `Сезоны (${filmSeasons.total})`);
-   serialContainer.append(serialHeader);
+   const serialHeader: HTMLElement = addElement('div', 'serial__header', `Всего вышло сезонов ${filmSeasons.total}`);
    for (const season of filmSeasons.items) {
       const seasonsContainer: HTMLElement = addElement('div', 'seasons__container');
       const seasonsHeader: HTMLElement = addElement('div', 'seasons__header', `Сезон ${season.number}`);
-      seasonsContainer.append(seasonsHeader);
+      const seasonsSubtitle: HTMLElement = addElement('div', 'seasons__subtitle', `Эпизодов ${season.episodes.length}`);
+      const episodesContainer: HTMLElement = addElement('div', 'episodes__container');
+      seasonsContainer.append(seasonsHeader, seasonsSubtitle, episodesContainer);
       for (const episode of season.episodes) {
          const episodeContainer: HTMLElement = addElement('div', 'episode__container');
+         const namesContainer: HTMLElement = addElement('div', 'episode__names');
          const episodeNumber: HTMLElement = addElement('p', 'episode__number episode', `Эпизод ${episode.episodeNumber}`);
          const episodeHeader: HTMLElement = addElement('p', 'episode__header episode', `${episode.nameRu}`);
+         namesContainer.append(episodeNumber, episodeHeader);
+         if (episode.nameEn) {
+            const episodeHeaderEn: HTMLElement = addElement('p', 'episode__headerEn episode', `${episode.nameEn}`);
+            namesContainer.append(episodeHeaderEn);
+         }
+
+         const dateContainer: HTMLElement = addElement('div', 'episode__date-container');
          const releaseDate: string = new Date(episode.releaseDate).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
          const episodeDate: HTMLElement = addElement('p', 'episode__date episode', `${releaseDate}`);
-         episodeContainer.append(episodeNumber, episodeHeader, episodeDate);
-         seasonsContainer.append(episodeContainer);
+         dateContainer.append(episodeDate);
+         episodeContainer.append(namesContainer, dateContainer);
+         episodesContainer.append(episodeContainer);
       }
       serialContainer.append(seasonsContainer);
    }
-   el.appendChild(serialContainer);
+   const buttonShowAll: HTMLElement = addElement('button', 'btn btn__show-all-series', 'Показать все', [{ attr: 'type', attrValue: 'button' }]);
+   buttonShowAll.onclick = showAllSeasons;
+   el.append(serialHeader, serialContainer, buttonShowAll);
    fragment.appendChild(el);
    return fragment;
 }
 
 
-function getReviewsBlock(filmReviews: respReviews): DocumentFragment {
+function getReviewsBlock(filmReviews: respReviews, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__reviews reviews');
+   const el: HTMLElement = addElement('div', 'movie__reviews reviews', '', [{ attr: 'name', attrValue: 'filmReviews' }]);
+   asideList.append(addMenuElement('Рецензии', '#filmReviews'));
+
    const reviewsContainer: HTMLElement = addElement('div', 'reviews__container');
    const reviewsItems: HTMLElement = addElement('div', 'reviews__items');
    const reviewsTotal: HTMLElement = addElement('div', 'reviews__total');
@@ -308,9 +364,11 @@ function getReviewsBlock(filmReviews: respReviews): DocumentFragment {
    return fragment;
 }
 
-function getImagesBlock(filmImages: respImages): DocumentFragment {
+function getImagesBlock(filmImages: respImages, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__images movie-images');
+   const el: HTMLElement = addElement('div', 'movie__images movie-images', '', [{ attr: 'name', attrValue: 'filmImages' }]);
+   asideList.append(addMenuElement('Кадры и постеры', '#filmImages'));
+
    const header: HTMLElement = addElement('div', 'movie-images__header');
    header.textContent = 'Кадры';
    el.append(header);
@@ -330,9 +388,11 @@ function getImagesBlock(filmImages: respImages): DocumentFragment {
    return fragment;
 }
 
-function getSimilarBlock(filmSimilar: respSimilars): DocumentFragment {
+function getSimilarBlock(filmSimilar: respSimilars, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__similar similar');
+   const el: HTMLElement = addElement('div', 'movie__similar similar', '', [{ attr: 'name', attrValue: 'filmSimilar' }]);
+   asideList.append(addMenuElement('Похожие', '#filmSimilar'));
+
    for (const item of filmSimilar.items) {
       try {
          const card: HTMLElement = addCard('similar__item', item.posterUrlPreview, item.nameRu, item.nameOriginal);
