@@ -1,6 +1,6 @@
 import * as App from "../app/app";
 import { getFilm, getFilmsWithFilters, getPremieres } from "../kinopoiskAPI/controller";
-import { router, handleRoute } from "../router/router";
+import { createPoster } from "./components/poster";
 
 
 function homePage(): void {
@@ -115,7 +115,6 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[]): void {
    const data = dataArr.filter((el) =>
       (el.nameRu || el.nameEn) && (el.posterUrl || el.posterUrlPreview) && el.year && el.genres[0].genre);
-   console.log(data);
 
    const section = document.createElement('section');
    const sectionTitle = document.createElement('h2');
@@ -129,42 +128,7 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
    sectionItems.className = 'section__items';
 
    for (let i = 0; i < 6; i++) {
-      const film = data[i];
-
-      const poster = document.createElement('div');
-      const posterAnchor: HTMLElement = document.createElement('a');
-      const posterImg = document.createElement('img');
-      const posterTitle = document.createElement('p');
-      const posterDesc = document.createElement('p');
-
-      const moviePath = `/movie?${film.kinopoiskId}`;
-      sectionItems.append(poster);
-      poster.className = 'section__poster';
-      poster.addEventListener('click', () => {
-         handleRoute(moviePath);
-      });
-
-      posterImg.className = 'poster__img';
-      if (film.posterUrlPreview) posterImg.src = film.posterUrlPreview;
-      else posterImg.src = film.posterUrl;
-      posterAnchor.append(posterImg);
-
-      posterAnchor.className = 'poster__link';
-      posterAnchor.setAttribute('href', `/movie?${film.kinopoiskId}`);
-      posterAnchor.addEventListener('click', (event) => {
-         event.preventDefault();
-         router(`/movie?${film.kinopoiskId}`);
-      });
-      poster.append(posterAnchor);
-
-      poster.append(posterTitle);
-      posterTitle.className = 'poster__title';
-      if (film.nameRu) posterTitle.textContent = film.nameRu;
-      else posterTitle.textContent = film.nameEn;
-
-      poster.append(posterDesc);
-      posterDesc.className = 'poster__desc';
-      posterDesc.textContent = `${film.year}, ${film.genres[0].genre}`;
+      createPoster(sectionItems, data[i]);
    }
 }
 
