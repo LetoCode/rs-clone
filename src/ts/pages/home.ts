@@ -1,5 +1,6 @@
 import * as App from "../app/app";
 import { getFilm, getFilmsWithFilters, getPremieres } from "../kinopoiskAPI/controller";
+import { router } from "../router/router";
 import { createPoster } from "./components/poster";
 
 
@@ -19,69 +20,70 @@ function createHomePage(): HTMLElement {
    mainElement.append(container);
    container.className = 'container';
 
-   getPremieres(year.toString(), 'JANUARY').then(data => {
-      const dataArr = (data as respPremieres).items;
-      const dataFiltered = dataArr.filter((el) => el.nameRu);
-      createMainPoster(container, dataFiltered);
-      createSection(container, 'Премьеры', dataArr);
-   });
-
-   const filtersNew: argumentForFilmSearch = {
+   const filtersNewFilms: argumentForFilmSearch = {
       filmsOrder: 'RATING',
       yearFrom: year - 1,
       yearTo: year,
       page: 1,
    };
 
-   getFilmsWithFilters(filtersNew).then(data => {
-      const dataArr = (data as respfilmsWithFilters).items;
-      const dataFiltered = dataArr.filter((el) => el.genres[0].genre !== 'музыка');
-      createSection(container, 'Новинки', dataFiltered);
-   });
-
-   const filtersSeries: argumentForFilmSearch = {
-      // country,
-      // genres,
+   const filtersBestFilms: argumentForFilmSearch = {
       filmsOrder: 'RATING',
-      filmsType: 'TV_SERIES',
-      // ratingFrom,
-      // ratingTo,
-      yearFrom: year - 15,
-      // yearTo: year,
-      // imdbId,
-      // keyword,
+      filmsType: 'FILM',
       page: 1,
    };
 
-   getFilmsWithFilters(filtersSeries).then(data => {
-      const dataArr = (data as respfilmsWithFilters).items;
-      createSection(container, 'Лучшие сериалы', dataArr);
-   });
+   const filtersBestSeries: argumentForFilmSearch = {
+      filmsOrder: 'RATING',
+      filmsType: 'TV_SERIES',
+      page: 1,
+   };
 
-   const filtersFamily: argumentForFilmSearch = {
+   const filtersAdventure: argumentForFilmSearch = {
       genres: 7,
       filmsOrder: 'RATING',
       filmsType: 'FILM',
-      yearFrom: year - 20,
       page: 1,
    };
 
-   getFilmsWithFilters(filtersFamily).then(data => {
-      const dataArr = (data as respfilmsWithFilters).items;
-      createSection(container, 'Приключения для всей семьи', dataArr);
-   });
+   (async () => {
+      const dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
+      const dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
+      const dataBestFilms = await getFilmsWithFilters(filtersBestFilms) as respfilmsWithFilters;
+      const dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
+      const dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
+
+      const arrPremieres = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
+      const arrNewFilms = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
+      const arrBestFilms = dataBestFilms.items.filter((el) => el.genres[0].genre !== 'мультфильм');
+      const arrBestSeries = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
+      const arrAdventure = dataAdventure.items;
+
+      createMainPoster(container, arrPremieres);
+      createSection(container, 'Премьеры', arrPremieres);
+      createSection(container, 'Новинки', arrNewFilms);
+      createSection(container, 'Лучшие фильмы', arrBestFilms);
+      createSection(container, 'Лучшие сериалы', arrBestSeries);
+      createSection(container, 'Приключения для всей семьи', arrAdventure);
+   })();
 
    return mainElement;
 }
 
 function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
+   const greeting = document.createElement('div');
+
    const rand = Math.floor(Math.random() * dataArr.length);
    const film = dataArr[rand];
+   const pathname = `/movie?${film.kinopoiskId}`;
 
-   const greeting = document.createElement('div');
    block.append(greeting);
    greeting.className = 'greeting';
    greeting.style.background = `linear-gradient(90deg, rgba(3,5,17,1) 15%, rgba(3,5,17,0.8) 35%, rgba(3,5,17,0) 80%, rgba(3,5,17,0.8) 100%), url(${film.posterUrl}) center/cover`;
+   greeting.addEventListener('click', (event) => {
+      event.preventDefault();
+      router(pathname);
+   });
 
    getFilm(film.kinopoiskId.toString()).then(film => {
       const data = film as respFilm;
@@ -115,6 +117,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[]): void {
    const data = dataArr.filter((el) =>
       (el.nameRu || el.nameEn) && (el.posterUrl || el.posterUrlPreview) && el.year && el.genres[0].genre);
+   const films = data.sort(() => Math.random() - 0.5);
 
    const section = document.createElement('section');
    const sectionTitle = document.createElement('h2');
@@ -128,7 +131,7 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
    sectionItems.className = 'section__items';
 
    for (let i = 0; i < 6; i++) {
-      createPoster(sectionItems, data[i]);
+      createPoster(sectionItems, films[i]);
    }
 }
 
