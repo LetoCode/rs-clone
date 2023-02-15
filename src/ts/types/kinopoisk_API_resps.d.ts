@@ -365,8 +365,18 @@ interface PersonByID {
    hasAwards: number,
    profession: string,
    facts: string[],
-   spouses: string[],
-   films: respFilmItem[]
+   spouses: Spouses[],
+   films: personsFilm[]
+}
+
+interface personsFilm {
+   description: string,
+   filmId: number,
+   general: boolean,
+   nameEn: string,
+   nameRu: string,
+   professionKey: string,
+   rating: string
 }
 
 
@@ -374,6 +384,17 @@ interface PersonByID {
 interface PersonsByName {
    total: number,
    items: string[],
+}
+
+interface Spouses {
+   children: number,
+   divorced: boolean,
+   divorcedReason: string,
+   name: string,
+   personId: number,
+   relation: string,
+   sex: string,
+   webUrl: string
 }
 
 

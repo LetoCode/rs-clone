@@ -38,7 +38,7 @@ const kinopoiskFrame = (endpoint: string): string => {
 }
 
 function moviePage(): void {
-   App.showPage(createMoviePage)
+   App.showPage(createMoviePage);
 }
 
 function createMoviePage(): HTMLElement {
@@ -161,33 +161,7 @@ function getTopBlock(
    const topInfo: HTMLElement = addElement('div', 'top__info info');
    embedPoster(topPoster, filmData);
    embedTopInfo(topInfo, filmData, filmStaff, filmBoxOffice, filmDistributions, filmFilters);
-
-   if (filmData.ratingImdb || filmData.ratingKinopoisk) {
-      const topRatingItems: HTMLElement = addElement('div', 'top__rating-items rating-items');
-      if (filmData.ratingImdb) {
-         const ratingImdbContainer: HTMLElement = addElement('div', 'rating__imdb');
-         const ratingImdbCircle: HTMLElement = addElement('div', 'rating__imdb-circle', RATING_SVG_IMDB);
-         const circleImdb: HTMLElement = ratingImdbCircle.querySelector('.circle') as HTMLElement;
-         const percentImdb: number = filmData.ratingImdb / 10;
-         circleImdb.style.strokeDashoffset = `${RATING_100 - percentImdb * RATING_100}`;
-         const ratingImdbNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingImdb));
-         const ratingImdbHeader: HTMLElement = addElement('div', 'rating-header', 'IMDb');
-         ratingImdbContainer.append(ratingImdbCircle, ratingImdbNumber, ratingImdbHeader);
-         topRatingItems.append(ratingImdbContainer);
-      }
-      if (filmData.ratingKinopoisk) {
-         const ratingKpContainer: HTMLElement = addElement('div', 'rating__kp');
-         const ratingKpCircle: HTMLElement = addElement('div', 'rating__kp-circle', RATING_SVG_KP);
-         const circleKp: HTMLElement = ratingKpCircle.querySelector('.circle') as HTMLElement;
-         const percentKp: number = filmData.ratingKinopoisk / 10;
-         circleKp.style.strokeDashoffset = `${RATING_100 - percentKp * RATING_100}`;
-         const ratingKpNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingKinopoisk));
-         const ratingKpHeader: HTMLElement = addElement('div', 'rating-header', 'KP');
-         ratingKpContainer.append(ratingKpCircle, ratingKpNumber, ratingKpHeader);
-         topRatingItems.append(ratingKpContainer);
-      }
-      topInfo.append(topRatingItems);
-   }
+   embedRating(filmData, topInfo);
 
    topBlock.append(topPoster, topInfo);
 
@@ -449,7 +423,6 @@ function embedPoster(topPoster: HTMLElement, filmData: respFilm): void {
    const attrArr: { attr: string, attrValue: string }[] = [{ attr: 'src', attrValue: posterUrl }, { attr: 'alt', attrValue: 'poster' }]
    const embedEl: HTMLElement = addElement('img', 'top__poster-fragment', '', attrArr);
    topPoster.appendChild(embedEl)
-
 }
 
 
@@ -483,6 +456,35 @@ function embedTopInfo(
    showFilmDistributions(filmDistributions, table);
    showFilmLength(filmData, table);
    topInfo.append(table);
+}
+
+function embedRating(filmData: respFilm, topInfo: HTMLElement) {
+   if (filmData.ratingImdb || filmData.ratingKinopoisk) {
+      const topRatingItems: HTMLElement = addElement('div', 'top__rating-items rating-items');
+      if (filmData.ratingImdb) {
+         const ratingImdbContainer: HTMLElement = addElement('div', 'rating__imdb');
+         const ratingImdbCircle: HTMLElement = addElement('div', 'rating__imdb-circle', RATING_SVG_IMDB);
+         const circleImdb: HTMLElement = ratingImdbCircle.querySelector('.circle') as HTMLElement;
+         const percentImdb: number = filmData.ratingImdb / 10;
+         circleImdb.style.strokeDashoffset = `${RATING_100 - percentImdb * RATING_100}`;
+         const ratingImdbNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingImdb));
+         const ratingImdbHeader: HTMLElement = addElement('div', 'rating-header', 'IMDb');
+         ratingImdbContainer.append(ratingImdbCircle, ratingImdbNumber, ratingImdbHeader);
+         topRatingItems.append(ratingImdbContainer);
+      }
+      if (filmData.ratingKinopoisk) {
+         const ratingKpContainer: HTMLElement = addElement('div', 'rating__kp');
+         const ratingKpCircle: HTMLElement = addElement('div', 'rating__kp-circle', RATING_SVG_KP);
+         const circleKp: HTMLElement = ratingKpCircle.querySelector('.circle') as HTMLElement;
+         const percentKp: number = filmData.ratingKinopoisk / 10;
+         circleKp.style.strokeDashoffset = `${RATING_100 - percentKp * RATING_100}`;
+         const ratingKpNumber: HTMLElement = addElement('div', 'rating-number', String(filmData.ratingKinopoisk));
+         const ratingKpHeader: HTMLElement = addElement('div', 'rating-header', 'KP');
+         ratingKpContainer.append(ratingKpCircle, ratingKpNumber, ratingKpHeader);
+         topRatingItems.append(ratingKpContainer);
+      }
+      topInfo.append(topRatingItems);
+   }
 }
 
 function embedReviews(reviewsItems: HTMLElement, reviews: respReviewItem[], max: number, className: string): void {
@@ -765,7 +767,8 @@ function showFilmDistributions(filmDistributions: respDistributions, table: HTML
       if (filmDistributions.total > 0) {
          const worldPremierObj: respDistributionsItem = filmDistributions.items.find(el => el.type.toUpperCase() === 'WORLD_PREMIER') as respDistributionsItem;
          if (worldPremierObj) {
-            const worldPremier: string = new Date(worldPremierObj.date).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
+            const worldPremier: string = new Date(worldPremierObj.date)
+               .toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
             addTableRow(table, ['Премьера в мире', worldPremier], 'table__row table__row_budget', '');
          }
       }

@@ -1,7 +1,7 @@
 export const DOMAIN = 'https://kinopoiskapiunofficial.tech/api';
-export const API_KEY = '66723cba-ea77-458f-80d5-57e3db4430c1';
-// export const API_KEY = '859e945d-207a-47dd-afea-0c28e7067f8a';
-// export const API_KEY = '8c4d0f91-cacb-4c70-9528-b59b313497bb';
+//export const API_KEY = '66723cba-ea77-458f-80d5-57e3db4430c1';
+//export const API_KEY = '859e945d-207a-47dd-afea-0c28e7067f8a';
+export const API_KEY = '8c4d0f91-cacb-4c70-9528-b59b313497bb';
 //export const API_KEY = '092ee281-33c1-4042-b861-55bc57b55677';
 export const KINOPOISK_URLS: kinopoiskURLs = {
    'premieres': 'v2.2/films/premieres',

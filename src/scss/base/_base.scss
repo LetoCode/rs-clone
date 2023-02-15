@@ -21,8 +21,9 @@ body {
 }
 
 .container {
-   width: 1104px;
+   max-width: 1134px;
    margin: 0 auto;
+   padding: 0 15px;
 }
 
 .header {

@@ -4,7 +4,7 @@ import { router, handleRoute } from "../router/router";
 
 
 function homePage(): void {
-   App.showPage(createHomePage)
+   App.showPage(createHomePage);
 }
 
 function createHomePage(): HTMLElement {
