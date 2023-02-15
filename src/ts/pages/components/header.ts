@@ -1,3 +1,5 @@
+import { addSearchListener } from "../handlers/searchHandlers";
+
 function showHeader(): HTMLElement {
    const headerElement: HTMLElement = document.createElement('header');
    headerElement.className = 'header';
@@ -21,6 +23,7 @@ function showHeader(): HTMLElement {
       </div>
    </div>
    `;
+   setTimeout(addSearchListener, 100)
    return headerElement;
 }
 

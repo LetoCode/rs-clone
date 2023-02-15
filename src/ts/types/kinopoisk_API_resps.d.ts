@@ -18,6 +18,7 @@ interface respCompanies {
 
 interface respFilmItem {
    kinopoiskId: number,
+   filmId: number,
    nameRu: string,
    nameEn: string,
    year: number,
