@@ -3,6 +3,7 @@ import homePage from "../pages/home";
 import moviePage from "../pages/movie";
 import testApi from "../pages/testKinopoiskApi";
 import personPage from "../pages/person";
+import staffPage from "../pages/staff";
 
 const ROUTER_PATHS: Paths = {
    '404': {
@@ -20,6 +21,10 @@ const ROUTER_PATHS: Paths = {
    'person': {
       cb: personPage,
       title: 'person'
+   },
+   'filmstaff': {
+      cb: staffPage,
+      title: 'movie staff'
    },
    'testapi': {
       cb: testApi,

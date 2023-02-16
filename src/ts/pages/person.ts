@@ -1,8 +1,29 @@
 import * as Controller from "../kinopoiskAPI/controller";
+import * as imdbController from "../imdbAPI/imdbController";
 import * as App from "../app/app";
 import { addElement, addTableRow } from "../utils/elementsBuilder";
 import { router } from "../router/router";
 import { buttonProfClick } from "./handlers/personHandlers";
+import noPoster from '../../assets/noPoster.gif';
+
+const FILMS_ON_PAGE: number = 10;
+const PROFS: {
+   actor: string;
+   director: string;
+   writer: string;
+   producer: string;
+   editor: string;
+   operator: string;
+   design: string;
+} = {
+   actor: 'Актер',
+   director: 'Режиссер',
+   writer: 'Сценарист',
+   producer: 'Продюссер',
+   editor: 'Монтаж',
+   operator: 'Оператор',
+   design: 'Художник'
+}
 
 function personPage(): void {
    App.showPage(createPersonPage);
@@ -17,7 +38,7 @@ function createPersonPage(): HTMLElement {
       const personContainer: HTMLElement = addElement('div', 'container person');
       const personData: PersonByID = await Controller.getPersonById(id) as PersonByID;
       if (!personData) router('/404');
-      console.log(personData)
+      console.log('personData=', personData)
 
       const topBlock: DocumentFragment = getTopBlock(personData);
       personContainer.append(topBlock);
@@ -28,10 +49,9 @@ function createPersonPage(): HTMLElement {
       }
 
       if (personData.films.length) {
-         const filmsBlock: DocumentFragment = getFilmsBlock(personData.films);
+         const filmsBlock: DocumentFragment = await getFilmsBlock(personData.films);
          personContainer.append(filmsBlock);
       }
-
 
       mainElement.append(personContainer);
    })();
@@ -64,9 +84,9 @@ function getFactsBlock(facts: string[]): DocumentFragment {
 
    const title: HTMLElement = addElement('div', 'facts__title', 'Знаете ли вы, что...');
    el.append(title);
-   const items: HTMLElement = addElement('div', 'facts__items');
+   const items: HTMLElement = addElement('ul', 'facts__items');
    for (const fact of facts) {
-      const item: HTMLElement = addElement('div', 'fact__item', fact);
+      const item: HTMLElement = addElement('li', 'fact__item', fact);
       items.append(item);
    }
    el.appendChild(items);
@@ -75,40 +95,34 @@ function getFactsBlock(facts: string[]): DocumentFragment {
 }
 
 
-function getFilmsBlock(films: personsFilm[]): DocumentFragment {
+async function getFilmsBlock(films: personsFilm[]): Promise<DocumentFragment> {
    const fragment: DocumentFragment = new DocumentFragment();
    const el: HTMLElement = addElement('div', 'person__films person-films', '', [{ attr: 'name', attrValue: 'personFilms' }]);
 
    const container: HTMLElement = addElement('div', 'persons-film__container');
    const personMenu: HTMLElement = addElement('div', 'persons-film__menu block-menu');
-   const personFilms: HTMLElement = addElement('div', 'person-film__Films');
+   const personFilms: HTMLElement = addElement('div', 'person-film__films');
    container.append(personMenu, personFilms);
 
    const [uniqProfessions, theMostProfessionCount]: [Set<string>, string] = getProfessions(films);
 
    for (const prof of uniqProfessions) {
-      const buttonProf: HTMLElement = addElement('button', 'btn person-film__btn', prof,
+      if (prof === 'HIMSELF' || prof === 'HRONO_TITR_MALE') continue;
+      const profKey = (prof.toLocaleLowerCase()) as keyof typeof PROFS;
+      const currentProf: string = PROFS[profKey] || prof;
+      const buttonProf: HTMLElement = addElement('button', 'btn person-film__btn', currentProf,
          [{ attr: 'type', attrValue: 'button' }]);
       if (prof === theMostProfessionCount) buttonProf.classList.add('_active');
-      buttonProf.addEventListener('click', (event: Event): void =>
-         buttonProfClick.call(buttonProf, event, films, personFilms));
+      const filmsForButton: personsFilm[] = films.filter(el => el.professionKey === prof);
+      buttonProf.addEventListener('click', (event: Event): Promise<void> =>
+         buttonProfClick.call(buttonProf, event, filmsForButton, personFilms));
       personMenu.append(buttonProf);
    }
 
-   const currentFilms: personsFilm[] = films.filter(el => el.professionKey === theMostProfessionCount);
-   for (const item of currentFilms) {
-      if (item.nameRu) {
-         const filmContainer: HTMLElement = addElement('div', 'persons-film__item');
-         const filmName: HTMLElement = addElement('div', 'persons-film__name');
-         const filmRating: HTMLElement = addElement('div', 'persons-film__rating');
-         const a: HTMLElement = addElement('a', 'persons-film__link', item.nameRu,
-            [{ attr: 'href', attrValue: `/movie?${item.filmId}` }]);
-         filmRating.textContent = item.rating;
-         filmName.append(a);
-         filmContainer.append(filmName, filmRating);
-         personFilms.append(filmContainer);
-      }
-   }
+   const currentFilms: personsFilm[] = films.filter(el => {
+      return el.professionKey === theMostProfessionCount && el.nameEn && el.nameRu;
+   });
+   showFilmPageWithPagination(currentFilms, personFilms, 1);
 
    el.appendChild(container);
    fragment.appendChild(el);
@@ -131,7 +145,7 @@ function embedTopInfo(topInfo: HTMLElement, personData: PersonByID): void {
 
    const about: HTMLElement = addElement('div', 'info__year', 'О персоне');
    topInfo.append(about);
-   const table: HTMLElement = addElement('table', 'info__table table');
+   const table: HTMLElement = addElement('table', 'info__table info__table_person table');
 
    showProfession(personData, table);
    showGrowth(personData, table);
@@ -234,13 +248,22 @@ function showSpouses(personData: PersonByID, table: HTMLElement) {
    }
 }
 
-function getProfessions(films: personsFilm[]): [uniqProfessions: Set<string>, theMostProfession: string] {
+function getProfessions(films: personsFilm[]): [Set<string>, string] {
    const professions: string[] = films.map(el => el.professionKey);
    const professionsCount: { [key: string]: number } = {}
    const uniqProfessions: Set<string> = new Set(professions);
    uniqProfessions.forEach(el => {
       const value: number = professions.reduce((acc, item) => {
-         return item === el ? acc + 1 : acc;
+         switch (el) {
+            case 'HIMSELF':
+               return acc;
+               break;
+            case 'HRONO_TITR_MALE':
+               return acc;
+               break;
+            default:
+               return item === el ? acc + 1 : acc;
+         }
       }, 0)
       professionsCount[el] = value;
    })
@@ -254,10 +277,40 @@ function getProfessions(films: personsFilm[]): [uniqProfessions: Set<string>, th
    return [uniqProfessions, theMostProfession];
 }
 
+export async function showFilmPageWithPagination(currentFilms: personsFilm[], personFilms: HTMLElement, page: number): Promise<void> {
+   //const pagesCount: number = Math.ceil(currentFilms.length / FILMS_ON_PAGE);
+   const start: number = FILMS_ON_PAGE * (page - 1);
+   const finish: number = FILMS_ON_PAGE * (page);
+   const filmsOnPage = currentFilms.slice(start, finish)
+   console.log('currentFilms =', currentFilms)
+   console.log('filmsOnPage =', filmsOnPage)
 
-
-
-
+   for (const item of filmsOnPage) {
+      if (item.nameEn && item.nameRu) {
+         const imdbData: respImdbTitle = await imdbController.getFilmImdb(item.nameEn) as respImdbTitle;
+         const filmContainer: HTMLElement = addElement('div', 'persons-film__item');
+         const imageContainer: HTMLElement = addElement('div', 'persons-film__image');
+         const a1: HTMLElement = addElement('a', 'persons-film__link', '',
+            [{ attr: 'href', attrValue: `/movie?${item.filmId}` }]);
+         const image: HTMLElement = addElement('img', '', '',
+            [{ attr: 'src', attrValue: imdbData.Poster || noPoster },
+            { attr: 'alt', attrValue: '' },
+            { attr: 'loading', attrValue: 'lazy' }]);
+         a1.append(image);
+         imageContainer.append(a1);
+         const filmName: HTMLElement = addElement('div', 'persons-film__name');
+         const filmRatingContainer: HTMLElement = addElement('div', 'persons-film__rating-container');
+         const filmRatingName: HTMLElement = addElement('div', 'persons-film__rating-name', 'рейтинг Кинопоиск');
+         const filmRatingValue: HTMLElement = addElement('div', 'persons-film__rating-value', item.rating || '-');
+         const a2: HTMLElement = addElement('a', 'persons-film__link', item.nameRu,
+            [{ attr: 'href', attrValue: `/movie?${item.filmId}` }]);
+         filmRatingContainer.append(filmRatingName, filmRatingValue);
+         filmName.append(a2);
+         filmContainer.append(imageContainer, filmName, filmRatingContainer);
+         personFilms.append(filmContainer);
+      }
+   }
+}
 
 
 export default personPage;

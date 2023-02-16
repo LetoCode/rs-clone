@@ -1,6 +1,6 @@
 interface requestOptions {
    method: string,
-   headers: {
+   headers?: {
       [key: string]: string
    }
 

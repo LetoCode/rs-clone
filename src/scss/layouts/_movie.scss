@@ -191,6 +191,9 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
    display: flex;
    gap: 10px;
    margin: 25px 0px 25px 0px;
+   width: 100%;
+   overflow: auto;
+   padding-bottom: 10px;
 }
 
 .actors__menu {
@@ -495,6 +498,12 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
 }
 
 //=======================================images========================================
+.movie-images {
+   height: 530px;
+}
+.swiper-wrapper {
+   height: 100%;
+}
 
 .movie-images__header {
    font-size: 100%;
@@ -510,14 +519,24 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
 
 #swiper {
    min-width: 290px;
-   max-width: 645px;
+   max-width: 800px;
+   height: 450px;
    margin: 0;
+}
+
+.swiper-slide {
+   width: 100%;
+   height: 100%;
 }
 
 .movie-images__img {
    width: 100%;
    height: 100%;
-   object-fit: cover;
+   object-fit: contain;
+   & img {
+      width: 100%;
+      height: 100%;
+   }
 }
 
 .movie-images__header {
