@@ -19,6 +19,7 @@ import avatar7 from '../../assets/avatars/smile_avatar7.png';
 import avatar8 from '../../assets/avatars/smile_avatar8.png';
 import avatar9 from '../../assets/avatars/smile_avatar9.png';
 import avatar10 from '../../assets/avatars/smile_avatar10.png';
+import { DATE_FORMAT } from '../utils/stringFormats';
 
 
 const MAX_REVIEWS: number = 5;
@@ -313,7 +314,7 @@ function getSeasonsBlock(filmSeasons: respSeasons, asideList: HTMLElement): Docu
          }
 
          const dateContainer: HTMLElement = addElement('div', 'episode__date-container');
-         const releaseDate: string = new Date(episode.releaseDate).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
+         const releaseDate: string = new Date(episode.releaseDate).toLocaleDateString('ru-RU', DATE_FORMAT);
          const episodeDate: HTMLElement = addElement('p', 'episode__date episode', `${releaseDate}`);
          dateContainer.append(episodeDate);
          episodeContainer.append(namesContainer, dateContainer);
@@ -500,7 +501,7 @@ function embedReviews(reviewsItems: HTMLElement, reviews: respReviewItem[], max:
       const reviewAuthor: HTMLElement = addElement('div', 'item__author', reviews[i].author);
       const reviewAuthorGroup: HTMLElement = addElement('div', 'item__author_group');
       reviewAuthorGroup.append(reviewAuthorAvatar, reviewAuthor);
-      const rDate = new Date(reviews[i].date).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
+      const rDate = new Date(reviews[i].date).toLocaleDateString('ru-RU', DATE_FORMAT);
       const reviewDate: HTMLElement = addElement('div', 'item__date', rDate);
       reviewItemHeader.append(reviewAuthorGroup, reviewDate);
 
@@ -768,7 +769,7 @@ function showFilmDistributions(filmDistributions: respDistributions, table: HTML
          const worldPremierObj: respDistributionsItem = filmDistributions.items.find(el => el.type.toUpperCase() === 'WORLD_PREMIER') as respDistributionsItem;
          if (worldPremierObj) {
             const worldPremier: string = new Date(worldPremierObj.date)
-               .toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
+               .toLocaleDateString('ru-RU', DATE_FORMAT);
             addTableRow(table, ['Премьера в мире', worldPremier], 'table__row table__row_budget', '');
          }
       }

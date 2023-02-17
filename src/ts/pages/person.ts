@@ -5,17 +5,10 @@ import { addElement, addTableRow } from "../utils/elementsBuilder";
 import { router } from "../router/router";
 import { buttonProfClick } from "./handlers/personHandlers";
 import noPoster from '../../assets/noPoster.gif';
+import { DATE_FORMAT } from "../utils/stringFormats";
 
 const FILMS_ON_PAGE: number = 10;
-const PROFS: {
-   actor: string;
-   director: string;
-   writer: string;
-   producer: string;
-   editor: string;
-   operator: string;
-   design: string;
-} = {
+const PROFS: professionTranslate = {
    actor: 'Актер',
    director: 'Режиссер',
    writer: 'Сценарист',
@@ -159,7 +152,7 @@ function embedTopInfo(topInfo: HTMLElement, personData: PersonByID): void {
 }
 
 
-function showPersonNameRu(personData: PersonByID, topInfo: HTMLElement) {
+function showPersonNameRu(personData: PersonByID, topInfo: HTMLElement): void {
    try {
       const nameRuContent = `${personData.nameRu}`;
       if (nameRuContent) {
@@ -169,7 +162,7 @@ function showPersonNameRu(personData: PersonByID, topInfo: HTMLElement) {
    } catch (e: unknown) { console.log(e) }
 }
 
-function showPersonNameEn(personData: PersonByID, topInfo: HTMLElement) {
+function showPersonNameEn(personData: PersonByID, topInfo: HTMLElement): void {
    try {
       const nameEnContent = personData.nameEn || '';
       if (nameEnContent) {
@@ -180,7 +173,7 @@ function showPersonNameEn(personData: PersonByID, topInfo: HTMLElement) {
 }
 
 
-function showProfession(personData: PersonByID, table: HTMLElement) {
+function showProfession(personData: PersonByID, table: HTMLElement): void {
    try {
       const profession: string = personData.profession;
       if (profession) addTableRow(table, ['Карьера', profession], 'table__row table__row_profession', '');
@@ -189,7 +182,7 @@ function showProfession(personData: PersonByID, table: HTMLElement) {
 }
 
 
-function showGrowth(personData: PersonByID, table: HTMLElement) {
+function showGrowth(personData: PersonByID, table: HTMLElement): void {
    try {
       const growth: string = personData.growth;
       if (growth) addTableRow(table, ['Рост', growth.toString()], 'table__row table__row_growth', '');
@@ -197,25 +190,30 @@ function showGrowth(personData: PersonByID, table: HTMLElement) {
    } catch (e: unknown) { console.log(e) }
 }
 
-function showBirthday(personData: PersonByID, table: HTMLElement) {
+function showBirthday(personData: PersonByID, table: HTMLElement): void {
    try {
       const birthday: string = personData.growth;
-      if (birthday) addTableRow(table, ['День рождения', new Date(birthday).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' })], 'table__row table__row_birthday', '');
+      if (birthday) {
+         const date: string = new Date(birthday).toLocaleDateString('ru-RU', DATE_FORMAT);
+         addTableRow(table, ['День рождения', date], 'table__row table__row_birthday', '');
+      }
 
    } catch (e: unknown) { console.log(e) }
 }
 
-function showDeath(personData: PersonByID, table: HTMLElement) {
+function showDeath(personData: PersonByID, table: HTMLElement): void {
    try {
       const death: string = personData.death;
-      if (death) addTableRow(table, ['День смерти', new Date(death)
-         .toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' })], 'table__row table__row_death', '');
+      if (death) {
+         const date: string = new Date(death).toLocaleDateString('ru-RU', DATE_FORMAT);
+         addTableRow(table, ['День смерти', date], 'table__row table__row_death', '');
+      }
 
    } catch (e: unknown) { console.log(e) }
 }
 
 
-function showBirthplace(personData: PersonByID, table: HTMLElement) {
+function showBirthplace(personData: PersonByID, table: HTMLElement): void {
    try {
       const birthplace: string = personData.birthplace;
       if (birthplace) addTableRow(table, ['Место рождения', birthplace], 'table__row table__row_birthplace', '');
@@ -223,7 +221,7 @@ function showBirthplace(personData: PersonByID, table: HTMLElement) {
    } catch (e: unknown) { console.log(e) }
 }
 
-function showDeathplace(personData: PersonByID, table: HTMLElement) {
+function showDeathplace(personData: PersonByID, table: HTMLElement): void {
    try {
       const deathplace: string = personData.deathplace;
       if (deathplace) addTableRow(table, ['Место смерти', deathplace], 'table__row table__row_deathplace', '');
@@ -232,7 +230,7 @@ function showDeathplace(personData: PersonByID, table: HTMLElement) {
 }
 
 
-function showSpouses(personData: PersonByID, table: HTMLElement) {
+function showSpouses(personData: PersonByID, table: HTMLElement): void {
    if (personData.spouses.length) {
       try {
          let anchorsArray: Array<HTMLElement> = [];
