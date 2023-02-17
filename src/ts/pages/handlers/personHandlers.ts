@@ -24,7 +24,7 @@ export async function changePaginationPage(
    paginationContainer: HTMLElement,
    currentFilms: personsFilm[],
    personFilms: HTMLElement,
-   page: number) {
+   page: number): Promise<void> {
 
    console.log('this', this)
    console.log('paginationContainer', paginationContainer)
