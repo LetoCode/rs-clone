@@ -16,7 +16,7 @@ function showHeader(): HTMLElement {
          </nav>
          <div class="header__right">
            <input type="search" class="header__search" placeholder="Поиск">
-           <a href="#">Войти</a>
+           <a href="/authentication">Войти</a>
          </div>
       </div>
    </div>
