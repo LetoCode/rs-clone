@@ -5,7 +5,7 @@ import { createPoster } from "./components/poster";
 
 
 function homePage(): void {
-   App.showPage(createHomePage)
+   App.showPage(createHomePage);
 }
 
 function createHomePage(): HTMLElement {

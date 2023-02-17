@@ -8,7 +8,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const devServer = (isDev) => !isDev ? {} : {
    devServer: {
       open: true,
-      //watchFiles: ['src/**/*', 'public/**/*'],
+      watchFiles: ['src/**/*', 'public/**/*'],
       port: 8080,
       historyApiFallback: true,
       static: path.join(__dirname, './src/public'),
@@ -33,6 +33,7 @@ module.exports = ({ development }) => ({
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'dist'),
       assetModuleFilename: 'assets/[hash][ext]',
+      publicPath: '/'
    },
    module: {
       rules: [
