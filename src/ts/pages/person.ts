@@ -3,11 +3,11 @@ import * as imdbController from "../imdbAPI/imdbController";
 import * as App from "../app/app";
 import { addElement, addTableRow } from "../utils/elementsBuilder";
 import { router } from "../router/router";
-import { buttonProfClick } from "./handlers/personHandlers";
+import { buttonProfClick, changePaginationPage } from "./handlers/personHandlers";
 import noPoster from '../../assets/noPoster.gif';
 import { DATE_FORMAT } from "../utils/stringFormats";
 
-const FILMS_ON_PAGE: number = 10;
+export const FILMS_ON_PAGE: number = 5;
 const PROFS: professionTranslate = {
    actor: 'Актер',
    director: 'Режиссер',
@@ -31,7 +31,6 @@ function createPersonPage(): HTMLElement {
       const personContainer: HTMLElement = addElement('div', 'container person');
       const personData: PersonByID = await Controller.getPersonById(id) as PersonByID;
       if (!personData) router('/404');
-      console.log('personData=', personData)
 
       const topBlock: DocumentFragment = getTopBlock(personData);
       personContainer.append(topBlock);
@@ -54,7 +53,8 @@ function createPersonPage(): HTMLElement {
 
 function getTopBlock(personData: PersonByID): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'person__top top', '', [{ attr: 'name', attrValue: 'personName' }]);
+   const el: HTMLElement = addElement('div', 'person__top top', '',
+      [{ attr: 'name', attrValue: 'personName' }]);
 
    const topBlock: HTMLElement = addElement('div', 'top-person__block');
    const topPoster: HTMLElement = addElement('div', 'top-person__poster');
@@ -106,7 +106,7 @@ async function getFilmsBlock(films: personsFilm[]): Promise<DocumentFragment> {
       const buttonProf: HTMLElement = addElement('button', 'btn person-film__btn', currentProf,
          [{ attr: 'type', attrValue: 'button' }]);
       if (prof === theMostProfessionCount) buttonProf.classList.add('_active');
-      const filmsForButton: personsFilm[] = films.filter(el => el.professionKey === prof);
+      const filmsForButton: personsFilm[] = films.filter(el => el.professionKey === prof && el.nameEn && el.nameRu);
       buttonProf.addEventListener('click', (event: Event): Promise<void> =>
          buttonProfClick.call(buttonProf, event, filmsForButton, personFilms));
       personMenu.append(buttonProf);
@@ -115,7 +115,9 @@ async function getFilmsBlock(films: personsFilm[]): Promise<DocumentFragment> {
    const currentFilms: personsFilm[] = films.filter(el => {
       return el.professionKey === theMostProfessionCount && el.nameEn && el.nameRu;
    });
-   showFilmPageWithPagination(currentFilms, personFilms, 1);
+   await showFilmPageWithPagination(currentFilms, personFilms, 1);
+   console.log('currentFilms', currentFilms)
+   addPagination(currentFilms, personFilms, 1);
 
    el.appendChild(container);
    fragment.appendChild(el);
@@ -275,13 +277,15 @@ function getProfessions(films: personsFilm[]): [Set<string>, string] {
    return [uniqProfessions, theMostProfession];
 }
 
-export async function showFilmPageWithPagination(currentFilms: personsFilm[], personFilms: HTMLElement, page: number): Promise<void> {
-   //const pagesCount: number = Math.ceil(currentFilms.length / FILMS_ON_PAGE);
+export async function showFilmPageWithPagination(
+   currentFilms: personsFilm[],
+   personFilms: HTMLElement,
+   page: number): Promise<void> {
+
    const start: number = FILMS_ON_PAGE * (page - 1);
    const finish: number = FILMS_ON_PAGE * (page);
-   const filmsOnPage = currentFilms.slice(start, finish)
-   console.log('currentFilms =', currentFilms)
-   console.log('filmsOnPage =', filmsOnPage)
+   const filmsOnPage = currentFilms.slice(start, finish);
+   const filmsItems: HTMLElement = addElement('div', 'person-film__items');
 
    for (const item of filmsOnPage) {
       if (item.nameEn && item.nameRu) {
@@ -290,8 +294,9 @@ export async function showFilmPageWithPagination(currentFilms: personsFilm[], pe
          const imageContainer: HTMLElement = addElement('div', 'persons-film__image');
          const a1: HTMLElement = addElement('a', 'persons-film__link', '',
             [{ attr: 'href', attrValue: `/movie?${item.filmId}` }]);
+         const posterIMG: string = imdbData.Poster === 'N/A' ? noPoster : imdbData.Poster || noPoster;
          const image: HTMLElement = addElement('img', '', '',
-            [{ attr: 'src', attrValue: imdbData.Poster || noPoster },
+            [{ attr: 'src', attrValue: posterIMG },
             { attr: 'alt', attrValue: '' },
             { attr: 'loading', attrValue: 'lazy' }]);
          a1.append(image);
@@ -305,9 +310,30 @@ export async function showFilmPageWithPagination(currentFilms: personsFilm[], pe
          filmRatingContainer.append(filmRatingName, filmRatingValue);
          filmName.append(a2);
          filmContainer.append(imageContainer, filmName, filmRatingContainer);
-         personFilms.append(filmContainer);
+         filmsItems.append(filmContainer);
       }
    }
+   personFilms.append(filmsItems);
+}
+
+export function addPagination(currentFilms: personsFilm[], personFilms: HTMLElement, page: number): void {
+   const pagesCount: number = Math.ceil(currentFilms.length / FILMS_ON_PAGE);
+   let paginationContainer: HTMLElement | null = document.querySelector('pag__container');
+   if (!paginationContainer) {
+      paginationContainer = addElement('div', 'pag__container');
+   } else {
+      paginationContainer.innerHTML = '';
+   }
+   for (let i = 1; i <= pagesCount; i += 1) {
+      const item: HTMLElement = addElement('button', 'pag__item', i.toString(),
+         [{ attr: 'type', attrValue: 'button' }]);
+      if (i === page) {
+         item.classList.add('_active');
+      }
+      item.addEventListener('click', changePaginationPage.bind(item, paginationContainer, currentFilms, personFilms, i));
+      paginationContainer.append(item);
+   }
+   personFilms.append(paginationContainer);
 }
 
 

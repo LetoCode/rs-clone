@@ -71,7 +71,7 @@
 
 .fact__item {
    position: relative;
-   width: 80%;
+   width: 90%;
 
    font-size: 90%;
    padding: 20px 15px;
@@ -122,4 +122,38 @@
 
 .person-film__btn {
    text-transform: lowercase;
+}
+
+.person-film__films {
+   min-height: 895px;
+   display: flex;
+   flex-direction: column;
+}
+
+.person-film__items {
+   margin-bottom: 30px;
+   flex: 1 1 auto;
+}
+
+//====================================pagination===================================================
+.pag__container {
+   display: flex;
+   justify-content: center;
+   gap: 10px;
+   // margin-top: 50px;
+}
+
+.pag__item {
+   color: #ffffff;
+   font-size: 60%;
+   display: inline-block;
+   width: 20px;
+   height: 20px;
+   border: 1px solid rgb(238, 223, 138);
+   border-radius: 2px;
+   background-color: transparent;
+}
+
+.pag__item._active {
+   border: 2px solid rgb(238, 223, 138);
 }
