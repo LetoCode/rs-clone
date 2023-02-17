@@ -12,8 +12,6 @@ export async function buttonProfClick(
    button.classList.add('_active');
    personFilms.innerHTML = '';
    await showFilmPageWithPagination(filmsForButton, personFilms, 1);
-   console.log('FILMS_ON_PAGE', FILMS_ON_PAGE)
-   console.log('filmsForButton', filmsForButton)
    if (FILMS_ON_PAGE < filmsForButton.length) {
       addPagination(filmsForButton, personFilms, 1);
    }
@@ -25,12 +23,6 @@ export async function changePaginationPage(
    currentFilms: personsFilm[],
    personFilms: HTMLElement,
    page: number): Promise<void> {
-
-   console.log('this', this)
-   console.log('paginationContainer', paginationContainer)
-   console.log('currentFilms', currentFilms)
-   console.log('personFilms', personFilms)
-   console.log('page', page)
 
    const oldActiveEl: HTMLElement = paginationContainer.querySelector('._active') as HTMLElement;
    oldActiveEl.classList.remove('_active');

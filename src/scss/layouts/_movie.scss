@@ -191,9 +191,21 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
    display: flex;
    gap: 10px;
    margin: 25px 0px 25px 0px;
-   width: 100%;
+   width: 90%;
    overflow: auto;
    padding-bottom: 10px;
+}
+
+.block-menu::-webkit-scrollbar {
+   width: 5px;
+   height: 5px;
+   background: #30c5ff;
+}
+
+.block-menu::-webkit-scrollbar-thumb {
+   background: #19ee52;
+   border-radius: 3px;
+   border: 3px solid #19ee52;
 }
 
 .actors__menu {
