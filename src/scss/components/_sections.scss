@@ -35,15 +35,35 @@
     justify-content: space-between;
     margin-bottom: 20px;
     flex-wrap: wrap;
+    @include media-laptop {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-rows: repeat(2, 50%);
+        grid-template-columns: repeat(3, 32.333%);
+        margin-bottom: 40px;
+    }
+
+    @include media-mobile {
+        grid-template-rows: repeat(3, 33.333%);
+        grid-template-columns: repeat(2, 49%);
+    }
+
+    @include media-mobilesmall {
+        display: block;
+    }
 }
 
 .section__poster {
     width: 168px;
     margin-top: 20px;
-    transition: .5s;
+    transition: 0.5s;
     &:hover {
         margin-top: 10px;
         cursor: pointer;
+    }
+
+    @include media-laptop {
+        width: 100%;
     }
 }
 
@@ -51,6 +71,11 @@
     width: 100%;
     height: 240px;
     border-radius: 8px;
+
+    @include media-laptop {
+        height: auto;
+        aspect-ratio: 240/320;
+    }
 }
 
 .poster__title {
@@ -63,4 +88,10 @@
 .poster__desc {
     font-size: 1.4rem;
     color: $color-light;
+}
+
+.section h2 {
+    @include media-laptop {
+        font-size: 3.4rem;
+    }
 }

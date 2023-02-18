@@ -25,10 +25,20 @@
     &:hover {
         color: $color-text;
     }
+    & a {
+        display: flex;
+    }
 }
 
 .github__img {
+    display: block;
     width: 24px;
     height: 24px;
     margin-right: 5px;
+}
+
+.github-name {
+    @include between-tablet-and-mobile {
+        display: none;
+    }
 }

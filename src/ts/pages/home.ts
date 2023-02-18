@@ -85,7 +85,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 
    block.append(greeting);
    greeting.className = 'greeting';
-   greeting.style.background = `linear-gradient(90deg, rgba(3,5,17,1) 15%, rgba(3,5,17,0.8) 35%, rgba(3,5,17,0) 80%, rgba(3,5,17,0.8) 100%), url(${film.posterUrl}) center/cover`;
+   greeting.style.background = `linear-gradient(90deg, rgba(3,5,17,1) 15%, rgba(3,5,17,0.8) 35%, rgba(3,5,17,0) 80%, rgba(3,5,17,0.8) 100%), url(${film.posterUrl}) center center/cover`;
    greeting.addEventListener('click', (event) => {
       event.preventDefault();
       router(pathname);
