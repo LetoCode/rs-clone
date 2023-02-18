@@ -65,16 +65,6 @@ function createMoviePage(): HTMLElement {
       //const filmSimilar: respSimilars = await Controller.getSimilars('77044') as respSimilars;
       //const film1: respfilmsWithFilters = await Controller.getFilmsWithFilters({ keyword: 'друзья', page: 1 }) as respfilmsWithFilters;
 
-      // console.log('filmData =', filmData)
-      //console.log('filmVideos =', filmVideos)
-      //console.log('filmImages =', filmImages)
-      // console.log('filmStaff =', filmStaff)
-      // console.log('filmBoxOffice =', filmBoxOffice)
-      // console.log('filmDistributions =', filmDistributions)
-      // console.log('filmDFacts =', filmFacts)
-      // console.log('filmReviews =', filmReviews)
-      //console.log('filmSimilar =', filmSimilar)
-      // console.log('filmFilters =', filmFilters)
       const movieContainer: HTMLElement = addElement('div', 'container movie');
 
       const asideMenu: HTMLElement = addElement('nav', 'aside-menu');
@@ -144,7 +134,7 @@ function getTopBlock(
    asideList: HTMLElement): DocumentFragment {
 
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__top top', '', [{ attr: 'name', attrValue: 'filmName' }]);
+   const el: HTMLElement = addElement('section', 'movie__top top', '', [{ attr: 'name', attrValue: 'filmName' }]);
    asideList.append(addMenuElement('Фильм', '#filmName'));
    if (filmImages.items.length) {
       const randomImageIndex = Math.floor(Math.random() * filmImages.items.length);
@@ -184,7 +174,7 @@ function getBodyBlock(): [DocumentFragment, HTMLElement, HTMLElement] {
 
 function getActorsBlock(filmStaff: FilmStaffItem[], asideList: HTMLElement, id: string): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__actors actors', '', [{ attr: 'name', attrValue: 'filmActors' }]);
+   const el: HTMLElement = addElement('section', 'movie__actors actors', '', [{ attr: 'name', attrValue: 'filmActors' }]);
    asideList.append(addMenuElement('Создатели', '#filmActors'));
 
    const actorsBlock: HTMLElement = addElement('div', 'actors__block');
@@ -218,7 +208,7 @@ function getActorsBlock(filmStaff: FilmStaffItem[], asideList: HTMLElement, id: 
 
 function getTrailerBlock(filmVideos: respVideos, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__trailer trailer', '', [{ attr: 'name', attrValue: 'filmTrailer' }]);
+   const el: HTMLElement = addElement('section', 'movie__trailer trailer', '', [{ attr: 'name', attrValue: 'filmTrailer' }]);
    asideList.append(addMenuElement('Трейлер', '#filmTrailer'));
 
    const menu: HTMLElement = addElement('div', 'trailer__menu block-menu');
@@ -252,7 +242,7 @@ function getTrailerBlock(filmVideos: respVideos, asideList: HTMLElement): Docume
 
 function getAboutBlock(filmData: respFilm, filmFacts: respFacts, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__about about', '', [{ attr: 'name', attrValue: 'filmAbout' }]);
+   const el: HTMLElement = addElement('section', 'movie__about about', '', [{ attr: 'name', attrValue: 'filmAbout' }]);
    asideList.append(addMenuElement('О фильме', '#filmAbout'));
 
    if (filmData.description) {
@@ -291,7 +281,7 @@ function getAboutBlock(filmData: respFilm, filmFacts: respFacts, asideList: HTML
 
 function getSeasonsBlock(filmSeasons: respSeasons, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__serial serial _hidden', '', [{ attr: 'name', attrValue: 'filmSeasons' }]);
+   const el: HTMLElement = addElement('section', 'movie__serial serial _hidden', '', [{ attr: 'name', attrValue: 'filmSeasons' }]);
    asideList.append(addMenuElement('Сезоны', '#filmSeasons'));
 
    const serialContainer: HTMLElement = addElement('div', 'serial__container');
@@ -332,7 +322,7 @@ function getSeasonsBlock(filmSeasons: respSeasons, asideList: HTMLElement): Docu
 
 function getReviewsBlock(filmReviews: respReviews, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__reviews reviews', '', [{ attr: 'name', attrValue: 'filmReviews' }]);
+   const el: HTMLElement = addElement('section', 'movie__reviews reviews', '', [{ attr: 'name', attrValue: 'filmReviews' }]);
    asideList.append(addMenuElement('Рецензии', '#filmReviews'));
 
    const reviewsContainer: HTMLElement = addElement('div', 'reviews__container');
@@ -361,7 +351,7 @@ function getReviewsBlock(filmReviews: respReviews, asideList: HTMLElement): Docu
 
 function getImagesBlock(filmImages: respImages, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__images movie-images', '', [{ attr: 'name', attrValue: 'filmImages' }]);
+   const el: HTMLElement = addElement('section', 'movie__images movie-images', '', [{ attr: 'name', attrValue: 'filmImages' }]);
    asideList.append(addMenuElement('Кадры и постеры', '#filmImages'));
 
    const header: HTMLElement = addElement('div', 'movie-images__header');
@@ -394,7 +384,7 @@ function getImagesBlock(filmImages: respImages, asideList: HTMLElement): Documen
 
 function getSimilarBlock(filmSimilar: respSimilars, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('div', 'movie__similar similar', '', [{ attr: 'name', attrValue: 'filmSimilar' }]);
+   const el: HTMLElement = addElement('section', 'movie__similar similar', '', [{ attr: 'name', attrValue: 'filmSimilar' }]);
    const header: HTMLElement = addElement('div', 'similar__header', 'Похожие фильмы');
    const items: HTMLElement = addElement('div', 'similar__items');
    el.append(header);

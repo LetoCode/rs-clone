@@ -1,8 +1,11 @@
 import * as App from "../app/app";
 import { getFilm, getFilmsWithFilters, getPremieres } from "../kinopoiskAPI/controller";
+import { getNews } from "../newsAPI/newsController";
 import { router } from "../router/router";
+import { createNewsItem } from "./components/newsItem";
 import { createPoster } from "./components/poster";
 
+const MAX_NEWS = 5;
 
 function homePage(): void {
    App.showPage(createHomePage);
@@ -52,6 +55,8 @@ function createHomePage(): HTMLElement {
       const dataBestFilms = await getFilmsWithFilters(filtersBestFilms) as respfilmsWithFilters;
       const dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
       const dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
+      const dataNews: respNews = await getNews() as respNews;
+      console.log('news', dataNews)
 
       const arrPremieres = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
       const arrNewFilms = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
@@ -60,6 +65,7 @@ function createHomePage(): HTMLElement {
       const arrAdventure = dataAdventure.items;
 
       createMainPoster(container, arrPremieres);
+      createNewsSection(container, 'Актуально', dataNews);
       createSection(container, 'Премьеры', arrPremieres);
       createSection(container, 'Новинки', arrNewFilms);
       createSection(container, 'Лучшие фильмы', arrBestFilms);
@@ -132,6 +138,25 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
 
    for (let i = 0; i < 6; i++) {
       createPoster(sectionItems, films[i]);
+   }
+}
+
+function createNewsSection(block: HTMLElement, title: string, dataNews: respNews) {
+   if (dataNews.totalResults) {
+      const section = document.createElement('section');
+      const sectionTitle = document.createElement('h2');
+      const sectionItems = document.createElement('div');
+
+      section.className = 'section section_news';
+      section.append(sectionTitle);
+      sectionTitle.textContent = title;
+      section.append(sectionItems);
+      sectionItems.className = 'section__items_news';
+      for (let i = 0; i < MAX_NEWS; i++) {
+         createNewsItem(sectionItems, dataNews.articles[i]);
+      }
+
+      block.append(section);
    }
 }
 
