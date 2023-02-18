@@ -19,7 +19,7 @@ export async function getFromAPI<T>(url: string, requestOptions: requestOptions)
       if (e instanceof Error) {
          if (e.message === 'Failed to fetch' && API_KEYS.length) {
             //if Error then try to change API key
-            new Promise((res, rej) => {
+            return new Promise((res, rej) => {
                console.log('1111111')
                const requestOptions: requestOptions = getRequestOptions(true);
                res(requestOptions);
