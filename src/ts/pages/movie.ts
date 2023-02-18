@@ -164,7 +164,7 @@ function getTopBlock(
 function getBodyBlock(): [DocumentFragment, HTMLElement, HTMLElement] {
    const fragment: DocumentFragment = new DocumentFragment();
    const el: HTMLElement = addElement('div', 'body-block');
-   const left: HTMLElement = addElement('div', 'body-block-left');
+   const left: HTMLElement = addElement('aside', 'body-block-left');
    const right: HTMLElement = addElement('div', 'body-block-right');
 
    el.append(left, right);
