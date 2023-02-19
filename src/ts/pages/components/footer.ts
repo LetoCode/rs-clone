@@ -8,19 +8,20 @@ function showFooter(): HTMLElement {
                <div class="github">
                   <a href="https://github.com/LetoCode">
                      <img src="github.svg" class="github__img" alt="github">
-                     LetoCode
+                     <div class="github-name">LetoCode</div>
                   </a>
                </div>
                <div class="github">
                   <a href="https://github.com/EGalitsky">
                      <img src="github.svg" class="github__img" alt="github">
-                     EGalitsky
+                     <div class="github-name">EGalitsky</div>
                   </a>
                </div>
                <div class="github">
                   <a href="https://github.com/eOne1999">
                      <img src="github.svg" class="github__img" alt="github">
-                     eOne1999
+                     <div class="github-name">eOne1999</div>
+
                   </a>
                </div>
             </div>

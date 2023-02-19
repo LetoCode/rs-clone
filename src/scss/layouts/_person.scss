@@ -1,14 +1,18 @@
 .top-person__block {
    display: flex;
    gap: 40px;
+
+   @include between-tablet-and-mobile {
+      display: block;
+   }
 }
 
 .top-person__poster {
-   flex: 1 1 20%;
+   flex: 1 0 30%;
 }
 
 .top-person__info {
-   flex: 1 1 80%;
+   flex: 1 1 70%;
 }
 
 .info__table_person .col_2 {
@@ -47,6 +51,10 @@
    width: 90%;
    position: relative;
    @include underLine1px;
+
+   @include media-mobile {
+      display: block;
+   }
 }
 
 .persons-film__image {

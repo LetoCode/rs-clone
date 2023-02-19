@@ -10,6 +10,12 @@
     }
 }
 
+@mixin between-tablet-and-mobile {
+    @media (max-width: $between-tablet-and-mobile-width) {
+        @content;
+    }
+}
+
 @mixin media-mobile {
     @media (max-width: $mobile-big-width) {
         @content;
