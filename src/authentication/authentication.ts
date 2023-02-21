@@ -1,7 +1,9 @@
-import signInForm from './signInForm';
-import signUpForm from './signUpForm';
-import { sighInWithGooglePopup, createUserDocumentFromAuth, createUser, signIn } from './firebase-utils';
+import signInForm from './sign-in-form';
+import signUpForm from './sign-up-form';
+import { sighInWithGooglePopup, createUserDocumentFromAuth, createUser, signIn, signOutUser, storage } from './firebase-utils';
 import * as App from '../ts/app/app';
+import homePage from '../ts/pages/home';
+import { router } from '../ts/router/router';
 
 export default function authenticationPage(): void {
    App.showPage(createAuthenticationPage);
@@ -34,6 +36,8 @@ function addSignInListener() {
    const logGoogleUser = async () => {
       const { user } = await sighInWithGooglePopup();
       await createUserDocumentFromAuth(user);
+      await storage(user.uid);
+      router('/');
    };
 
    signInGoogleBtn?.addEventListener('click', logGoogleUser);
@@ -46,18 +50,24 @@ function addSignInListener() {
       });
    });
 
-   signInBtn?.addEventListener('click', async (e) => {
+   const signInFunc = async (e: Event) => {
       e.preventDefault();
       try {
+         if (formFields.email === '') return alert('Fill in the email field');
+         if (formFields.password === '') return alert('Fill in the password field');
          const res = await signIn(formFields.email, formFields.password);
-         console.log(res);
-         signInInputs.forEach((input) => {
-            (input as HTMLInputElement).value = '';
-         });
+         await storage(res.user.uid);
+         router('/');
       } catch (err: unknown) {
-         console.error(`Unknown error: ${err}`);
+         if (err instanceof Error) {
+            alert(`Error: ${err.name}, Message: ${err.message}`);
+         } else {
+            console.error(`Unknown error: ${err}`);
+         }
       }
-   });
+   };
+
+   signInBtn?.addEventListener('click', signInFunc);
 }
 
 function addSignUpListener(): void {
@@ -80,10 +90,9 @@ function addSignUpListener(): void {
       try {
          const { user } = await createUser(formFields.email, formFields.password);
          await createUserDocumentFromAuth(user, { displayName: formFields.displayName });
-
-         signUpInputs.forEach((input) => {
-            (input as HTMLInputElement).value = '';
-         });
+         await signIn(formFields.email, formFields.password);
+         await storage(user.uid);
+         router('/');
       } catch (err: unknown) {
          if (err instanceof Error) {
             console.error(`Error: ${err.name}, Message: ${err.message}`);

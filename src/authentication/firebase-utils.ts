@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, Firestore } from 'firebase/firestore';
+import { FirebaseApp, initializeApp } from 'firebase/app';
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, Auth, signOut } from 'firebase/auth';
+import { getFirestore, doc, getDoc, setDoc, Firestore, SnapshotOptions, DocumentData } from 'firebase/firestore';
 
 const firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
@@ -11,25 +11,25 @@ const firebaseConfig = {
    appId: '1:952386437036:web:e6d627b7610b569badc409',
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 
-const googleProvider = new GoogleAuthProvider();
+const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
    prompt: 'select_account',
 });
 
-export const auth = getAuth();
+export const auth: Auth = getAuth();
 export const sighInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 
-export const db = getFirestore();
+export const db: Firestore = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth: any, restInfo: object = {}) => {
+export const createUserDocumentFromAuth = async (userAuth: User, restInfo: object = {}) => {
    const userDocRef = doc(db, 'users', userAuth.uid);
    const getUser = await getDoc(userDocRef);
-
+   console.log(getUser);
    if (!getUser.exists()) {
       const { displayName, email } = userAuth;
-      const createdAt = new Date();
+      const createdAt: Date = new Date();
 
       try {
          await setDoc(userDocRef, { displayName, email, createdAt, ...restInfo });
@@ -52,3 +52,19 @@ export const createUser = async (email: string, password: string) => {
 export const signIn = async (email: string, password: string) => {
    return await signInWithEmailAndPassword(auth, email, password);
 };
+
+export const signOutUser = async (/*auth: Auth*/) => {
+   //  signOut(auth);
+   sessionStorage.removeItem('user');
+   console.log('deleted');
+};
+
+export async function getUserData(uid: string) {
+   const userDocRef = doc(db, 'users', uid);
+   const getUser = await getDoc(userDocRef);
+   return getUser.data();
+}
+
+export async function storage(uid: string) {
+   sessionStorage.setItem('user', JSON.stringify(Object.assign({ uid: uid }, await getUserData(uid))));
+}

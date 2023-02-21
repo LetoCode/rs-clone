@@ -3,7 +3,7 @@ export default function signInForm() {
    <div class="authentication__sign-in">
       <h2>I already have an account</h2>
       <h1 class="authentication__title">Sign in with your email and password</h1>
-      <form action="">
+      <form>
         <label class="input-label" for="">Email</label>
         <input class="signInInputs" type="email" name="email" required />
         <label class="input-label" for="">Password</label>
