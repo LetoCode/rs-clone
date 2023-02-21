@@ -1,0 +1,19 @@
+.list__items {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+
+    & .section__poster {
+        width: 195px;
+    }
+}
+
+.lists__nav {
+    margin-bottom: 40px;
+}
+
+.list__controls {
+    display: flex;
+    justify-content: space-between;
+}

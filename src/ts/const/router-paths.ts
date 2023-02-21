@@ -4,6 +4,7 @@ import moviePage from "../pages/movie";
 import testApi from "../pages/testKinopoiskApi";
 import personPage from "../pages/person";
 import staffPage from "../pages/staff";
+import filmsOrSeriesPage from "../pages/filmsSeries";
 
 const ROUTER_PATHS: Paths = {
    '404': {
@@ -25,6 +26,14 @@ const ROUTER_PATHS: Paths = {
    'filmstaff': {
       cb: staffPage,
       title: 'movie staff'
+   },
+   'films': {
+      cb: filmsOrSeriesPage,
+      title: 'films'
+   },
+   'series': {
+      cb: filmsOrSeriesPage,
+      title: 'series'
    },
    'testapi': {
       cb: testApi,
