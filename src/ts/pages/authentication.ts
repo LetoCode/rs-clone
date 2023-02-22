@@ -11,15 +11,19 @@ export default function authenticationPage(): void {
 }
 
 function createAuthenticationPage(): HTMLElement {
+   const authenticationMainEl: HTMLElement = document.createElement('main');
    const authenticationEl: HTMLElement = document.createElement('div');
+   authenticationMainEl.className = 'main';
    authenticationEl.className = 'authentication__content';
+
    const signInFormEl = signInForm();
    const signUpFormEl = signUpForm();
    authenticationEl.innerHTML = `
       ${signInFormEl}
       ${signUpFormEl}
    `;
-   return authenticationEl;
+   authenticationMainEl.append(authenticationEl);
+   return authenticationMainEl;
 }
 
 function addSignInListener() {
