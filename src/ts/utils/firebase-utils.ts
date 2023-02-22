@@ -1,6 +1,16 @@
 import { FirebaseApp, initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, Auth, signOut } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, Firestore, SnapshotOptions, DocumentData } from 'firebase/firestore';
+import {
+   getAuth,
+   signInWithPopup,
+   GoogleAuthProvider,
+   createUserWithEmailAndPassword,
+   signInWithEmailAndPassword,
+   User,
+   Auth,
+   UserCredential,
+   signOut,
+} from 'firebase/auth';
+import { getFirestore, doc, getDoc, setDoc, Firestore, SnapshotOptions, DocumentData, DocumentReference } from 'firebase/firestore';
 
 const firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
@@ -19,14 +29,16 @@ googleProvider.setCustomParameters({
 });
 
 export const auth: Auth = getAuth();
-export const sighInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+
+export function sighInWithGooglePopup(): Promise<UserCredential> {
+   return signInWithPopup(auth, googleProvider);
+}
 
 export const db: Firestore = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth: User, restInfo: object = {}) => {
+export async function createUserDocumentFromAuth(userAuth: User, restInfo: object = {}): Promise<DocumentReference<DocumentData>> {
    const userDocRef = doc(db, 'users', userAuth.uid);
    const getUser = await getDoc(userDocRef);
-   console.log(getUser);
    if (!getUser.exists()) {
       const { displayName, email } = userAuth;
       const createdAt: Date = new Date();
@@ -43,28 +55,28 @@ export const createUserDocumentFromAuth = async (userAuth: User, restInfo: objec
    }
 
    return userDocRef;
-};
+}
 
-export const createUser = async (email: string, password: string) => {
+export async function createUser(email: string, password: string): Promise<UserCredential> {
    return await createUserWithEmailAndPassword(auth, email, password);
-};
+}
 
-export const signIn = async (email: string, password: string) => {
+export async function signIn(email: string, password: string): Promise<UserCredential> {
    return await signInWithEmailAndPassword(auth, email, password);
-};
+}
 
-export const signOutUser = async (/*auth: Auth*/) => {
+export async function signOutUser(/*auth: Auth*/): Promise<void> {
    //  signOut(auth);
    sessionStorage.removeItem('user');
    console.log('deleted');
-};
+}
 
-export async function getUserData(uid: string) {
+export async function getUserData(uid: string): Promise<DocumentData | undefined> {
    const userDocRef = doc(db, 'users', uid);
    const getUser = await getDoc(userDocRef);
    return getUser.data();
 }
 
-export async function storage(uid: string) {
+export async function storage(uid: string): Promise<void> {
    sessionStorage.setItem('user', JSON.stringify(Object.assign({ uid: uid }, await getUserData(uid))));
 }

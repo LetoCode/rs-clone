@@ -26,22 +26,22 @@ function createAuthenticationPage(): HTMLElement {
    return authenticationMainEl;
 }
 
-function addSignInListener() {
-   const signInBtn = document.querySelector('.signIn');
-   const signInGoogleBtn = document.querySelector('.signInWithGoogle');
-   const signInInputs = document.querySelectorAll('.signInInputs');
+function addSignInListener(): void {
+   const signInBtn = document.querySelector('.authentication__sign-email');
+   const signInGoogleBtn = document.querySelector('.authentication__sign-google');
+   const signInInputs = document.querySelectorAll('.authentication__sign-in-inputs');
 
    const formFields = {
       email: '',
       password: '',
    };
 
-   const logGoogleUser = async () => {
+   async function logGoogleUser(): Promise<void> {
       const { user } = await sighInWithGooglePopup();
       await createUserDocumentFromAuth(user);
       await storage(user.uid);
       router('/');
-   };
+   }
 
    signInGoogleBtn?.addEventListener('click', logGoogleUser);
 
@@ -53,7 +53,7 @@ function addSignInListener() {
       });
    });
 
-   const signInFunc = async (e: Event) => {
+   async function signInFunc(e: Event): Promise<void> {
       e.preventDefault();
       try {
          if (formFields.email === '') return alert('Fill in the email field');
@@ -68,14 +68,14 @@ function addSignInListener() {
             console.error(`Unknown error: ${err}`);
          }
       }
-   };
+   }
 
    signInBtn?.addEventListener('click', signInFunc);
 }
 
 function addSignUpListener(): void {
-   const signUpBtn = document.querySelector('.sign-up-btn');
-   const signUpInputs = document.querySelectorAll('.signUpInputs');
+   const signUpBtn = document.querySelector('.authentication__sign-up-btn');
+   const signUpInputs = document.querySelectorAll('.authentication__sign-up-inputs');
 
    const formFields = {
       displayName: '',
