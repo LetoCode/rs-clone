@@ -1,10 +1,14 @@
 import * as App from "../app/app";
 import { getFilm, getFilmsWithFilters, getPremieres } from "../kinopoiskAPI/controller";
-import { router, handleRoute } from "../router/router";
+import { getNews } from "../newsAPI/newsController";
+import { router } from "../router/router";
+import { createNewsItem } from "./components/newsItem";
+import { createPoster } from "./components/poster";
 
+const MAX_NEWS = 5;
 
 function homePage(): void {
-   App.showPage(createHomePage)
+   App.showPage(createHomePage);
 }
 
 function createHomePage(): HTMLElement {
@@ -19,69 +23,73 @@ function createHomePage(): HTMLElement {
    mainElement.append(container);
    container.className = 'container';
 
-   getPremieres(year.toString(), 'JANUARY').then(data => {
-      const dataArr = (data as respPremieres).items;
-      const dataFiltered = dataArr.filter((el) => el.nameRu);
-      createMainPoster(container, dataFiltered);
-      createSection(container, 'Премьеры', dataArr);
-   });
-
-   const filtersNew: argumentForFilmSearch = {
+   const filtersNewFilms: argumentForFilmSearch = {
       filmsOrder: 'RATING',
       yearFrom: year - 1,
       yearTo: year,
       page: 1,
    };
 
-   getFilmsWithFilters(filtersNew).then(data => {
-      const dataArr = (data as respfilmsWithFilters).items;
-      const dataFiltered = dataArr.filter((el) => el.genres[0].genre !== 'музыка');
-      createSection(container, 'Новинки', dataFiltered);
-   });
-
-   const filtersSeries: argumentForFilmSearch = {
-      // country,
-      // genres,
+   const filtersBestFilms: argumentForFilmSearch = {
       filmsOrder: 'RATING',
-      filmsType: 'TV_SERIES',
-      // ratingFrom,
-      // ratingTo,
-      yearFrom: year - 15,
-      // yearTo: year,
-      // imdbId,
-      // keyword,
+      filmsType: 'FILM',
       page: 1,
    };
 
-   getFilmsWithFilters(filtersSeries).then(data => {
-      const dataArr = (data as respfilmsWithFilters).items;
-      createSection(container, 'Лучшие сериалы', dataArr);
-   });
+   const filtersBestSeries: argumentForFilmSearch = {
+      filmsOrder: 'RATING',
+      filmsType: 'TV_SERIES',
+      page: 1,
+   };
 
-   const filtersFamily: argumentForFilmSearch = {
+   const filtersAdventure: argumentForFilmSearch = {
       genres: 7,
       filmsOrder: 'RATING',
       filmsType: 'FILM',
-      yearFrom: year - 20,
       page: 1,
    };
 
-   getFilmsWithFilters(filtersFamily).then(data => {
-      const dataArr = (data as respfilmsWithFilters).items;
-      createSection(container, 'Приключения для всей семьи', dataArr);
-   });
+   (async () => {
+      const dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
+      const dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
+      const dataBestFilms = await getFilmsWithFilters(filtersBestFilms) as respfilmsWithFilters;
+      const dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
+      const dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
+      const dataNews: respNews = await getNews() as respNews;
+      console.log('news', dataNews)
+
+      const arrPremieres = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
+      const arrNewFilms = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
+      const arrBestFilms = dataBestFilms.items.filter((el) => el.genres[0].genre !== 'мультфильм');
+      const arrBestSeries = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
+      const arrAdventure = dataAdventure.items;
+
+      createMainPoster(container, arrPremieres);
+      createNewsSection(container, 'Актуально', dataNews);
+      createSection(container, 'Премьеры', arrPremieres);
+      createSection(container, 'Новинки', arrNewFilms);
+      createSection(container, 'Лучшие фильмы', arrBestFilms);
+      createSection(container, 'Лучшие сериалы', arrBestSeries);
+      createSection(container, 'Приключения для всей семьи', arrAdventure);
+   })();
 
    return mainElement;
 }
 
 function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
+   const greeting = document.createElement('div');
+
    const rand = Math.floor(Math.random() * dataArr.length);
    const film = dataArr[rand];
+   const pathname = `/movie?${film.kinopoiskId}`;
 
-   const greeting = document.createElement('div');
    block.append(greeting);
    greeting.className = 'greeting';
-   greeting.style.background = `linear-gradient(90deg, rgba(3,5,17,1) 15%, rgba(3,5,17,0.8) 35%, rgba(3,5,17,0) 80%, rgba(3,5,17,0.8) 100%), url(${film.posterUrl}) center/cover`;
+   greeting.style.background = `linear-gradient(90deg, rgba(3,5,17,1) 15%, rgba(3,5,17,0.8) 35%, rgba(3,5,17,0) 80%, rgba(3,5,17,0.8) 100%), url(${film.posterUrl}) center center/cover`;
+   greeting.addEventListener('click', (event) => {
+      event.preventDefault();
+      router(pathname);
+   });
 
    getFilm(film.kinopoiskId.toString()).then(film => {
       const data = film as respFilm;
@@ -115,7 +123,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[]): void {
    const data = dataArr.filter((el) =>
       (el.nameRu || el.nameEn) && (el.posterUrl || el.posterUrlPreview) && el.year && el.genres[0].genre);
-   console.log(data);
+   const films = data.sort(() => Math.random() - 0.5);
 
    const section = document.createElement('section');
    const sectionTitle = document.createElement('h2');
@@ -129,42 +137,26 @@ function createSection(block: HTMLElement, title: string, dataArr: respFilmItem[
    sectionItems.className = 'section__items';
 
    for (let i = 0; i < 6; i++) {
-      const film = data[i];
+      createPoster(sectionItems, films[i]);
+   }
+}
 
-      const poster = document.createElement('div');
-      const posterAnchor: HTMLElement = document.createElement('a');
-      const posterImg = document.createElement('img');
-      const posterTitle = document.createElement('p');
-      const posterDesc = document.createElement('p');
+function createNewsSection(block: HTMLElement, title: string, dataNews: respNews) {
+   if (dataNews.totalResults) {
+      const section = document.createElement('section');
+      const sectionTitle = document.createElement('h2');
+      const sectionItems = document.createElement('div');
 
-      const moviePath = `/movie?${film.kinopoiskId}`;
-      sectionItems.append(poster);
-      poster.className = 'section__poster';
-      poster.addEventListener('click', () => {
-         handleRoute(moviePath);
-      });
+      section.className = 'section section_news';
+      section.append(sectionTitle);
+      sectionTitle.textContent = title;
+      section.append(sectionItems);
+      sectionItems.className = 'section__items_news';
+      for (let i = 0; i < MAX_NEWS; i++) {
+         createNewsItem(sectionItems, dataNews.articles[i]);
+      }
 
-      posterImg.className = 'poster__img';
-      if (film.posterUrlPreview) posterImg.src = film.posterUrlPreview;
-      else posterImg.src = film.posterUrl;
-      posterAnchor.append(posterImg);
-
-      posterAnchor.className = 'poster__link';
-      posterAnchor.setAttribute('href', `/movie?${film.kinopoiskId}`);
-      posterAnchor.addEventListener('click', (event) => {
-         event.preventDefault();
-         router(`/movie?${film.kinopoiskId}`);
-      });
-      poster.append(posterAnchor);
-
-      poster.append(posterTitle);
-      posterTitle.className = 'poster__title';
-      if (film.nameRu) posterTitle.textContent = film.nameRu;
-      else posterTitle.textContent = film.nameEn;
-
-      poster.append(posterDesc);
-      posterDesc.className = 'poster__desc';
-      posterDesc.textContent = `${film.year}, ${film.genres[0].genre}`;
+      block.append(section);
    }
 }
 
