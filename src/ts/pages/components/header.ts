@@ -1,4 +1,4 @@
-import { addSearchListener } from "../handlers/searchHandlers";
+import { addSearchListener } from '../handlers/searchHandlers';
 
 function showHeader(): HTMLElement {
    const headerElement: HTMLElement = document.createElement('header');
@@ -23,7 +23,7 @@ function showHeader(): HTMLElement {
       </div>
    </div>
    `;
-   setTimeout(addSearchListener, 100)
+   setTimeout(addSearchListener, 100);
    return headerElement;
 }
 
@@ -31,7 +31,7 @@ function userInOut() {
    console.log(sessionStorage.getItem('user'));
    if (sessionStorage.getItem('user')) {
       const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
-      return `<a href="/">Привет, ${displayName}!</a>`;
+      return `<a href="/auth">Привет, ${displayName}!</a>`;
    } else return '<a href="/authentication">Войти</a>';
 }
 

@@ -1,10 +1,11 @@
-import notFoundPage from "../pages/notFound";
-import homePage from "../pages/home";
-import moviePage from "../pages/movie";
-import testApi from "../pages/testKinopoiskApi";
-import personPage from "../pages/person";
-import staffPage from "../pages/staff";
+import notFoundPage from '../pages/notFound';
+import homePage from '../pages/home';
+import moviePage from '../pages/movie';
+import testApi from '../pages/testKinopoiskApi';
+import personPage from '../pages/person';
+import staffPage from '../pages/staff';
 import authenticationPage from '../pages/authentication';
+import authPage from '../../auth-page/auth-page';
 
 const ROUTER_PATHS: Paths = {
    '404': {
@@ -19,13 +20,17 @@ const ROUTER_PATHS: Paths = {
       cb: moviePage,
       title: 'movie',
    },
-   'testapi': {
+   testapi: {
       cb: testApi,
       title: 'testKinopoiskApi',
    },
    authentication: {
       cb: authenticationPage,
       title: 'authentication',
+   },
+   auth: {
+      cb: authPage,
+      title: 'auth',
    },
 };
 
