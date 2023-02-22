@@ -1,3 +1,20 @@
+.list {
+    cursor: pointer;
+    padding: 20px;
+    background: $color-primary;
+    border-radius: 8px;
+    transition: .3s;
+    &:hover {
+        transform: scale(1.07);
+    }
+}
+
+.lists__container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
 .list__items {
     display: flex;
     justify-content: space-between;

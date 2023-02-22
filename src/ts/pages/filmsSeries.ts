@@ -1,10 +1,11 @@
 import * as App from "../app/app";
 import { addElement } from "../utils/elementsBuilder";
 import { createPoster } from "./components/poster";
-import { filmsDataset, filmsGenresDataset } from "./datasets/listsData";
+import { filmsDataset, filmsGenresDataset, seriesGenresDataset } from "./datasets/listsData";
 
 let pageNumber = 1;
 let pagesCount = 1000;
+const listAmount = addElement('p', 'list__amount');
 
 function filmsOrSeriesPage(): void {
    App.showPage(createFilmsOrSeriesPage);
@@ -30,28 +31,25 @@ function createFilmsOrSeriesPage(): HTMLElement {
    listsNav.append(btnLists, btnGenres, btnCountries, btnYears);
 
    if (page === 'films') {
-      // btnLists.addEventListener('click', () => createLists(listsContainer, page));
       btnLists.addEventListener('click', () => createLists(listsContainer, filmsDataset));
       btnGenres.addEventListener('click', () => createLists(listsContainer, filmsGenresDataset));
+   } else {
+      btnGenres.addEventListener('click', () => createLists(listsContainer, seriesGenresDataset));
    }
 
    return mainElement;
 }
 
-function createLists(container: HTMLElement, dataset: dataset<listTOP> | dataset<listFilms>): void {
+function createLists(container: HTMLElement, dataset: listTOP[] | listFilms[]): void {
    container.innerHTML = '';
-   Object.values<listTOP | listFilms>(dataset).forEach(list => {
-      createListsItem(container, list);
-   });
+   dataset.forEach(list => createListsItem(container, list));
 }
 
 function createListsItem(container: HTMLElement, list: listTOP | listFilms): void {
    const listsItem = addElement('div', 'lists__item list');
    const listHeading = addElement('h2', 'list__heading', list.title);
-   // const listAmount = addElement('p', 'list__amount', `${list.amount} фильмов`);
 
    container.append(listsItem);
-   // listsItem.append(listHeading, listAmount);
    listsItem.append(listHeading);
 
    listsItem.addEventListener('click', () => showList(container, listsItem, list), { once: true });
@@ -61,14 +59,16 @@ function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP 
    pageNumber = 1;
    container.innerHTML = '';
    container.append(listsItem);
-   listsItem.classList.add('list');
+   listsItem.classList.remove('list');
+   listsItem.classList.add('list_active');
 
    const listItems = addElement('div', 'list__items');
    const listControls = addElement('div', 'list__controls');
    const btnPrev = addElement('button', 'btn btn__prev', 'Назад');
    const btnNext = addElement('button', 'btn btn__next', 'Вперед');
 
-   listsItem.append(listItems);
+   listAmount.textContent = '';
+   listsItem.append(listAmount, listItems);
 
    showPosters(listItems, list);
 
@@ -93,8 +93,7 @@ function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP 
 async function showPosters(block: HTMLElement, list: listTOP | listFilms) {
    block.innerHTML = '';
    const storage = sessionStorage.getItem(`${list.name}-${pageNumber}`);
-   // let data: respTop | respfilmsWithFilters;
-   let arrData: respFilmItem[];
+   let arrData: respFilmItem[] | undefined;
 
    if (list.isTop) {
       let data: respTop;
@@ -110,24 +109,49 @@ async function showPosters(block: HTMLElement, list: listTOP | listFilms) {
       pagesCount = data.pagesCount;
 
    } else {
-      let data: respfilmsWithFilters;
+      let data: respfilmsWithFilters | undefined;
       const listData = list as listFilms;
 
       if (storage === null) {
-         data = await listData.getData({
-            genres: listData.argums.genres,
-            filmsOrder: 'RATING',
-            filmsType: listData.argums.filmsType,
-            page: pageNumber}) as respfilmsWithFilters;
+
+         if (listData.argums.genres) {
+            data = await listData.getData({
+               genres: listData.argums.genres,
+               filmsType: listData.argums.filmsType,
+               page: pageNumber
+            }) as respfilmsWithFilters;
+         }
+
+         if (listData.argums.country) {
+            data = await listData.getData({
+               country: listData.argums.country,
+               filmsType: listData.argums.filmsType,
+               page: pageNumber
+            }) as respfilmsWithFilters;
+         }
+
+         if (listData.argums.yearFrom && listData.argums.yearTo) {
+            data = await listData.getData({
+               yearFrom: listData.argums.yearFrom,
+               yearTo: listData.argums.yearTo,
+               filmsType: listData.argums.filmsType,
+               page: pageNumber
+            }) as respfilmsWithFilters;
+         }
+
          sessionStorage.setItem(`${list.name}-${pageNumber}`, JSON.stringify(data));
       } else {
          data = JSON.parse(storage);
       }
 
-      arrData = data.items;
-      pagesCount = data.totalPages;
+      if (data) {
+         arrData = data.items;
+         pagesCount = data.totalPages;
+         listAmount.textContent = `Найдено: ${data.total}`;
+      }
    }
-   arrData.forEach(film => {
+
+   arrData?.forEach(film => {
       createPoster(block, film)
    });
 };
