@@ -2,7 +2,7 @@ import notFoundPage from '../pages/notFoundPage';
 import homePage from '../pages/home';
 import moviePage from '../pages/movie';
 import testApi from '../pages/testKinopoiskApi';
-import authenticationPage from '../../authentication/authentication';
+import authenticationPage from '../pages/authentication';
 
 const ROUTER_PATHS: Paths = {
    '404': {

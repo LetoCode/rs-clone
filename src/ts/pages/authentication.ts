@@ -1,9 +1,8 @@
-import signInForm from './sign-in-form';
-import signUpForm from './sign-up-form';
-import { sighInWithGooglePopup, createUserDocumentFromAuth, createUser, signIn, signOutUser, storage } from './firebase-utils';
-import * as App from '../ts/app/app';
-import homePage from '../ts/pages/home';
-import { router } from '../ts/router/router';
+import signInForm from './components/sign-in-form';
+import signUpForm from './components/sign-up-form';
+import { sighInWithGooglePopup, createUserDocumentFromAuth, createUser, signIn, storage } from '../utils/firebase-utils';
+import * as App from '../app/app';
+import { router } from '../router/router';
 
 export default function authenticationPage(): void {
    App.showPage(createAuthenticationPage);

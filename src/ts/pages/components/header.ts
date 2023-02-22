@@ -1,5 +1,3 @@
-import { getUserData, storage } from '../../../authentication/firebase-utils';
-
 function showHeader(): HTMLElement {
    const headerElement: HTMLElement = document.createElement('header');
    headerElement.className = 'header';
@@ -29,7 +27,6 @@ function showHeader(): HTMLElement {
 function userInOut() {
    console.log(sessionStorage.getItem('user'));
    if (sessionStorage.getItem('user')) {
-      console.log('in');
       const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
       return `<a href="/">Привет, ${displayName}!</a>`;
    } else return '<a href="/authentication">Войти</a>';
