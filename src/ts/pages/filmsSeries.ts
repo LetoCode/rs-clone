@@ -90,7 +90,7 @@ function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP 
    });
 }
 
-async function showPosters(block: HTMLElement, list: listTOP | listFilms) {
+async function showPosters(block: HTMLElement, list: listTOP | listFilms): Promise<void> {
    block.innerHTML = '';
    const storage = sessionStorage.getItem(`${list.name}-${pageNumber}`);
    let arrData: respFilmItem[] | undefined;
