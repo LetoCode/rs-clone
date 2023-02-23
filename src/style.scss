@@ -2,24 +2,25 @@
 // @import url("https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 // Abstract
-@import "scss/abstarct/constants";
-@import "scss/abstarct/mixins";
+@import 'scss/abstarct/constants';
+@import 'scss/abstarct/mixins';
 
 // Base
-@import "scss/base/nullstyle";
-@import "scss/base/base";
+@import 'scss/base/nullstyle';
+@import 'scss/base/base';
 
 //Layouts
-@import "scss/layouts/header";
-@import "scss/layouts/testKinopoiskAPI";
-@import "scss/layouts/movie";
-@import "scss/layouts/notFound";
-@import "scss/layouts/footer";
-@import "scss/layouts/person";
-@import "scss/layouts/staff";
+@import 'scss/layouts/header';
+@import 'scss/layouts/testKinopoiskAPI';
+@import 'scss/layouts/movie';
+@import 'scss/layouts/notFound';
+@import 'scss/layouts/footer';
+@import 'scss/layouts/person';
+@import 'scss/layouts/staff';
+@import 'scss/layouts/authentication';
 
 // Components
-@import "scss/components/sections";
-@import "scss/components/news";
+@import 'scss/components/sections';
+@import 'scss/components/news';
 
 // @import "";

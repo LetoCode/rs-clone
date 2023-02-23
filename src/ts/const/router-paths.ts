@@ -1,36 +1,40 @@
-import notFoundPage from "../pages/notFound";
-import homePage from "../pages/home";
-import moviePage from "../pages/movie";
-import testApi from "../pages/testKinopoiskApi";
-import personPage from "../pages/person";
-import staffPage from "../pages/staff";
+import notFoundPage from '../pages/notFound';
+import homePage from '../pages/home';
+import moviePage from '../pages/movie';
+import testApi from '../pages/testKinopoiskApi';
+import personPage from '../pages/person';
+import staffPage from '../pages/staff';
+import authenticationPage from '../pages/authentication';
 
 const ROUTER_PATHS: Paths = {
    '404': {
       cb: notFoundPage,
-      title: '404 :('
+      title: '404 :(',
    },
    '/': {
       cb: homePage,
-      title: 'PoiskKino'
+      title: 'PoiskKino',
    },
-   'movie': {
+   movie: {
       cb: moviePage,
-      title: 'movie'
+      title: 'movie',
    },
-   'person': {
+   person: {
       cb: personPage,
-      title: 'person'
+      title: 'person',
    },
-   'filmstaff': {
+   filmstaff: {
       cb: staffPage,
-      title: 'movie staff'
+      title: 'movie staff',
    },
-   'testapi': {
+   testapi: {
       cb: testApi,
-      title: 'testKinopoiskApi'
-   }
-
-}
+      title: 'testKinopoiskApi',
+   },
+   authentication: {
+      cb: authenticationPage,
+      title: 'authentication',
+   },
+};
 
 export default ROUTER_PATHS;

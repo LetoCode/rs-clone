@@ -18,13 +18,21 @@ function showHeader(): HTMLElement {
          </nav>
          <div class="header__right">
            <input type="search" class="header__search" placeholder="Поиск">
-           <a href="#">Войти</a>
+           ${userInOut()}
          </div>
       </div>
    </div>
    `;
    setTimeout(addSearchListener, 100)
    return headerElement;
+}
+
+function userInOut() {
+   console.log(sessionStorage.getItem('user'));
+   if (sessionStorage.getItem('user')) {
+      const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
+      return `<a href="/">Привет, ${displayName}!</a>`;
+   } else return '<a href="/authentication">Войти</a>';
 }
 
 export default showHeader;
