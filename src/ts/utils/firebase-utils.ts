@@ -12,7 +12,7 @@ import {
 } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, Firestore, SnapshotOptions, DocumentData, DocumentReference } from 'firebase/firestore';
 
-const firebaseConfig = {
+const firebaseConfig: firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
    authDomain: 'rs-clone-kinopoisk.firebaseapp.com',
    projectId: 'rs-clone-kinopoisk',
