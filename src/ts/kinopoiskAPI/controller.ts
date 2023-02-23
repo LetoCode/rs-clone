@@ -101,7 +101,7 @@ export async function getTOP250(page = 1): Promise<respTop | string> {
 
 //Returns a list of paginated movies. Each page contains no more than 20 films.
 export async function getTOP100(page = 1): Promise<respTop | string> {
-   const params = `?type=TOP_100_POPULAR_FILM&page=${page}`;
+   const params = `?type=TOP_100_POPULAR_FILMS&page=${page}`;
    const requestParams = {
       APItarget: 'top100',
       params,
