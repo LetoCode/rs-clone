@@ -1,11 +1,12 @@
 import * as App from "../app/app";
-import { getFilm, getFilmsWithFilters, getPremieres } from "../kinopoiskAPI/controller";
+import { getFilm, getFilmsWithFilters, getPremieres, getTOP250 } from "../kinopoiskAPI/controller";
 import { getNews } from "../newsAPI/newsController";
 import { router } from "../router/router";
 import { createNewsItem } from "./components/newsItem";
 import { createPoster } from "./components/poster";
 
 const MAX_NEWS = 5;
+const MAIN_POSTER_BG = 'linear-gradient(90deg, rgba(3,5,17,1) 15%, rgba(3,5,17,0.8) 35%, rgba(3,5,17,0) 80%, rgba(3,5,17,0.8) 100%)';
 
 function homePage(): void {
    App.showPage(createHomePage);
@@ -30,12 +31,6 @@ function createHomePage(): HTMLElement {
       page: 1,
    };
 
-   const filtersBestFilms: argumentForFilmSearch = {
-      filmsOrder: 'RATING',
-      filmsType: 'FILM',
-      page: 1,
-   };
-
    const filtersBestSeries: argumentForFilmSearch = {
       filmsOrder: 'RATING',
       filmsType: 'TV_SERIES',
@@ -50,19 +45,48 @@ function createHomePage(): HTMLElement {
    };
 
    (async () => {
-      const dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
-      const dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
-      const dataBestFilms = await getFilmsWithFilters(filtersBestFilms) as respfilmsWithFilters;
-      const dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
-      const dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
-      const dataNews: respNews = await getNews() as respNews;
-      console.log('news', dataNews)
+      const storagePremieres = sessionStorage.getItem('premieres');
+      const storageNewFilms = sessionStorage.getItem('new-1');
+      const storageBestFilms = sessionStorage.getItem('top250-1');
+      const storageBestSeries = sessionStorage.getItem('best-s-1');
+      const storageAdventure = sessionStorage.getItem('adventures-1');
+      const storageNews = sessionStorage.getItem('news');
 
-      const arrPremieres = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
-      const arrNewFilms = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
-      const arrBestFilms = dataBestFilms.items.filter((el) => el.genres[0].genre !== 'мультфильм');
-      const arrBestSeries = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
-      const arrAdventure = dataAdventure.items;
+      let dataPremieres: respPremieres;
+      let dataNewFilms: respfilmsWithFilters;
+      let dataBestFilms: respTop;
+      let dataBestSeries: respfilmsWithFilters;
+      let dataAdventure: respfilmsWithFilters;
+      let dataNews: respNews;
+
+      if (storagePremieres && storageNewFilms && storageBestFilms && storageBestSeries && storageAdventure && storageNews !== null) {
+         dataPremieres = JSON.parse(storagePremieres);
+         dataNewFilms = JSON.parse(storageNewFilms);
+         dataBestFilms = JSON.parse(storageBestFilms);
+         dataBestSeries = JSON.parse(storageBestSeries);
+         dataAdventure = JSON.parse(storageAdventure);
+         dataNews = JSON.parse(storageNews);
+      } else {
+         dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
+         dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
+         dataBestFilms = await getTOP250() as respTop;
+         dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
+         dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
+         dataNews = await getNews() as respNews;
+
+         sessionStorage.setItem('premieres', JSON.stringify(dataPremieres));
+         sessionStorage.setItem('new-1', JSON.stringify(dataNewFilms));
+         sessionStorage.setItem('top250-1', JSON.stringify(dataBestFilms));
+         sessionStorage.setItem('best-s-1', JSON.stringify(dataBestSeries));
+         sessionStorage.setItem('adventures-1', JSON.stringify(dataAdventure));
+         sessionStorage.setItem('news', JSON.stringify(dataNews));
+      }
+
+      const arrPremieres: respFilmItem[] = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
+      const arrNewFilms: respFilmItem[] = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
+      const arrBestFilms: respFilmItem[] = dataBestFilms.films;
+      const arrBestSeries: respFilmItem[] = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
+      const arrAdventure: respFilmItem[] = dataAdventure.items;
 
       createMainPoster(container, arrPremieres);
       createNewsSection(container, 'Актуально', dataNews);
@@ -85,7 +109,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 
    block.append(greeting);
    greeting.className = 'greeting';
-   greeting.style.background = `linear-gradient(90deg, rgba(3,5,17,1) 15%, rgba(3,5,17,0.8) 35%, rgba(3,5,17,0) 80%, rgba(3,5,17,0.8) 100%), url(${film.posterUrl}) center center/cover`;
+   greeting.style.background = `${MAIN_POSTER_BG}, url(${film.posterUrl}) center center/cover`;
    greeting.addEventListener('click', (event) => {
       event.preventDefault();
       router(pathname);

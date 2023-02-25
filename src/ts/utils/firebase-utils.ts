@@ -1,8 +1,18 @@
 import { FirebaseApp, initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, Auth, signOut } from 'firebase/auth';
+import {
+   getAuth,
+   signInWithPopup,
+   GoogleAuthProvider,
+   createUserWithEmailAndPassword,
+   signInWithEmailAndPassword,
+   User,
+   Auth,
+   UserCredential,
+   signOut,
+} from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, Firestore, updateDoc, DocumentReference, DocumentData, arrayUnion, arrayRemove } from 'firebase/firestore';
 
-const firebaseConfig = {
+const firebaseConfig: firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
    authDomain: 'rs-clone-kinopoisk.firebaseapp.com',
    projectId: 'rs-clone-kinopoisk',
@@ -19,11 +29,14 @@ googleProvider.setCustomParameters({
 });
 
 export const auth: Auth = getAuth();
-export const sighInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+
+export function sighInWithGooglePopup(): Promise<UserCredential> {
+   return signInWithPopup(auth, googleProvider);
+}
 
 export const db: Firestore = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth: User, restInfo: object = {}) => {
+export async function createUserDocumentFromAuth(userAuth: User, restInfo: object = {}): Promise<DocumentReference<DocumentData>> {
    const userDocRef = doc(db, 'users', userAuth.uid);
    const getUser = await getDoc(userDocRef);
    if (!getUser.exists()) {
@@ -42,24 +55,20 @@ export const createUserDocumentFromAuth = async (userAuth: User, restInfo: objec
    }
 
    return userDocRef;
-};
+}
 
-export const createUser = async (email: string, password: string) => {
+export async function createUser(email: string, password: string): Promise<UserCredential> {
    return await createUserWithEmailAndPassword(auth, email, password);
-};
+}
 
-export const signIn = async (email: string, password: string) => {
+export async function signIn(email: string, password: string): Promise<UserCredential> {
    return await signInWithEmailAndPassword(auth, email, password);
-};
+}
 
-export const signOutUser = async (/*auth: Auth*/) => {
+export async function signOutUser(/*auth: Auth*/): Promise<void> {
    //  signOut(auth);
    sessionStorage.removeItem('user');
    console.log('deleted');
-};
-
-export function getUserDocRef(uid: string) {
-   return doc(db, 'users', uid);
 }
 
 export async function getUserData(uid: string) {
@@ -68,7 +77,7 @@ export async function getUserData(uid: string) {
    return getUser.data();
 }
 
-export async function storage(uid: string) {
+export async function storage(uid: string): Promise<void> {
    sessionStorage.setItem('user', JSON.stringify(Object.assign({ uid: uid }, await getUserData(uid))));
 }
 
@@ -81,4 +90,8 @@ export function deleteFilm(userDocRef: DocumentReference<DocumentData>, filmId: 
 }
 export function addFilm(userDocRef: DocumentReference<DocumentData>, filmId: string) {
    updateDoc(userDocRef, { movie: arrayUnion(filmId) });
+}
+
+export function getUserDocRef(uid: string) {
+   return doc(db, 'users', uid);
 }

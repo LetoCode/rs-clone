@@ -4,6 +4,7 @@ import moviePage from '../pages/movie';
 import testApi from '../pages/testKinopoiskApi';
 import personPage from '../pages/person';
 import staffPage from '../pages/staff';
+import filmsOrSeriesPage from '../pages/filmsSeries';
 import authenticationPage from '../pages/authentication';
 import authPage from '../../auth-page/auth-page';
 

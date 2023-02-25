@@ -11,23 +11,19 @@
    font-size: 16px;
 }
 
-.hidden {
-   display: none;
-}
-
 .authentication__title {
    margin-top: 10px;
 }
 
-.signUpInputs,
-.signInInputs {
+.authentication__sign-up-inputs,
+.authentication__sign-in-inputs {
    display: block;
    background-color: inherit;
    margin-bottom: 15px;
    border-bottom: 1px solid #000;
 }
 
-.input-label {
+.authentication__input-label {
    display: block;
    margin-top: 25px;
 }
@@ -48,7 +44,7 @@
    color: #fff;
 }
 
-.buttons-container {
+.authentication__buttons-container {
    display: flex;
    justify-content: space-between;
 }

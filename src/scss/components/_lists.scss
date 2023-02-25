@@ -1,0 +1,36 @@
+.list {
+    cursor: pointer;
+    padding: 20px;
+    background: $color-primary;
+    border-radius: 8px;
+    transition: .3s;
+    &:hover {
+        transform: scale(1.07);
+    }
+}
+
+.lists__container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.list__items {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+
+    & .section__poster {
+        width: 195px;
+    }
+}
+
+.lists__nav {
+    margin-bottom: 40px;
+}
+
+.list__controls {
+    display: flex;
+    justify-content: space-between;
+}
