@@ -3,7 +3,7 @@ export const NEWS_DOMAIN = 'http://newsapi.org/v2/everything';
 
 export const NEWS_REQUEST = (): string => {
    const query: URLSearchParams = new URLSearchParams();
-   query.set('q', 'фильм');
+   query.set('q', 'кино');
    query.set('language', 'ru');
    query.set('apiKey', NEWS_API_KEY);
    return `${NEWS_DOMAIN}?${query.toString()}`;
