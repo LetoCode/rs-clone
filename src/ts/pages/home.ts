@@ -61,6 +61,7 @@ function createHomePage(): HTMLElement {
       const dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
       const dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
       const dataNews: respNews = await getNews() as respNews;
+      console.log('dataNews', dataNews)
 
       const arrPremieres = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
       const arrNewFilms = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
@@ -84,7 +85,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 
    const rand = Math.floor(Math.random() * dataArr.length);
    const film = dataArr[rand];
-   const pathname = `/movie?${film.kinopoiskId}`;
+   const pathname = `/movie/${film.kinopoiskId}`;
 
    block.append(greeting);
    greeting.className = 'greeting';
@@ -155,10 +156,10 @@ function createNewsSection(block: HTMLElement, title: string, dataNews: respNews
       sectionTitle.textContent = title;
       section.append(sectionItems);
       sectionItems.className = 'section__items_news';
-      for (let i = 0; i < MAX_NEWS; i++) {
+      dataNews.articles.sort(() => Math.random() - Math.random());
+      for (let i = 0; i < Math.min(MAX_NEWS, dataNews.articles.length); i++) {
          createNewsItem(sectionItems, dataNews.articles[i]);
       }
-
       block.append(section);
    }
 }

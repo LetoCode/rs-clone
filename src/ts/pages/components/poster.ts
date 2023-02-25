@@ -8,7 +8,7 @@ export function createPoster(block: HTMLElement, data: respFilmItem): void {
    const posterTitle = document.createElement('p');
    const posterDesc = document.createElement('p');
    const id = film.kinopoiskId | film.filmId;
-   const pathname = `/movie?${id}`
+   const pathname = `/movie/${id}`
 
    block.append(poster);
    poster.className = 'section__poster';
