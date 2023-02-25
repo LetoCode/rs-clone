@@ -6,6 +6,7 @@ import { router } from "../router/router";
 import { buttonProfClick, changePaginationPage } from "./handlers/personHandlers";
 import noPoster from '../../assets/noPoster.gif';
 import { DATE_FORMAT } from "../utils/stringFormats";
+import { getIDfromPathname } from "../utils/endpoints";
 
 export const FILMS_ON_PAGE: number = 5;
 const PROFS: professionTranslate = {
@@ -23,7 +24,8 @@ function personPage(): void {
 }
 
 function createPersonPage(): HTMLElement {
-   const id: string = window.location.search.replace('?', '');
+   const id: string = getIDfromPathname();
+   console.log('id=', id)
    const mainElement: HTMLElement = document.createElement('div');
    mainElement.className = 'main';
 
@@ -116,7 +118,6 @@ async function getFilmsBlock(films: personsFilm[]): Promise<DocumentFragment> {
       return el.professionKey === theMostProfessionCount && el.nameEn && el.nameRu;
    });
    await showFilmPageWithPagination(currentFilms, personFilms, 1);
-   console.log('currentFilms', currentFilms)
    addPagination(currentFilms, personFilms, 1);
 
    el.appendChild(container);
@@ -239,7 +240,7 @@ function showSpouses(personData: PersonByID, table: HTMLElement): void {
          const spouse: Spouses[] = personData.spouses.filter(el => el.name) as Spouses[];
          if (spouse.length) {
             spouse.forEach(el => {
-               const anchor: HTMLElement = addElement('a', 'table__spouse-link table__link', el.name, [{ attr: 'href', attrValue: `/person?${el.personId}` }]);
+               const anchor: HTMLElement = addElement('a', 'table__spouse-link table__link', el.name, [{ attr: 'href', attrValue: `/person/${el.personId}` }]);
                anchorsArray.push(anchor);
             })
             addTableRow(table, ['Супруги', anchorsArray], 'table__row table__row_spouses', '');
@@ -293,7 +294,7 @@ export async function showFilmPageWithPagination(
          const filmContainer: HTMLElement = addElement('div', 'persons-film__item');
          const imageContainer: HTMLElement = addElement('div', 'persons-film__image');
          const a1: HTMLElement = addElement('a', 'persons-film__link', '',
-            [{ attr: 'href', attrValue: `/movie?${item.filmId}` }]);
+            [{ attr: 'href', attrValue: `/movie/${item.filmId}` }]);
          const posterIMG: string = imdbData.Poster === 'N/A' ? noPoster : imdbData.Poster || noPoster;
          const image: HTMLElement = addElement('img', '', '',
             [{ attr: 'src', attrValue: posterIMG },
@@ -306,7 +307,7 @@ export async function showFilmPageWithPagination(
          const filmRatingName: HTMLElement = addElement('div', 'persons-film__rating-name', 'рейтинг Кинопоиск');
          const filmRatingValue: HTMLElement = addElement('div', 'persons-film__rating-value', item.rating || '-');
          const a2: HTMLElement = addElement('a', 'persons-film__link', item.nameRu,
-            [{ attr: 'href', attrValue: `/movie?${item.filmId}` }]);
+            [{ attr: 'href', attrValue: `/movie/${item.filmId}` }]);
          filmRatingContainer.append(filmRatingName, filmRatingValue);
          filmName.append(a2);
          filmContainer.append(imageContainer, filmName, filmRatingContainer);

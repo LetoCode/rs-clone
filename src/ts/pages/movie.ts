@@ -20,6 +20,7 @@ import avatar8 from '../../assets/avatars/smile_avatar8.png';
 import avatar9 from '../../assets/avatars/smile_avatar9.png';
 import avatar10 from '../../assets/avatars/smile_avatar10.png';
 import { DATE_FORMAT } from '../utils/stringFormats';
+import { getIDfromPathname } from '../utils/endpoints';
 
 
 const MAX_REVIEWS: number = 5;
@@ -43,13 +44,12 @@ function moviePage(): void {
 }
 
 function createMoviePage(): HTMLElement {
-   const id: string = window.location.search.replace('?', '');
+   const id: string = getIDfromPathname();
    const mainElement: HTMLElement = document.createElement('div');
    mainElement.className = 'main';
 
    (async () => {
       const filmFilters: respFilters = await Controller.getFilters() as respFilters;
-      // const filmData: respFilm = await Controller.getFilm('77044') as respFilm;
       const filmData: respFilm = await Controller.getFilm(id) as respFilm;
       if (!filmData) router('/404');
       const filmVideos: respVideos = await Controller.getVideos(id) as respVideos;
@@ -58,12 +58,8 @@ function createMoviePage(): HTMLElement {
       const filmBoxOffice: respBoxOffice = await Controller.getBoxOffice(id) as respBoxOffice;
       const filmDistributions: respDistributions = await Controller.getDistributions(id) as respDistributions;
       const filmFacts: respFacts = await Controller.getFacts(id) as respFacts;
-      //const filmFacts: respFacts = await Controller.getFacts('326') as respFacts;
       const filmReviews: respReviews = await Controller.getReviews(id, 1, 'USER_POSITIVE_RATING_DESC') as respReviews;
-      // const filmReviews: respReviews = await Controller.getReviews('77044', 1, 'USER_POSITIVE_RATING_DESC') as respReviews;
       const filmSimilar: respSimilars = await Controller.getSimilars(id) as respSimilars;
-      //const filmSimilar: respSimilars = await Controller.getSimilars('77044') as respSimilars;
-      //const film1: respfilmsWithFilters = await Controller.getFilmsWithFilters({ keyword: 'друзья', page: 1 }) as respfilmsWithFilters;
 
       const movieContainer: HTMLElement = addElement('div', 'container movie');
 
@@ -91,7 +87,6 @@ function createMoviePage(): HTMLElement {
       }
 
       if (filmData.serial) {
-         //const filmSeasons: respSeasons = await Controller.getSeasons('77044') as respSeasons;
          const filmSeasons: respSeasons = await Controller.getSeasons(id) as respSeasons;
          console.log(filmSeasons);
          if (filmSeasons.total) {
@@ -134,7 +129,7 @@ function getTopBlock(
    asideList: HTMLElement): DocumentFragment {
 
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__top top', '', [{ attr: 'name', attrValue: 'filmName' }]);
+   const el: HTMLElement = addElement('section', 'movie__top top', '', [{ attr: 'id', attrValue: 'filmName' }]);
    asideList.append(addMenuElement('Фильм', '#filmName'));
    if (filmImages.items.length) {
       const randomImageIndex = Math.floor(Math.random() * filmImages.items.length);
@@ -174,7 +169,7 @@ function getBodyBlock(): [DocumentFragment, HTMLElement, HTMLElement] {
 
 function getActorsBlock(filmStaff: FilmStaffItem[], asideList: HTMLElement, id: string): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__actors actors', '', [{ attr: 'name', attrValue: 'filmActors' }]);
+   const el: HTMLElement = addElement('section', 'movie__actors actors', '', [{ attr: 'id', attrValue: 'filmActors' }]);
    asideList.append(addMenuElement('Создатели', '#filmActors'));
 
    const actorsBlock: HTMLElement = addElement('div', 'actors__block');
@@ -197,7 +192,7 @@ function getActorsBlock(filmStaff: FilmStaffItem[], asideList: HTMLElement, id: 
    buttonGroup1.append(buttonActors, buttonCreators);
    const buttonGroup2: HTMLElement = addElement('div', 'btn-group-actors');
    const buttonAll: HTMLElement = addElement('a', 'btn actors__btn actors__btn_all _addition', 'Смотреть всех',
-      [{ attr: 'href', attrValue: `/filmstaff?${id}` }]);
+      [{ attr: 'href', attrValue: `/filmstaff/${id}` }]);
    buttonGroup2.append(buttonAll);
    actorsMenu.append(buttonGroup1, buttonGroup2);
 
@@ -208,7 +203,7 @@ function getActorsBlock(filmStaff: FilmStaffItem[], asideList: HTMLElement, id: 
 
 function getTrailerBlock(filmVideos: respVideos, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__trailer trailer', '', [{ attr: 'name', attrValue: 'filmTrailer' }]);
+   const el: HTMLElement = addElement('section', 'movie__trailer trailer', '', [{ attr: 'id', attrValue: 'filmTrailer' }]);
    asideList.append(addMenuElement('Трейлер', '#filmTrailer'));
 
    const menu: HTMLElement = addElement('div', 'trailer__menu block-menu');
@@ -242,7 +237,7 @@ function getTrailerBlock(filmVideos: respVideos, asideList: HTMLElement): Docume
 
 function getAboutBlock(filmData: respFilm, filmFacts: respFacts, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__about about', '', [{ attr: 'name', attrValue: 'filmAbout' }]);
+   const el: HTMLElement = addElement('section', 'movie__about about', '', [{ attr: 'id', attrValue: 'filmAbout' }]);
    asideList.append(addMenuElement('О фильме', '#filmAbout'));
 
    if (filmData.description) {
@@ -281,7 +276,7 @@ function getAboutBlock(filmData: respFilm, filmFacts: respFacts, asideList: HTML
 
 function getSeasonsBlock(filmSeasons: respSeasons, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__serial serial _hidden', '', [{ attr: 'name', attrValue: 'filmSeasons' }]);
+   const el: HTMLElement = addElement('section', 'movie__serial serial _hidden', '', [{ attr: 'id', attrValue: 'filmSeasons' }]);
    asideList.append(addMenuElement('Сезоны', '#filmSeasons'));
 
    const serialContainer: HTMLElement = addElement('div', 'serial__container');
@@ -322,7 +317,7 @@ function getSeasonsBlock(filmSeasons: respSeasons, asideList: HTMLElement): Docu
 
 function getReviewsBlock(filmReviews: respReviews, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__reviews reviews', '', [{ attr: 'name', attrValue: 'filmReviews' }]);
+   const el: HTMLElement = addElement('section', 'movie__reviews reviews', '', [{ attr: 'id', attrValue: 'filmReviews' }]);
    asideList.append(addMenuElement('Рецензии', '#filmReviews'));
 
    const reviewsContainer: HTMLElement = addElement('div', 'reviews__container');
@@ -351,7 +346,7 @@ function getReviewsBlock(filmReviews: respReviews, asideList: HTMLElement): Docu
 
 function getImagesBlock(filmImages: respImages, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__images movie-images', '', [{ attr: 'name', attrValue: 'filmImages' }]);
+   const el: HTMLElement = addElement('section', 'movie__images movie-images', '', [{ attr: 'id', attrValue: 'filmImages' }]);
    asideList.append(addMenuElement('Кадры и постеры', '#filmImages'));
 
    const header: HTMLElement = addElement('div', 'movie-images__header');
@@ -384,7 +379,7 @@ function getImagesBlock(filmImages: respImages, asideList: HTMLElement): Documen
 
 function getSimilarBlock(filmSimilar: respSimilars, asideList: HTMLElement): DocumentFragment {
    const fragment: DocumentFragment = new DocumentFragment();
-   const el: HTMLElement = addElement('section', 'movie__similar similar', '', [{ attr: 'name', attrValue: 'filmSimilar' }]);
+   const el: HTMLElement = addElement('section', 'movie__similar similar', '', [{ attr: 'id', attrValue: 'filmSimilar' }]);
    const header: HTMLElement = addElement('div', 'similar__header', 'Похожие фильмы');
    const items: HTMLElement = addElement('div', 'similar__items');
    el.append(header);
@@ -393,7 +388,7 @@ function getSimilarBlock(filmSimilar: respSimilars, asideList: HTMLElement): Doc
    for (let i = 0; i < Math.min(MAX_SIMILAR, filmSimilar.items.length); i += 1) {
       try {
          const a: HTMLElement = addElement('a', 'similar__item-link', '',
-            [{ attr: 'href', attrValue: `/movie?${filmSimilar.items[i].filmId}` }]);
+            [{ attr: 'href', attrValue: `/movie/${filmSimilar.items[i].filmId}` }]);
          const card: HTMLElement = addCard('similar__item',
             filmSimilar.items[i].posterUrlPreview,
             filmSimilar.items[i].nameRu,
@@ -545,21 +540,19 @@ function embedTotalReviewsCount(reviewsTotal: HTMLElement, filmReviews: respRevi
    const neutralNumber: HTMLElement = addElement('div', 'total-item__number total-item__number_neutral', String(filmReviews.totalNeutralReviews));
    const neutralHeader: HTMLElement = addElement('div', 'total-item__header total-item__header_neutral', 'Нейтральные');
    neutralContainer.append(neutralNumber, neutralHeader);
-
    reviewsTotal.append(totalContainer, positiveContainer, negContainer, neutralContainer);
 }
 
 export function embedStaffCards(staff: FilmStaffItem[], actorsItems: HTMLElement) {
    for (let i = 0; i < Math.min(MAX_ACTORS, staff.length); i += 1) {
       try {
-         const card: HTMLElement = addCard('actors__item', staff[i].posterUrl, staff[i].nameRu, staff[i].professionText.slice(0, -1), `person?${staff[i].staffId}`);
+         const card: HTMLElement = addCard('actors__item', staff[i].posterUrl, staff[i].nameRu, staff[i].professionText.slice(0, -1), `/person/${staff[i].staffId}`);
          actorsItems.append(card);
       } catch (e) {
          console.log(`Don't get staff card ${e}`);
       }
    }
 }
-
 
 function showFilmNameRu(filmData: respFilm, topInfo: HTMLElement) {
    try {
@@ -607,7 +600,7 @@ function showFilmCountry(filmData: respFilm, filmFilters: respFilters, table: HT
          let anchor: HTMLElement = addElement('span', 'table__country-nolink', countryName);
          if (countryId) {
             const id = countryId.id;
-            anchor = addElement('a', 'table__country-link table__link', countryName, [{ attr: 'href', attrValue: `/country?${id}` }]);
+            anchor = addElement('a', 'table__country-link table__link', countryName, [{ attr: 'href', attrValue: `/country/${id}` }]);
          }
          anchorsArray.push(anchor);
       });
@@ -624,7 +617,7 @@ function showFilmGenres(filmData: respFilm, filmFilters: respFilters, table: HTM
          let anchor: HTMLElement = addElement('span', 'table__country-nolink', genreName);
          if (genreId) {
             const id = genreId.id;
-            anchor = addElement('a', 'table__genre-link table__link', genreName, [{ attr: 'href', attrValue: `/genre?${id}` }]);
+            anchor = addElement('a', 'table__genre-link table__link', genreName, [{ attr: 'href', attrValue: `/genre/${id}` }]);
          }
          anchorsArray.push(anchor);
       });
@@ -638,7 +631,7 @@ function showFilmDirector(filmStaff: FilmStaffItem[], table: HTMLElement) {
       const director: FilmStaffItem = filmStaff.find(el => el.professionKey.toUpperCase() === 'DIRECTOR') as FilmStaffItem;
       if (director) {
          const directorName: string = director.nameRu || director.nameEn;
-         const anchor: HTMLElement = addElement('a', 'table__director-link table__link', directorName, [{ attr: 'href', attrValue: `/person?${director.staffId}` }]);
+         const anchor: HTMLElement = addElement('a', 'table__director-link table__link', directorName, [{ attr: 'href', attrValue: `/person/${director.staffId}` }]);
          addTableRow(table, ['Режиссер', [anchor]], 'table__row table__row_director', '');
       }
    } catch (e: unknown) { console.log(e) }
@@ -652,7 +645,7 @@ function showFilmWriter(filmStaff: FilmStaffItem[], table: HTMLElement) {
       if (screenWriter.length) {
          screenWriter.forEach(el => {
             const screenWriterName: string = el.nameRu || el.nameEn;
-            const anchor: HTMLElement = addElement('a', 'table__writer-link table__link', screenWriterName, [{ attr: 'href', attrValue: `/person?${el.staffId}` }]);
+            const anchor: HTMLElement = addElement('a', 'table__writer-link table__link', screenWriterName, [{ attr: 'href', attrValue: `/person/${el.staffId}` }]);
             anchorsArray.push(anchor);
          })
          addTableRow(table, ['Сценарий', anchorsArray], 'table__row table__row_writer', '');
@@ -667,7 +660,7 @@ function showFilmProducer(filmStaff: FilmStaffItem[], table: HTMLElement) {
       if (producer.length) {
          producer.forEach(el => {
             const producerName: string = el.nameRu || el.nameEn;
-            const anchor: HTMLElement = addElement('a', 'table__producer-link table__link', producerName, [{ attr: 'href', attrValue: `/person?${el.staffId}` }]);
+            const anchor: HTMLElement = addElement('a', 'table__producer-link table__link', producerName, [{ attr: 'href', attrValue: `/person/${el.staffId}` }]);
             anchorsArray.push(anchor);
          })
          addTableRow(table, ['Продюсер', anchorsArray], 'table__row table__row_producer', '');
@@ -682,7 +675,7 @@ function showFilmOperator(filmStaff: FilmStaffItem[], table: HTMLElement) {
       if (operator.length) {
          operator.forEach(el => {
             const operatorName: string = el.nameRu || el.nameEn;
-            const anchor: HTMLElement = addElement('a', 'table__operator-link table__link', operatorName, [{ attr: 'href', attrValue: `/person?${el.staffId}` }]);
+            const anchor: HTMLElement = addElement('a', 'table__operator-link table__link', operatorName, [{ attr: 'href', attrValue: `/person/${el.staffId}` }]);
             anchorsArray.push(anchor);
          })
          addTableRow(table, ['Оператор', anchorsArray], 'table__row table__row_operator', '');
@@ -697,7 +690,7 @@ function showFilmComposer(filmStaff: FilmStaffItem[], table: HTMLElement) {
       if (composer.length) {
          composer.forEach(el => {
             const composerName: string = el.nameRu || el.nameEn;
-            const anchor: HTMLElement = addElement('a', 'table__composer-link table__link', composerName, [{ attr: 'href', attrValue: `/person?${el.staffId}` }]);
+            const anchor: HTMLElement = addElement('a', 'table__composer-link table__link', composerName, [{ attr: 'href', attrValue: `/person/${el.staffId}` }]);
             anchorsArray.push(anchor);
          })
          addTableRow(table, ['Композитор', anchorsArray], 'table__row table__row_composer', '');
@@ -712,7 +705,7 @@ function showFilmDesigner(filmStaff: FilmStaffItem[], table: HTMLElement) {
       if (designer.length) {
          designer.forEach(el => {
             const designerName: string = el.nameRu || el.nameEn;
-            const anchor: HTMLElement = addElement('a', 'table__designer-link table__link', designerName, [{ attr: 'href', attrValue: `/person?${el.staffId}` }]);
+            const anchor: HTMLElement = addElement('a', 'table__designer-link table__link', designerName, [{ attr: 'href', attrValue: `/person/${el.staffId}` }]);
             anchorsArray.push(anchor);
          })
          addTableRow(table, ['Художник', anchorsArray], 'table__row table__row_designer', '');
@@ -727,7 +720,7 @@ function showFilmEditor(filmStaff: FilmStaffItem[], table: HTMLElement) {
       if (editor.length) {
          editor.forEach(el => {
             const editorName: string = el.nameRu || el.nameEn;
-            const anchor: HTMLElement = addElement('a', 'table__editor-link table__link', editorName, [{ attr: 'href', attrValue: `/person?${el.staffId}` }]);
+            const anchor: HTMLElement = addElement('a', 'table__editor-link table__link', editorName, [{ attr: 'href', attrValue: `/person/${el.staffId}` }]);
             anchorsArray.push(anchor);
          })
          addTableRow(table, ['Монтаж', anchorsArray], 'table__row table__row_editor', '');

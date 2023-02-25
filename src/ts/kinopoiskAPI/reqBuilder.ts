@@ -14,10 +14,7 @@ export function getRequestOptions(useNewApiKey: boolean = false): requestOptions
       }
    }
 
-   // console.log('API_KEYS=', API_KEYS);
    const currentAPIkey = USED_API_KEYS.at(-1);
-   console.log('USED_API_KEYS=', USED_API_KEYS);
-   console.log('currentAPIkey=', currentAPIkey);
    return {
       method: 'GET',
       headers: {

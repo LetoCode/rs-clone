@@ -3,6 +3,7 @@ import * as Controller from "../kinopoiskAPI/controller";
 import { router } from "../router/router";
 import { addElement } from "../utils/elementsBuilder";
 import noPhoto from '../../assets/noPhoto.png';
+import { getIDfromPathname } from "../utils/endpoints";
 
 
 function staffPage(): void {
@@ -11,7 +12,7 @@ function staffPage(): void {
 export default staffPage;
 
 function createStaffPage(): HTMLElement {
-   const id: string = window.location.search.replace('?', '');
+   const id: string = getIDfromPathname();
    const mainElement: HTMLElement = document.createElement('div');
    mainElement.className = 'main';
    const staffContainer: HTMLElement = addElement('div', 'container staff');
@@ -31,14 +32,14 @@ function createStaffPage(): HTMLElement {
             const itemContainer: HTMLElement = addElement('div', 'staff__item');
             const imageContainer: HTMLElement = addElement('div', 'staff__image');
             const a1: HTMLElement = addElement('a', 'staff__link', '',
-               [{ attr: 'href', attrValue: `/person?${item.staffId}` }]);
+               [{ attr: 'href', attrValue: `/person/${item.staffId}` }]);
             const image: HTMLElement = addElement('img', '', '',
                [{ attr: 'src', attrValue: item.posterUrl }, { attr: 'alt', attrValue: noPhoto }]);
             a1.append(image);
             imageContainer.append(a1);
             const itemNameContainer: HTMLElement = addElement('div', 'staff__name');
             const a2: HTMLElement = addElement('a', 'persons-film__link', item.nameRu,
-               [{ attr: 'href', attrValue: `/person?${item.staffId}` }]);
+               [{ attr: 'href', attrValue: `/person/${item.staffId}` }]);
             const itemNameEn: HTMLElement = addElement('div', 'staff__name_en', item.nameEn);
             itemNameContainer.append(a2, itemNameEn);
             const itemProfession: HTMLElement = addElement('div', 'staff__prof', item.professionText.slice(0, -1));

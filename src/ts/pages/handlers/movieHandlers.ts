@@ -25,7 +25,6 @@ export function buttonActorsClick(e: Event, filmStaff: FilmStaffItem[], actorsIt
       actorsItems.innerHTML = '';
       const creators: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() !== 'ACTOR');
       embedStaffCards(creators, actorsItems);
-
    }
 }
 
