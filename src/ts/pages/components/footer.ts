@@ -7,19 +7,19 @@ function showFooter(): HTMLElement {
             <div class="footer__left">
                <div class="github">
                   <a href="https://github.com/LetoCode">
-                     <img src="github.svg" class="github__img" alt="github">
+                     <img src="../github.svg" class="github__img" alt="github">
                      <div class="github-name">LetoCode</div>
                   </a>
                </div>
                <div class="github">
                   <a href="https://github.com/EGalitsky">
-                     <img src="github.svg" class="github__img" alt="github">
+                     <img src="../github.svg" class="github__img" alt="github">
                      <div class="github-name">EGalitsky</div>
                   </a>
                </div>
                <div class="github">
                   <a href="https://github.com/eOne1999">
-                     <img src="github.svg" class="github__img" alt="github">
+                     <img src="../github.svg" class="github__img" alt="github">
                      <div class="github-name">eOne1999</div>
 
                   </a>
@@ -28,7 +28,7 @@ function showFooter(): HTMLElement {
             <div class="footer__right">
                2023
                <a href="https://rs.school/js/">
-                  <img src="rss.svg" class="footer__rss" alt="RS School">
+                  <img src="../rss.svg" class="footer__rss" alt="RS School">
                </a>
             </div>
          </div>
