@@ -1,4 +1,4 @@
-import { DOMAIN, KINOPOISK_URLS, API_KEYS, USED_API_KEYS } from "./kinopoiskURLs";
+import { DOMAIN, KINOPOISK_URLS, API_KEYS, USED_API_KEYS } from './kinopoiskURLs';
 
 export function getRequestOptions(useNewApiKey: boolean = false): requestOptions {
    if (!USED_API_KEYS.length) {
@@ -14,22 +14,18 @@ export function getRequestOptions(useNewApiKey: boolean = false): requestOptions
       }
    }
 
-   // console.log('API_KEYS=', API_KEYS);
    const currentAPIkey = USED_API_KEYS.at(-1);
-   console.log('USED_API_KEYS=', USED_API_KEYS);
-   console.log('currentAPIkey=', currentAPIkey);
+
    return {
       method: 'GET',
       headers: {
          'X-API-KEY': `${currentAPIkey}`,
          'Content-Type': 'application/json',
-      }
-   }
+      },
+   };
 }
 
-export function getRequestURL(
-   { APItarget, params = '', id }:
-      { APItarget: keyof kinopoiskURLs, params?: string, id?: string }): string {
+export function getRequestURL({ APItarget, params = '', id }: { APItarget: keyof kinopoiskURLs; params?: string; id?: string }): string {
    const endpoint: string = KINOPOISK_URLS[APItarget];
    let newEndpoint: string = endpoint;
    if (id) {

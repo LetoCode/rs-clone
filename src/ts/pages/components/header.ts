@@ -28,7 +28,6 @@ function showHeader(): HTMLElement {
 }
 
 function userInOut() {
-   console.log(sessionStorage.getItem('user'));
    if (sessionStorage.getItem('user')) {
       const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
       return `<a href="/auth">Привет, ${displayName}!</a>`;

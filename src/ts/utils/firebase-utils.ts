@@ -1,6 +1,6 @@
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, Auth, signOut } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, Firestore } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, Firestore, updateDoc, DocumentReference, DocumentData, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 const firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
@@ -26,7 +26,6 @@ export const db: Firestore = getFirestore();
 export const createUserDocumentFromAuth = async (userAuth: User, restInfo: object = {}) => {
    const userDocRef = doc(db, 'users', userAuth.uid);
    const getUser = await getDoc(userDocRef);
-   console.log(getUser);
    if (!getUser.exists()) {
       const { displayName, email } = userAuth;
       const createdAt: Date = new Date();
@@ -59,12 +58,27 @@ export const signOutUser = async (/*auth: Auth*/) => {
    console.log('deleted');
 };
 
+export function getUserDocRef(uid: string) {
+   return doc(db, 'users', uid);
+}
+
 export async function getUserData(uid: string) {
-   const userDocRef = doc(db, 'users', uid);
+   const userDocRef = getUserDocRef(uid);
    const getUser = await getDoc(userDocRef);
    return getUser.data();
 }
 
 export async function storage(uid: string) {
    sessionStorage.setItem('user', JSON.stringify(Object.assign({ uid: uid }, await getUserData(uid))));
+}
+
+export async function updateUserDoc(userDocRef: DocumentReference<DocumentData>, obj: object = {}) {
+   updateDoc(userDocRef, obj);
+}
+
+export function deleteFilm(userDocRef: DocumentReference<DocumentData>, filmId: string) {
+   updateDoc(userDocRef, { movie: arrayRemove(filmId) });
+}
+export function addFilm(userDocRef: DocumentReference<DocumentData>, filmId: string) {
+   updateDoc(userDocRef, { movie: arrayUnion(filmId) });
 }
