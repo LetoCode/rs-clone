@@ -45,28 +45,48 @@ function createHomePage(): HTMLElement {
    };
 
    (async () => {
+      const storagePremieres = sessionStorage.getItem('premieres');
+      const storageNewFilms = sessionStorage.getItem('new-1');
       const storageBestFilms = sessionStorage.getItem('top250-1');
+      const storageBestSeries = sessionStorage.getItem('best-s-1');
+      const storageAdventure = sessionStorage.getItem('adventures-1');
+      const storageNews = sessionStorage.getItem('news');
+
+      let dataPremieres: respPremieres;
+      let dataNewFilms: respfilmsWithFilters;
       let dataBestFilms: respTop;
-      let arrBestFilms: respFilmItem[];
-      if (storageBestFilms === null) {
-         dataBestFilms = await getTOP250() as respTop;
-         sessionStorage.setItem('top250-1', JSON.stringify(dataBestFilms));
-      } else {
+      let dataBestSeries: respfilmsWithFilters;
+      let dataAdventure: respfilmsWithFilters;
+      let dataNews: respNews;
+
+      if (storagePremieres && storageNewFilms && storageBestFilms && storageBestSeries && storageAdventure && storageNews !== null) {
+         dataPremieres = JSON.parse(storagePremieres);
+         dataNewFilms = JSON.parse(storageNewFilms);
          dataBestFilms = JSON.parse(storageBestFilms);
+         dataBestSeries = JSON.parse(storageBestSeries);
+         dataAdventure = JSON.parse(storageAdventure);
+         dataNews = JSON.parse(storageNews);
+      } else {
+         dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
+         dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
+         dataBestFilms = await getTOP250() as respTop;
+         dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
+         dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
+         dataNews = await getNews() as respNews;
+
+         sessionStorage.setItem('premieres', JSON.stringify(dataPremieres));
+         sessionStorage.setItem('new-1', JSON.stringify(dataNewFilms));
+         sessionStorage.setItem('top250-1', JSON.stringify(dataBestFilms));
+         sessionStorage.setItem('best-s-1', JSON.stringify(dataBestSeries));
+         sessionStorage.setItem('adventures-1', JSON.stringify(dataAdventure));
+         sessionStorage.setItem('news', JSON.stringify(dataNews));
       }
-      arrBestFilms = dataBestFilms.films;
 
-      const dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
-      const dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
-      const dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
-      const dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
-      const dataNews: respNews = await getNews() as respNews;
-      console.log('dataNews', dataNews)
-
-      const arrPremieres = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
-      const arrNewFilms = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
-      const arrBestSeries = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
-      const arrAdventure = dataAdventure.items;
+      const arrPremieres: respFilmItem[] = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
+      const arrNewFilms: respFilmItem[] = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
+      const arrBestFilms: respFilmItem[] = dataBestFilms.films;
+      const arrBestSeries: respFilmItem[] = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
+      const arrAdventure: respFilmItem[] = dataAdventure.items;
 
       createMainPoster(container, arrPremieres);
       createNewsSection(container, 'Актуально', dataNews);
