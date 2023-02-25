@@ -17,7 +17,9 @@ export function handleRoute(pathname: string): void {
 handleRoute(window.location.pathname);
 
 window.addEventListener('popstate', (): void => {
-   handleRoute(window.location.pathname);
+   if (!window.location.hash) {
+      handleRoute(window.location.pathname);
+   }
 });
 
 
