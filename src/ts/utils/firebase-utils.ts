@@ -10,7 +10,7 @@ import {
    UserCredential,
    signOut,
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, Firestore, SnapshotOptions, DocumentData, DocumentReference } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, Firestore, SnapshotOptions, DocumentData, DocumentReference, initializeFirestore } from 'firebase/firestore';
 
 const firebaseConfig: firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
@@ -34,7 +34,11 @@ export function sighInWithGooglePopup(): Promise<UserCredential> {
    return signInWithPopup(auth, googleProvider);
 }
 
-export const db: Firestore = getFirestore();
+// export const db: Firestore = getFirestore();
+
+export const db: Firestore = initializeFirestore(firebaseApp, {
+   experimentalForceLongPolling: true,
+});
 
 export async function createUserDocumentFromAuth(userAuth: User, restInfo: object = {}): Promise<DocumentReference<DocumentData>> {
    const userDocRef = doc(db, 'users', userAuth.uid);
