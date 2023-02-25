@@ -25,7 +25,6 @@ function createStaffPage(): HTMLElement {
       const staffItemsContainer: HTMLElement = addElement('div', 'staff__items');
       const filmStaff: FilmStaffItem[] = await Controller.getStaff(id) as FilmStaffItem[];
       if (!filmStaff) router('/404');
-      console.log(filmStaff)
 
       for (const item of filmStaff) {
          if (item.nameEn && item.nameRu) {

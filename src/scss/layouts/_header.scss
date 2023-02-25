@@ -11,6 +11,17 @@
 
 .logo__img {
     height: 40px;
+    @media (max-width: 860px) {
+        display: none;
+    }
+}
+
+.logo__img_short {
+    height: 40px;
+    display: none;
+    @media (max-width: 860px) {
+        display: block;
+    }
 }
 
 .header__nav {

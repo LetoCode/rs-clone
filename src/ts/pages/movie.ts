@@ -23,11 +23,11 @@ import { DATE_FORMAT } from '../utils/stringFormats';
 import { getIDfromPathname } from '../utils/endpoints';
 
 
-const MAX_REVIEWS: number = 5;
-const MAX_SIMILAR: number = 5;
-const MAX_FILM_IMGS: number = 5;
-const MAX_ACTORS: number = 5;
-const RATING_100: number = 250;
+const MAX_REVIEWS = 5;
+const MAX_SIMILAR = 5;
+const MAX_FILM_IMGS = 5;
+const MAX_ACTORS = 5;
+const RATING_100 = 250;
 const AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10];
 
 const youtubeFrame = (endpoint: string): string => {
@@ -88,7 +88,6 @@ function createMoviePage(): HTMLElement {
 
       if (filmData.serial) {
          const filmSeasons: respSeasons = await Controller.getSeasons(id) as respSeasons;
-         console.log(filmSeasons);
          if (filmSeasons.total) {
             const serialsBlock: DocumentFragment = getSeasonsBlock(filmSeasons, asideList);
             rightBody.append(serialsBlock);
@@ -593,7 +592,7 @@ function showFilmYear(filmData: respFilm, table: HTMLElement) {
 
 function showFilmCountry(filmData: respFilm, filmFilters: respFilters, table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       filmData.countries.forEach(el => {
          const countryName: string = el.country;
          const countryId: respCountryForFilter = filmFilters.countries.find(item => item.country === countryName) as respCountryForFilter;
@@ -610,7 +609,7 @@ function showFilmCountry(filmData: respFilm, filmFilters: respFilters, table: HT
 
 function showFilmGenres(filmData: respFilm, filmFilters: respFilters, table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       filmData.genres.forEach(el => {
          const genreName: string = el.genre;
          const genreId: respGenreForFilter = filmFilters.genres.find(item => item.genre === genreName) as respGenreForFilter;
@@ -640,7 +639,7 @@ function showFilmDirector(filmStaff: FilmStaffItem[], table: HTMLElement) {
 
 function showFilmWriter(filmStaff: FilmStaffItem[], table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       const screenWriter: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'WRITER') as FilmStaffItem[];
       if (screenWriter.length) {
          screenWriter.forEach(el => {
@@ -655,7 +654,7 @@ function showFilmWriter(filmStaff: FilmStaffItem[], table: HTMLElement) {
 
 function showFilmProducer(filmStaff: FilmStaffItem[], table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       const producer: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'PRODUCER') as FilmStaffItem[];
       if (producer.length) {
          producer.forEach(el => {
@@ -670,7 +669,7 @@ function showFilmProducer(filmStaff: FilmStaffItem[], table: HTMLElement) {
 
 function showFilmOperator(filmStaff: FilmStaffItem[], table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       const operator: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'OPERATOR') as FilmStaffItem[];
       if (operator.length) {
          operator.forEach(el => {
@@ -685,7 +684,7 @@ function showFilmOperator(filmStaff: FilmStaffItem[], table: HTMLElement) {
 
 function showFilmComposer(filmStaff: FilmStaffItem[], table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       const composer: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'COMPOSER') as FilmStaffItem[];
       if (composer.length) {
          composer.forEach(el => {
@@ -700,7 +699,7 @@ function showFilmComposer(filmStaff: FilmStaffItem[], table: HTMLElement) {
 
 function showFilmDesigner(filmStaff: FilmStaffItem[], table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       const designer: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'DESIGN') as FilmStaffItem[];
       if (designer.length) {
          designer.forEach(el => {
@@ -715,7 +714,7 @@ function showFilmDesigner(filmStaff: FilmStaffItem[], table: HTMLElement) {
 
 function showFilmEditor(filmStaff: FilmStaffItem[], table: HTMLElement) {
    try {
-      let anchorsArray: Array<HTMLElement> = [];
+      const anchorsArray: Array<HTMLElement> = [];
       const editor: FilmStaffItem[] = filmStaff.filter(el => el.professionKey.toUpperCase() === 'EDITOR') as FilmStaffItem[];
       if (editor.length) {
          editor.forEach(el => {

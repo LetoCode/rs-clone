@@ -1,10 +1,10 @@
 export function addElement(
    tag: string,
    classNames: string,
-   content: string = '',
+   content = '',
    attributes: { attr: string, attrValue: string }[] = [],
-   dataSet: string = '',
-   dataSetValue: string = ''
+   dataSet = '',
+   dataSetValue = ''
 ): HTMLElement {
    const el: HTMLElement = document.createElement(tag);
    el.className = classNames;
@@ -48,7 +48,7 @@ export function addTableRow(
    table.append(row);
 }
 
-export function addCard(className: string, imageLink: string, header: string, info: string, link: string = ''): HTMLElement {
+export function addCard(className: string, imageLink: string, header: string, info: string, link = ''): HTMLElement {
    const card: HTMLElement = addElement('div', className);
 
    const imgContainer: HTMLElement = addElement('div', `${className}__image`);

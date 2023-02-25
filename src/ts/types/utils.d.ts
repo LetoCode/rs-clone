@@ -19,7 +19,7 @@ type listFilms = {
    isTop: boolean;
    name: string;
    title: string;
-   getData: ({}: argumentForFilmSearch) => Promise<string | respfilmsWithFilters>;
+   getData: (object: argumentForFilmSearch) => Promise<string | respfilmsWithFilters>;
    argums: {
       filmsType: string;
       genres?: number;
