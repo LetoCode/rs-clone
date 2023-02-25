@@ -26,8 +26,8 @@
    }
 }
 
-.news-item__image{
-   background: rgba(0, 0, 0, 0.5)
+.news-item__image {
+   background: rgba(0, 0, 0, 0.5);
 }
 
 .news-item:first-child {
@@ -106,14 +106,15 @@
 .news-item__image {
    width: 100%;
    height: 50%;
-   object-fit: cover;
+   // object-fit: contain;
+   overflow: hidden;
    @include media-tablet {
       display: none;
    }
 }
 
 .news-item__image img {
-   object-fit: cover;
+   object-fit: contain;
    width: 100%;
    height: 100%;
 }

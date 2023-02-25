@@ -1,3 +1,4 @@
+import { addBurgerListener } from "../handlers/headerHandler";
 import { addSearchListener } from "../handlers/searchHandlers";
 
 function showHeader(): HTMLElement {
@@ -21,10 +22,21 @@ function showHeader(): HTMLElement {
            <input type="search" class="header__search" placeholder="Поиск">
            ${userInOut()}
          </div>
+         <nav class="header__nav header__nav_burger">
+         <input type="search" class="header__search" placeholder="Поиск">
+            <a class="nav__item" href="/">Главная</a>
+            <a class="nav__item" href="/films">Фильмы</a>
+            <a class="nav__item" href="/series">Сериалы</a>
+            ${userInOut()}
+         </nav>
+         <div class="header__burger">
+            <span></span>
+         </div>
       </div>
    </div>
    `;
-   setTimeout(addSearchListener, 100)
+   setTimeout(addSearchListener, 100);
+   setTimeout(addBurgerListener, 100);
    return headerElement;
 }
 
@@ -32,8 +44,8 @@ function userInOut() {
    console.log(sessionStorage.getItem('user'));
    if (sessionStorage.getItem('user')) {
       const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
-      return `<a href="/">Привет, ${displayName}!</a>`;
-   } else return '<a href="/authentication">Войти</a>';
+      return `<a class="authentication__link" href="/">Привет, ${displayName}!</a>`;
+   } else return '<a class="authentication__link" href="/authentication">Войти</a>';
 }
 
 export default showHeader;

@@ -139,7 +139,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
       greetingInfo.append(greetingParams);
       greetingParams.className = 'greeting__params';
       if (data.year) greetingParams.textContent = `${data.year}`;
-      if (data.genres[0].genre) greetingParams.textContent += ` • ${data.genres[0].genre}`;
+      if (data.genres && data.genres[0].genre) greetingParams.textContent += ` • ${data.genres[0].genre}`;
       if (data.ratingAgeLimits) greetingParams.textContent += ` • ${data.ratingAgeLimits.slice(3)}+`;
    })
 }
