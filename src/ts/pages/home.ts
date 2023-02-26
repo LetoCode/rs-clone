@@ -68,34 +68,40 @@ function createHomePage(): HTMLElement {
          dataNews = JSON.parse(storageNews);
       } else {
          dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
-         console.log(String(dataPremieres).length);
          dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
          dataBestFilms = await getTOP250() as respTop;
          dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;
          dataAdventure = await getFilmsWithFilters(filtersAdventure) as respfilmsWithFilters;
          dataNews = await getNews() as respNews;
 
-         sessionStorage.setItem('premieres', JSON.stringify(dataPremieres));
-         sessionStorage.setItem('new-1', JSON.stringify(dataNewFilms));
-         sessionStorage.setItem('top250-1', JSON.stringify(dataBestFilms));
-         sessionStorage.setItem('best-s-1', JSON.stringify(dataBestSeries));
-         sessionStorage.setItem('adventures-1', JSON.stringify(dataAdventure));
-         sessionStorage.setItem('news', JSON.stringify(dataNews));
+         if (`${dataPremieres}${dataNewFilms}${dataBestFilms}${dataBestSeries}${dataAdventure}`.length) {
+            sessionStorage.setItem('premieres', JSON.stringify(dataPremieres));
+            sessionStorage.setItem('new-1', JSON.stringify(dataNewFilms));
+            sessionStorage.setItem('top250-1', JSON.stringify(dataBestFilms));
+            sessionStorage.setItem('best-s-1', JSON.stringify(dataBestSeries));
+            sessionStorage.setItem('adventures-1', JSON.stringify(dataAdventure));
+         }
+
+         if (`${dataNews}`.length) sessionStorage.setItem('news', JSON.stringify(dataNews));
       }
+      
+      try {
+         const arrPremieres: respFilmItem[] = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
+         const arrNewFilms: respFilmItem[] = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
+         const arrBestFilms: respFilmItem[] = dataBestFilms.films;
+         const arrBestSeries: respFilmItem[] = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
+         const arrAdventure: respFilmItem[] = dataAdventure.items;
 
-      const arrPremieres: respFilmItem[] = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
-      const arrNewFilms: respFilmItem[] = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
-      const arrBestFilms: respFilmItem[] = dataBestFilms.films;
-      const arrBestSeries: respFilmItem[] = dataBestSeries.items.filter((el) => el.genres[0].genre !== 'мультфильм');
-      const arrAdventure: respFilmItem[] = dataAdventure.items;
-
-      createMainPoster(container, arrPremieres);
-      createNewsSection(container, 'Актуально', dataNews);
-      createSection(container, 'Премьеры', arrPremieres);
-      createSection(container, 'Новинки', arrNewFilms);
-      createSection(container, 'Лучшие фильмы', arrBestFilms);
-      createSection(container, 'Лучшие сериалы', arrBestSeries);
-      createSection(container, 'Приключения для всей семьи', arrAdventure);
+         createMainPoster(container, arrPremieres);
+         createNewsSection(container, 'Актуально', dataNews);
+         createSection(container, 'Премьеры', arrPremieres);
+         createSection(container, 'Новинки', arrNewFilms);
+         createSection(container, 'Лучшие фильмы', arrBestFilms);
+         createSection(container, 'Лучшие сериалы', arrBestSeries);
+         createSection(container, 'Приключения для всей семьи', arrAdventure);
+      } catch (error) {
+         console.log('Failed to get data');
+      }
    })();
 
    return mainElement;
