@@ -1,7 +1,7 @@
 import * as App from "../app/app";
 import { addElement } from "../utils/elementsBuilder";
 import { createPoster } from "./components/poster";
-import { filmsCountriesDataset, filmsDataset, filmsGenresDataset, seriesGenresDataset } from "./datasets/listsData";
+import * as Dataset from "./datasets/listsData";
 
 let pageNumber = 1;
 let pagesCount = 1000;
@@ -24,18 +24,55 @@ function createFilmsOrSeriesPage(): HTMLElement {
    const btnCountries = addElement('button', 'btn btn__lists-item', 'Страны');
    const btnYears = addElement('button', 'btn btn__lists-item', 'Годы');
    const listsContainer = addElement('div', 'lists__container');
-
+   
    mainElement.append(container);
    container.append(lists);
    lists.append(listsNav, listsContainer);
    listsNav.append(btnLists, btnGenres, btnCountries, btnYears);
+   const btns = listsNav.querySelectorAll('.btn');
 
    if (page === 'films') {
-      btnLists.addEventListener('click', () => createLists(listsContainer, filmsDataset));
-      btnGenres.addEventListener('click', () => createLists(listsContainer, filmsGenresDataset));
-      btnCountries.addEventListener('click', () => createLists(listsContainer, filmsCountriesDataset));
+      btnLists.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnLists.classList.add('_active');
+         createLists(listsContainer, Dataset.filmsTOP);
+      });
+      btnGenres.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnGenres.classList.add('_active');
+         createLists(listsContainer, Dataset.filmsGenres);
+      });
+      btnCountries.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnCountries.classList.add('_active');
+         createLists(listsContainer, Dataset.filmsCountries);
+      });
+      btnYears.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnYears.classList.add('_active');
+         createLists(listsContainer, Dataset.filmsYears);
+      });
    } else {
-      btnGenres.addEventListener('click', () => createLists(listsContainer, seriesGenresDataset));
+      btnLists.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnLists.classList.add('_active');
+         createLists(listsContainer, Dataset.seriesLists);
+      });
+      btnGenres.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnGenres.classList.add('_active');
+         createLists(listsContainer, Dataset.seriesGenres);
+      });
+      btnCountries.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnCountries.classList.add('_active');
+         createLists(listsContainer, Dataset.seriesCountries);
+      });
+      btnYears.addEventListener('click', () => {
+         btns.forEach((btn) => btn.classList.remove('_active'));
+         btnYears.classList.add('_active');
+         createLists(listsContainer, Dataset.seriesYears);
+      });
    }
 
    return mainElement;
@@ -121,26 +158,27 @@ async function showPosters(block: HTMLElement, list: listTOP | listFilms): Promi
                filmsType: listData.argums.filmsType,
                page: pageNumber
             }) as respfilmsWithFilters;
-         }
-
-         if (listData.argums.country) {
+         } else if (listData.argums.country) {
             data = await listData.getData({
                country: listData.argums.country,
                filmsType: listData.argums.filmsType,
                page: pageNumber
             }) as respfilmsWithFilters;
-         }
-
-         if (listData.argums.yearFrom && listData.argums.yearTo) {
+         } else if (listData.argums.yearFrom && listData.argums.yearTo) {
             data = await listData.getData({
                yearFrom: listData.argums.yearFrom,
                yearTo: listData.argums.yearTo,
                filmsType: listData.argums.filmsType,
                page: pageNumber
             }) as respfilmsWithFilters;
+         } else {
+            data = await listData.getData({
+               filmsType: listData.argums.filmsType,
+               page: pageNumber
+            }) as respfilmsWithFilters;
          }
 
-         sessionStorage.setItem(`${list.name}-${pageNumber}`, JSON.stringify(data));
+         if (String(data).length) sessionStorage.setItem(`${list.name}-${pageNumber}`, JSON.stringify(data));
       } else {
          data = JSON.parse(storage);
       }
