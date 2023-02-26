@@ -295,8 +295,6 @@ export async function showFilmPageWithPagination(
          const a1: HTMLElement = addElement('a', 'persons-film__link', '',
             [{ attr: 'href', attrValue: `/movie/${item.filmId}` }]);
          const posterIMG: string = imdbData.Poster === 'N/A' ? noPoster : imdbData.Poster || noPoster;
-         console.log('imdbData.Poster=', imdbData.Poster);
-         console.log('imdbData=', imdbData);
          const image: HTMLElement = addElement('img', '', '',
             [{ attr: 'src', attrValue: posterIMG },
             { attr: 'alt', attrValue: '' },
