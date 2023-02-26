@@ -1,7 +1,7 @@
 import * as App from "../app/app";
 import { addElement } from "../utils/elementsBuilder";
 import { createPoster } from "./components/poster";
-import { filmsDataset, filmsGenresDataset, seriesGenresDataset } from "./datasets/listsData";
+import { filmsCountriesDataset, filmsDataset, filmsGenresDataset, seriesGenresDataset } from "./datasets/listsData";
 
 let pageNumber = 1;
 let pagesCount = 1000;
@@ -33,6 +33,7 @@ function createFilmsOrSeriesPage(): HTMLElement {
    if (page === 'films') {
       btnLists.addEventListener('click', () => createLists(listsContainer, filmsDataset));
       btnGenres.addEventListener('click', () => createLists(listsContainer, filmsGenresDataset));
+      btnCountries.addEventListener('click', () => createLists(listsContainer, filmsCountriesDataset));
    } else {
       btnGenres.addEventListener('click', () => createLists(listsContainer, seriesGenresDataset));
    }

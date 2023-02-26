@@ -68,6 +68,7 @@ function createHomePage(): HTMLElement {
          dataNews = JSON.parse(storageNews);
       } else {
          dataPremieres = await getPremieres(year.toString(), month) as respPremieres;
+         console.log(String(dataPremieres).length);
          dataNewFilms = await getFilmsWithFilters(filtersNewFilms) as respfilmsWithFilters;
          dataBestFilms = await getTOP250() as respTop;
          dataBestSeries = await getFilmsWithFilters(filtersBestSeries) as respfilmsWithFilters;

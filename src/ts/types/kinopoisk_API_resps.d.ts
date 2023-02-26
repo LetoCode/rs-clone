@@ -21,6 +21,7 @@ interface respFilmItem {
    filmId: number,
    nameRu: string,
    nameEn: string,
+   nameOriginal?: string,
    year: number,
    posterUrl: string,
    posterUrlPreview: string,
