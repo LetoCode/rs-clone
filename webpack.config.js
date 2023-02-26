@@ -21,7 +21,7 @@ module.exports = ({ development }) => ({
    mode: development ? 'development' : 'production',
    devtool: development ? 'source-map' : false,
    optimization: {
-      minimize: false
+      minimize: development ? false : true,
    },
    performance: {
       hints: false

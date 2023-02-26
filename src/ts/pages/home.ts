@@ -177,8 +177,9 @@ function createNewsSection(block: HTMLElement, title: string, dataNews: respNews
       section.append(sectionItems);
       sectionItems.className = 'section__items_news';
       dataNews.articles.sort(() => Math.random() - Math.random());
-      for (let i = 0; i < Math.min(MAX_NEWS, dataNews.articles.length); i++) {
-         createNewsItem(sectionItems, dataNews.articles[i]);
+      const filteredDataNews: newsArticle[] = dataNews.articles.filter(el => el.author !== 'Goblin');
+      for (let i = 0; i < Math.min(MAX_NEWS, filteredDataNews.length); i++) {
+         createNewsItem(sectionItems, filteredDataNews[i]);
       }
       block.append(section);
    }

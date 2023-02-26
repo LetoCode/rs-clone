@@ -41,7 +41,6 @@ function showHeader(): HTMLElement {
 }
 
 function userInOut() {
-   console.log(sessionStorage.getItem('user'));
    if (sessionStorage.getItem('user')) {
       const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
       return `<a class="authentication__link" href="/">Привет, ${displayName}!</a>`;
