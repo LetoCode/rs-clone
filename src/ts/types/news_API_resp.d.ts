@@ -2,7 +2,7 @@ interface respNews {
    status: string,
    totalResults: string;
    articles: newsArticle[];
-};
+}
 
 
 interface newsArticle {
@@ -14,4 +14,4 @@ interface newsArticle {
    url: string;
    urlToImage: string;
    source: { id: string; name: string };
-};
+}

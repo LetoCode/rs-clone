@@ -1,6 +1,6 @@
 import { DOMAIN, KINOPOISK_URLS, API_KEYS, USED_API_KEYS } from "./kinopoiskURLs";
 
-export function getRequestOptions(useNewApiKey: boolean = false): requestOptions {
+export function getRequestOptions(useNewApiKey = false): requestOptions {
    if (!USED_API_KEYS.length) {
       if (API_KEYS.length) {
          const apiKey: string = API_KEYS.pop() as string;

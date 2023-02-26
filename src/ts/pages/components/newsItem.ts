@@ -13,16 +13,25 @@ export function createNewsItem(block: HTMLElement, data: newsArticle) {
       newsBody.append(newsSource);
    }
    const newsImage: HTMLElement = addElement('div', 'news-item__image');
-   try {
-      const newsPhoto: HTMLElement = addElement('img', 'news-item__image-photo', '',
-         [{ attr: 'src', attrValue: data.urlToImage }, { attr: 'alt', attrValue: logo }]);
-      newsImage.append(newsPhoto);
-
-   } catch (err: unknown) {
-      console.log('err catch', err);
-      console.log('fetch catch', data.urlToImage);
-   }
+   checkImagePromise(data.urlToImage)
+      .then(res => {
+         const newsPhoto: HTMLElement = addElement('img', 'news-item__image-photo', '',
+            [{ attr: 'src', attrValue: data.urlToImage }, { attr: 'alt', attrValue: 'no image here  ^_^' }]);
+         newsImage.append(newsPhoto);
+      })
+      .catch(rej => {
+         const newsPhoto: HTMLElement = addElement('img', 'news-item__image-photo', '',
+            [{ attr: 'src', attrValue: logo }, { attr: 'alt', attrValue: 'no image here  ^_^' }]);
+         newsImage.append(newsPhoto);
+      })
 
    newsItemContainer.append(newsItemOverlay, newsAnchor, newsImage, newsBody);
    block.append(newsItemContainer);
 }
+
+const checkImagePromise = (url: string) => new Promise((resolve, reject) => {
+   const img: HTMLImageElement = new Image();
+   img.addEventListener('load', resolve);
+   img.addEventListener('error', reject);
+   img.src = url;
+})

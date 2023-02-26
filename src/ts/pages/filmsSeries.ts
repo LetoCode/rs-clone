@@ -154,6 +154,6 @@ async function showPosters(block: HTMLElement, list: listTOP | listFilms): Promi
    arrData?.forEach(film => {
       createPoster(block, film)
    });
-};
+}
 
 export default filmsOrSeriesPage;

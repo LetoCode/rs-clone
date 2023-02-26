@@ -8,7 +8,7 @@ import noPoster from '../../assets/noPoster.gif';
 import { DATE_FORMAT } from "../utils/stringFormats";
 import { getIDfromPathname } from "../utils/endpoints";
 
-export const FILMS_ON_PAGE: number = 5;
+export const FILMS_ON_PAGE = 5;
 const PROFS: professionTranslate = {
    actor: 'Актер',
    director: 'Режиссер',
@@ -25,7 +25,6 @@ function personPage(): void {
 
 function createPersonPage(): HTMLElement {
    const id: string = getIDfromPathname();
-   console.log('id=', id)
    const mainElement: HTMLElement = document.createElement('div');
    mainElement.className = 'main';
 
@@ -236,7 +235,7 @@ function showDeathplace(personData: PersonByID, table: HTMLElement): void {
 function showSpouses(personData: PersonByID, table: HTMLElement): void {
    if (personData.spouses.length) {
       try {
-         let anchorsArray: Array<HTMLElement> = [];
+         const anchorsArray: Array<HTMLElement> = [];
          const spouse: Spouses[] = personData.spouses.filter(el => el.name) as Spouses[];
          if (spouse.length) {
             spouse.forEach(el => {
@@ -271,7 +270,7 @@ function getProfessions(films: personsFilm[]): [Set<string>, string] {
 
    const professionsCountValues: number[] = Object.values(professionsCount).sort((a, b) => b - a);
    const maxValue: number = professionsCountValues[0];
-   let theMostProfession: string = '';
+   let theMostProfession = '';
    for (const [key, value] of Object.entries(professionsCount)) {
       if (value === maxValue) theMostProfession = key;
    }
