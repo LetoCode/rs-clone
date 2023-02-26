@@ -2,6 +2,7 @@ import * as App from "../app/app";
 import { addElement } from "../utils/elementsBuilder";
 import { createPoster } from "./components/poster";
 import * as Dataset from "./datasets/listsData";
+import { setQueryParamsForLists } from "./handlers/filmsSeriesHandlers";
 
 let pageNumber = 1;
 let pagesCount = 1000;
@@ -32,65 +33,54 @@ function createFilmsOrSeriesPage(): HTMLElement {
    const btns = listsNav.querySelectorAll('.btn');
 
    if (page === 'films') {
-      btnLists.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnLists.classList.add('_active');
-         createLists(listsContainer, Dataset.filmsTOP);
-      });
-      btnGenres.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnGenres.classList.add('_active');
-         createLists(listsContainer, Dataset.filmsGenres);
-      });
-      btnCountries.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnCountries.classList.add('_active');
-         createLists(listsContainer, Dataset.filmsCountries);
-      });
-      btnYears.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnYears.classList.add('_active');
-         createLists(listsContainer, Dataset.filmsYears);
-      });
+      addBtnListeners(btns, btnLists, listsContainer, Dataset.filmsTOP, 'lists');
+      addBtnListeners(btns, btnGenres, listsContainer, Dataset.filmsGenres, 'genres');
+      addBtnListeners(btns, btnCountries, listsContainer, Dataset.filmsCountries, 'countries');
+      addBtnListeners(btns, btnYears, listsContainer, Dataset.filmsYears, 'years');
    } else {
-      btnLists.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnLists.classList.add('_active');
-         createLists(listsContainer, Dataset.seriesLists);
-      });
-      btnGenres.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnGenres.classList.add('_active');
-         createLists(listsContainer, Dataset.seriesGenres);
-      });
-      btnCountries.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnCountries.classList.add('_active');
-         createLists(listsContainer, Dataset.seriesCountries);
-      });
-      btnYears.addEventListener('click', () => {
-         btns.forEach((btn) => btn.classList.remove('_active'));
-         btnYears.classList.add('_active');
-         createLists(listsContainer, Dataset.seriesYears);
-      });
+      addBtnListeners(btns, btnLists, listsContainer, Dataset.seriesLists, 'lists');
+      addBtnListeners(btns, btnGenres, listsContainer, Dataset.seriesGenres, 'genres');
+      addBtnListeners(btns, btnCountries, listsContainer, Dataset.seriesCountries, 'countries');
+      addBtnListeners(btns, btnYears, listsContainer, Dataset.seriesYears, 'years');
    }
 
    return mainElement;
 }
 
-function createLists(container: HTMLElement, dataset: listTOP[] | listFilms[]): void {
-   container.innerHTML = '';
-   dataset.forEach(list => createListsItem(container, list));
+function addBtnListeners(btns: NodeListOf<Element>, btn: HTMLElement, container: HTMLElement, dataset: listTOP[] | listFilms[], value: string): void {
+   const search = window.location.search;
+   const params = new URLSearchParams(search);
+   const category = params.get('category');
+
+   if (category === value) {
+      btn.classList.add('_active');
+      container.innerHTML = '';
+      dataset.forEach(list => createListsItem(container, list));
+   }
+
+   btn.addEventListener('click', () => {
+      btns.forEach((btn) => btn.classList.remove('_active'));
+      btn.classList.add('_active');
+      setQueryParamsForLists('list', '');
+      setQueryParamsForLists('page', '');
+      setQueryParamsForLists('category', value);
+
+      container.innerHTML = '';
+      dataset.forEach(list => createListsItem(container, list));
+   });
 }
 
-function createListsItem(container: HTMLElement, list: listTOP | listFilms): void {
+export function createListsItem(container: HTMLElement, list: listTOP | listFilms): void {
    const listsItem = addElement('div', 'lists__item list');
    const listHeading = addElement('h2', 'list__heading', list.title);
 
    container.append(listsItem);
    listsItem.append(listHeading);
 
-   listsItem.addEventListener('click', () => showList(container, listsItem, list), { once: true });
+   listsItem.addEventListener('click', () => {
+      setQueryParamsForLists('list', list.name);
+      showList(container, listsItem, list);
+   }, { once: true });
 }
 
 function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP | listFilms): void {
@@ -132,6 +122,7 @@ async function showPosters(block: HTMLElement, list: listTOP | listFilms): Promi
    block.innerHTML = '';
    const storage = sessionStorage.getItem(`${list.name}-${pageNumber}`);
    let arrData: respFilmItem[] | undefined;
+   setQueryParamsForLists('page', `${pageNumber}`);
 
    if (list.isTop) {
       let data: respTop;
