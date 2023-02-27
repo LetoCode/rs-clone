@@ -84,7 +84,7 @@ function createHomePage(): HTMLElement {
 
          if (`${dataNews}`.length) sessionStorage.setItem('news', JSON.stringify(dataNews));
       }
-      
+
       try {
          const arrPremieres: respFilmItem[] = dataPremieres.items.filter((el) => el.nameRu).slice(0, 30);
          const arrNewFilms: respFilmItem[] = dataNewFilms.items.filter((el) => el.genres[0].genre !== 'музыка');
@@ -184,7 +184,9 @@ function createNewsSection(block: HTMLElement, title: string, dataNews: respNews
       section.append(sectionItems);
       sectionItems.className = 'section__items_news';
       dataNews.articles.sort(() => Math.random() - Math.random());
-      const filteredDataNews: newsArticle[] = dataNews.articles.filter(el => el.author !== 'Goblin');
+      const filteredDataNews: newsArticle[] = dataNews.articles.filter(el => {
+         return el.author !== 'Goblin' && el.source.name !== 'Oper.ru'
+      });
       for (let i = 0; i < Math.min(MAX_NEWS, filteredDataNews.length); i++) {
          createNewsItem(sectionItems, filteredDataNews[i]);
       }

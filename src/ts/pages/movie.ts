@@ -22,6 +22,7 @@ import avatar10 from '../../assets/avatars/smile_avatar10.png';
 import { DATE_FORMAT } from '../utils/stringFormats';
 import { getIDfromPathname } from '../utils/endpoints';
 import { addFavouritesBtn } from '../utils/elementsBuilder';
+import { filmsCountries, filmsGenres } from './datasets/listsData';
 
 const MAX_REVIEWS = 5;
 const MAX_SIMILAR = 5;
@@ -613,7 +614,12 @@ function showFilmCountry(filmData: respFilm, filmFilters: respFilters, table: HT
          let anchor: HTMLElement = addElement('span', 'table__country-nolink', countryName);
          if (countryId) {
             const id = countryId.id;
-            anchor = addElement('a', 'table__country-link table__link', countryName, [{ attr: 'href', attrValue: `/country/${id}` }]);
+            const findedfilmsCountry: listFilms | undefined = filmsCountries.find(el => el.argums.country === Number(id));
+            if (findedfilmsCountry) {
+               const name = findedfilmsCountry.name;
+               const link = filmData.serial ? `/series?category=countries&list=${name}-s` : `/films?category=countries&list=${name}`
+               anchor = addElement('a', 'table__country-link table__link', countryName, [{ attr: 'href', attrValue: link }]);
+            }
          }
          anchorsArray.push(anchor);
       });
@@ -632,7 +638,12 @@ function showFilmGenres(filmData: respFilm, filmFilters: respFilters, table: HTM
          let anchor: HTMLElement = addElement('span', 'table__country-nolink', genreName);
          if (genreId) {
             const id = genreId.id;
-            anchor = addElement('a', 'table__genre-link table__link', genreName, [{ attr: 'href', attrValue: `/genre/${id}` }]);
+            const findedfilmsGenres: listFilms | undefined = filmsGenres.find(el => el.argums.genres === Number(id));
+            if (findedfilmsGenres) {
+               const name = findedfilmsGenres.name;
+               const link = filmData.serial ? `/series?category=genres&list=${name}-s` : `/films?category=genres&list=${name}`
+               anchor = addElement('a', 'table__genre-link table__link', genreName, [{ attr: 'href', attrValue: link }]);
+            }
          }
          anchorsArray.push(anchor);
       });
@@ -816,7 +827,6 @@ function showFilmLength(filmData: respFilm, table: HTMLElement) {
 // init Swiper:
 function initSwiper() {
    setTimeout(() => {
-      console.log(document.querySelector('.mySwiper'));
       const swiper = new Swiper('.mySwiper', {
          // configure Swiper to use modules
          modules: [Navigation, Pagination],
