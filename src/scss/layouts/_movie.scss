@@ -728,3 +728,8 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
    background: linear-gradient(0deg, rgb(142, 120, 255) 0%, rgb(252, 125, 123) 100%);
    color: #fff;
 }
+
+.disabled {
+   background-color: #444;
+   cursor: default;
+}

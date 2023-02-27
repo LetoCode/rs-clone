@@ -113,9 +113,11 @@ export function addDeleteFilm(e: Event): void {
       const userDocRef: DocumentReference<DocumentData> = getUserDocRef(uid);
       if ((e.target as HTMLElement).classList.contains('active')) {
          deleteFilm(userDocRef, filmId);
+         (e.target as HTMLElement).innerText = 'Избранное';
          (e.target as HTMLElement).classList.remove('active');
       } else {
          addFilm(userDocRef, filmId);
+         (e.target as HTMLElement).innerText = 'В избранном';
          (e.target as HTMLElement).classList.add('active');
       }
    } else alert('Sign in first');
