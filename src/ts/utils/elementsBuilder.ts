@@ -1,8 +1,11 @@
+import { addDeleteFilm } from '../pages/auth-page';
+import { getUserData } from './firebase-utils';
+
 export function addElement(
    tag: string,
    classNames: string,
    content: string = '',
-   attributes: { attr: string, attrValue: string }[] = [],
+   attributes: { attr: string; attrValue: string }[] = [],
    dataSet: string = '',
    dataSetValue: string = ''
 ): HTMLElement {
@@ -19,12 +22,7 @@ export function addElement(
 }
 
 //only two columns
-export function addTableRow(
-   table: HTMLElement,
-   contents: [string, HTMLElement[]] | string[],
-   rowClassName: string,
-   tdClassName: string): void {
-
+export function addTableRow(table: HTMLElement, contents: [string, HTMLElement[]] | string[], rowClassName: string, tdClassName: string): void {
    const row: HTMLElement = document.createElement('tr');
    row.className = rowClassName;
    let columnCounter = 1;
@@ -35,7 +33,7 @@ export function addTableRow(
       } else {
          td.className = `col_${columnCounter}`;
       }
-      if (typeof content === "string") {
+      if (typeof content === 'string') {
          td.textContent = content;
       } else {
          for (const el of content) {
@@ -52,7 +50,10 @@ export function addCard(className: string, imageLink: string, header: string, in
    const card: HTMLElement = addElement('div', className);
 
    const imgContainer: HTMLElement = addElement('div', `${className}__image`);
-   const attrArr: { attr: string, attrValue: string }[] = [{ attr: 'src', attrValue: imageLink }, { attr: 'alt', attrValue: '' }]
+   const attrArr: { attr: string; attrValue: string }[] = [
+      { attr: 'src', attrValue: imageLink },
+      { attr: 'alt', attrValue: '' },
+   ];
    const img = addElement('img', '', '', attrArr);
    imgContainer.append(img);
    card.append(imgContainer);
@@ -80,4 +81,23 @@ export function addMenuElement(linkName: string, link: string): HTMLElement {
    const a: HTMLElement = addElement('a', 'aside-menu__link', linkName, [{ attr: 'href', attrValue: link }]);
    li.append(a);
    return li;
+}
+
+export function addFavouritesBtn(targetBlock: HTMLElement) {
+   const addDeleteFilmBtn: HTMLElement = addElement('div', 'top__btn', 'Избранное');
+
+   const filmId: string = window.location.search.replace('?', '');
+   if (sessionStorage.getItem('user')) {
+      const { uid }: userData = JSON.parse(sessionStorage.getItem('user') as string);
+      (async () => {
+         const { movie } = (await getUserData(uid)) as userData;
+         movie?.forEach((e) => {
+            if (e === filmId) addDeleteFilmBtn.classList.add('active');
+         });
+      })();
+   }
+
+   addDeleteFilmBtn.addEventListener('click', addDeleteFilm);
+
+   targetBlock.append(addDeleteFilmBtn);
 }

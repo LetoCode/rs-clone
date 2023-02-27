@@ -20,8 +20,7 @@ import avatar8 from '../../assets/avatars/smile_avatar8.png';
 import avatar9 from '../../assets/avatars/smile_avatar9.png';
 import avatar10 from '../../assets/avatars/smile_avatar10.png';
 import { DATE_FORMAT } from '../utils/stringFormats';
-import addBtn from '../../assets/addBtn.svg';
-import { addDeleteFilm } from '../../auth-page/auth-page';
+import { addFavouritesBtn } from '../utils/elementsBuilder';
 
 const MAX_REVIEWS: number = 5;
 const MAX_SIMILAR: number = 5;
@@ -140,26 +139,26 @@ function getTopBlock(
       const randomImageIndex = Math.floor(Math.random() * filmImages.items.length);
       const topImage: HTMLElement = addElement('div', 'top__image');
       topImage.style.backgroundImage = `url("${filmImages.items[randomImageIndex].imageUrl}")`;
+
       el.appendChild(topImage);
    } else {
       const topImage: HTMLElement = addElement('div', 'top__image');
       topImage.style.backgroundImage = `url("${filmData.posterUrl}")`;
+
       el.appendChild(topImage);
    }
 
    const topBlock: HTMLElement = addElement('div', 'top__block');
    const topPoster: HTMLElement = addElement('div', 'top__poster');
    const topInfo: HTMLElement = addElement('div', 'top__info info');
-   const addDeleteFilmBtn: HTMLElement = addElement('img', 'movie__about-img', '', [
-      { attr: 'src', attrValue: addBtn },
-      { attr: 'alt', attrValue: '' },
-   ]);
-   addDeleteFilmBtn.addEventListener('click', addDeleteFilm);
+
    embedPoster(topPoster, filmData);
    embedTopInfo(topInfo, filmData, filmStaff, filmBoxOffice, filmDistributions, filmFilters);
    embedRating(filmData, topInfo);
 
-   topBlock.append(topPoster, topInfo, addDeleteFilmBtn);
+   addFavouritesBtn(topPoster);
+
+   topBlock.append(topPoster, topInfo);
 
    el.appendChild(topBlock);
    fragment.appendChild(el);

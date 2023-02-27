@@ -6,7 +6,7 @@ import personPage from '../pages/person';
 import staffPage from '../pages/staff';
 import filmsOrSeriesPage from '../pages/filmsSeries';
 import authenticationPage from '../pages/authentication';
-import authPage from '../../auth-page/auth-page';
+import authPage from '../pages/auth-page';
 
 const ROUTER_PATHS: Paths = {
    '404': {

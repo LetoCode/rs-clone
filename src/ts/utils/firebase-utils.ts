@@ -11,6 +11,7 @@ import {
    signOut,
 } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, Firestore, updateDoc, DocumentReference, DocumentData, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { router } from '../router/router';
 
 const firebaseConfig: firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
@@ -41,7 +42,7 @@ export async function createUserDocumentFromAuth(userAuth: User, restInfo: objec
    const getUser = await getDoc(userDocRef);
    if (!getUser.exists()) {
       const { displayName, email } = userAuth;
-      const createdAt: Date = new Date();
+      const createdAt: number = Date.now();
 
       try {
          await setDoc(userDocRef, { displayName, email, createdAt, ...restInfo });
@@ -65,10 +66,10 @@ export async function signIn(email: string, password: string): Promise<UserCrede
    return await signInWithEmailAndPassword(auth, email, password);
 }
 
-export async function signOutUser(/*auth: Auth*/): Promise<void> {
-   //  signOut(auth);
+export async function signOutUser(): Promise<void> {
+   signOut(auth);
    sessionStorage.removeItem('user');
-   console.log('deleted');
+   router('/');
 }
 
 export async function getUserData(uid: string) {
