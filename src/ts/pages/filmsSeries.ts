@@ -8,6 +8,12 @@ let pageNumber = 1;
 let pagesCount = 1000;
 const listAmount = addElement('p', 'list__amount');
 
+const search = window.location.search;
+const params = new URLSearchParams(search);
+const queryCategory = params.get('category');
+const queryList = params.get('list');
+const queryPage = params.get('page');
+
 function filmsOrSeriesPage(): void {
    App.showPage(createFilmsOrSeriesPage);
 }
@@ -25,7 +31,7 @@ function createFilmsOrSeriesPage(): HTMLElement {
    const btnCountries = addElement('button', 'btn btn__lists-item', 'Страны');
    const btnYears = addElement('button', 'btn btn__lists-item', 'Годы');
    const listsContainer = addElement('div', 'lists__container');
-   
+
    mainElement.append(container);
    container.append(lists);
    lists.append(listsNav, listsContainer);
@@ -48,15 +54,6 @@ function createFilmsOrSeriesPage(): HTMLElement {
 }
 
 function addBtnListeners(btns: NodeListOf<Element>, btn: HTMLElement, container: HTMLElement, dataset: listTOP[] | listFilms[], value: string): void {
-   const search = window.location.search;
-   const params = new URLSearchParams(search);
-   const category = params.get('category');
-
-   if (category === value) {
-      btn.classList.add('_active');
-      container.innerHTML = '';
-      dataset.forEach(list => createListsItem(container, list));
-   }
 
    btn.addEventListener('click', () => {
       btns.forEach((btn) => btn.classList.remove('_active'));
@@ -66,11 +63,17 @@ function addBtnListeners(btns: NodeListOf<Element>, btn: HTMLElement, container:
       setQueryParamsForLists('category', value);
 
       container.innerHTML = '';
-      dataset.forEach(list => createListsItem(container, list));
+      dataset.forEach(list => createListsItem(container, list, value));
    });
+
+   if (queryCategory === value) {
+      btn.classList.add('_active');
+      container.innerHTML = '';
+      dataset.forEach(list => createListsItem(container, list, value));
+   }
 }
 
-export function createListsItem(container: HTMLElement, list: listTOP | listFilms): void {
+export function createListsItem(container: HTMLElement, list: listTOP | listFilms, value: string): void {
    const listsItem = addElement('div', 'lists__item list');
    const listHeading = addElement('h2', 'list__heading', list.title);
 
@@ -81,6 +84,17 @@ export function createListsItem(container: HTMLElement, list: listTOP | listFilm
       setQueryParamsForLists('list', list.name);
       showList(container, listsItem, list);
    }, { once: true });
+
+   if (queryCategory === value && queryList === list.name) {
+      window.onload = () => {
+         const listsItems: NodeListOf<HTMLElement> = document.querySelectorAll('.lists__item');
+         [...listsItems].forEach(element => {
+            if (element.textContent === list.title) {
+               element.click();
+            }
+         });
+      }
+   }
 }
 
 function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP | listFilms): void {
@@ -98,6 +112,9 @@ function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP 
    listAmount.textContent = '';
    listsItem.append(listAmount, listItems);
 
+   if (queryCategory && queryList && !!Number(queryPage)) {
+      pageNumber = Number(queryPage);
+   }
    showPosters(listItems, list);
 
    listsItem.append(listControls);
@@ -106,6 +123,7 @@ function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP 
    btnNext.addEventListener('click', () => {
       if (pageNumber < pagesCount) {
          pageNumber++;
+         setQueryParamsForLists('page', `${pageNumber}`);
          showPosters(listItems, list);
       }
    });
@@ -113,6 +131,7 @@ function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP 
    btnPrev.addEventListener('click', () => {
       if (pageNumber > 1) {
          pageNumber--;
+         setQueryParamsForLists('page', `${pageNumber}`);
          showPosters(listItems, list);
       }
    });
@@ -122,7 +141,6 @@ async function showPosters(block: HTMLElement, list: listTOP | listFilms): Promi
    block.innerHTML = '';
    const storage = sessionStorage.getItem(`${list.name}-${pageNumber}`);
    let arrData: respFilmItem[] | undefined;
-   setQueryParamsForLists('page', `${pageNumber}`);
 
    if (list.isTop) {
       let data: respTop;
