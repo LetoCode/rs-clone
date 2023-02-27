@@ -1,5 +1,5 @@
-import { addBurgerListener } from "../handlers/headerHandler";
-import { addSearchListener } from "../handlers/searchHandlers";
+import { addBurgerListener } from '../handlers/headerHandler';
+import { addSearchListener } from '../handlers/searchHandlers';
 
 function showHeader(): HTMLElement {
    const headerElement: HTMLElement = document.createElement('header');
@@ -43,7 +43,7 @@ function showHeader(): HTMLElement {
 function userInOut() {
    if (sessionStorage.getItem('user')) {
       const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
-      return `<a class="authentication__link" href="/">Привет, ${displayName}!</a>`;
+      return `<a class="authentication__link" href="/auth">Привет, ${displayName}!</a>`;
    } else return '<a class="authentication__link" href="/authentication">Войти</a>';
 }
 
