@@ -37,6 +37,22 @@ const ROUTER_PATHS: Paths = {
       cb: authPage,
       title: 'auth',
    },
+   person: {
+      cb: personPage,
+      title: 'person',
+   },
+   filmstaff: {
+      cb: staffPage,
+      title: 'movie staff',
+   },
+   films: {
+      cb: filmsOrSeriesPage,
+      title: 'films',
+   },
+   series: {
+      cb: filmsOrSeriesPage,
+      title: 'series',
+   },
 };
 
 export default ROUTER_PATHS;

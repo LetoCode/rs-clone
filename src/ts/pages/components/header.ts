@@ -36,14 +36,15 @@ function showHeader(): HTMLElement {
    </div>
    `;
    setTimeout(addSearchListener, 100);
+   setTimeout(addBurgerListener, 100);
    return headerElement;
 }
 
 function userInOut() {
    if (sessionStorage.getItem('user')) {
       const { displayName } = JSON.parse(sessionStorage.getItem('user') as string);
-      return `<a href="/auth">Привет, ${displayName}!</a>`;
-   } else return '<a href="/authentication">Войти</a>';
+      return `<a class="authentication__link" href="/auth">Привет, ${displayName}!</a>`;
+   } else return '<a class="authentication__link" href="/authentication">Войти</a>';
 }
 
 export default showHeader;

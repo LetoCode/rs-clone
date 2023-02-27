@@ -51,7 +51,7 @@ function createMoviePage(): HTMLElement {
 
    (async () => {
       const filmFilters: respFilters = (await Controller.getFilters()) as respFilters;
-      // const filmData: respFilm = await Controller.getFilm('77044') as respFilm;
+
       const filmData: respFilm = (await Controller.getFilm(id)) as respFilm;
       if (!filmData) router('/404');
       const filmVideos: respVideos = (await Controller.getVideos(id)) as respVideos;
@@ -60,12 +60,10 @@ function createMoviePage(): HTMLElement {
       const filmBoxOffice: respBoxOffice = (await Controller.getBoxOffice(id)) as respBoxOffice;
       const filmDistributions: respDistributions = (await Controller.getDistributions(id)) as respDistributions;
       const filmFacts: respFacts = (await Controller.getFacts(id)) as respFacts;
-      //const filmFacts: respFacts = await Controller.getFacts('326') as respFacts;
+
       const filmReviews: respReviews = (await Controller.getReviews(id, 1, 'USER_POSITIVE_RATING_DESC')) as respReviews;
-      // const filmReviews: respReviews = await Controller.getReviews('77044', 1, 'USER_POSITIVE_RATING_DESC') as respReviews;
+
       const filmSimilar: respSimilars = (await Controller.getSimilars(id)) as respSimilars;
-      //const filmSimilar: respSimilars = await Controller.getSimilars('77044') as respSimilars;
-      //const film1: respfilmsWithFilters = await Controller.getFilmsWithFilters({ keyword: 'друзья', page: 1 }) as respfilmsWithFilters;
 
       const movieContainer: HTMLElement = addElement('div', 'container movie');
 
@@ -93,9 +91,8 @@ function createMoviePage(): HTMLElement {
       }
 
       if (filmData.serial) {
-         //const filmSeasons: respSeasons = await Controller.getSeasons('77044') as respSeasons;
          const filmSeasons: respSeasons = (await Controller.getSeasons(id)) as respSeasons;
-         console.log(filmSeasons);
+
          if (filmSeasons.total) {
             const serialsBlock: DocumentFragment = getSeasonsBlock(filmSeasons, asideList);
             rightBody.append(serialsBlock);
