@@ -15,8 +15,8 @@ function showHeader(): HTMLElement {
          </div>
          <nav class="header__nav">
             <a class="nav__item" href="/">Главная</a>
-            <a class="nav__item" href="/films">Фильмы</a>
-            <a class="nav__item" href="/series">Сериалы</a>
+            <a class="nav__item" href="/films?category=lists">Фильмы</a>
+            <a class="nav__item" href="/series?category=lists">Сериалы</a>
          </nav>
          <div class="header__right">
            <input type="search" class="header__search" placeholder="Поиск">
