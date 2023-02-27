@@ -17,17 +17,18 @@ interface respCompanies {
 }
 
 interface respFilmItem {
-   kinopoiskId: number;
-   filmId: number;
-   nameRu: string;
-   nameEn: string;
-   year: number;
-   posterUrl: string;
-   posterUrlPreview: string;
-   countries: respCountry[];
-   duration: number;
-   premiereRu: string;
-   genres: respGenre[];
+   kinopoiskId: number,
+   filmId: number,
+   nameRu: string,
+   nameEn: string,
+   nameOriginal?: string,
+   year: number,
+   posterUrl: string,
+   posterUrlPreview: string,
+   countries: respCountry[],
+   duration: number,
+   premiereRu: string,
+   genres: respGenre[]
 }
 
 //Premeires
