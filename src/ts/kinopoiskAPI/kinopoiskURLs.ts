@@ -10,7 +10,11 @@ export const API_KEYS: string[] = [
    '092ee281-33c1-4042-b861-55bc57b55677',
    '66723cba-ea77-458f-80d5-57e3db4430c1',
    '8167b251-d760-4ba3-9312-1fc06c47db00',
-   'cf8d7ed7-bb71-4966-b14e-9426b9242d99'
+   'cf8d7ed7-bb71-4966-b14e-9426b9242d99',
+   '0564a646-bda0-46ac-89b4-a020485b1ac0',
+   '87e3a185-c924-43e0-a3b0-fb2133e1c5c2',
+   '2b0b1922-ffa3-4503-8527-c0d3e7dd053a',
+   '74f36d08-9c7b-424f-a1fa-6eb17bead598'
 ];
 
 export const USED_API_KEYS: string[] = [];

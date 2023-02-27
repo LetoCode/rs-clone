@@ -32,9 +32,32 @@
 
 .lists__nav {
     margin-bottom: 40px;
+
+    @include media-tablet {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        .btn__lists-item {
+            margin: 0;
+        }
+    }
 }
 
 .list__controls {
     display: flex;
     justify-content: space-between;
+}
+
+.list__params {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.list__page-number {
+    @include media-tablet {
+        display: none;
+    }
 }
