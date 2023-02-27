@@ -93,12 +93,16 @@ export function addFavouritesBtn(targetBlock: HTMLElement) {
       (async () => {
          const { movie } = (await getUserData(uid)) as userData;
          movie?.forEach((e) => {
-            if (e === filmId) addDeleteFilmBtn.classList.add('active');
+            if (e === filmId) {
+               addDeleteFilmBtn.classList.add('active');
+               addDeleteFilmBtn.innerText = 'В избранном';
+            }
          });
       })();
+      addDeleteFilmBtn.addEventListener('click', addDeleteFilm);
+   } else {
+      addDeleteFilmBtn.classList.add('disabled');
    }
-
-   addDeleteFilmBtn.addEventListener('click', addDeleteFilm);
 
    targetBlock.append(addDeleteFilmBtn);
 }
