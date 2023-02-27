@@ -29,7 +29,8 @@ export function createPoster(block: HTMLElement, data: respFilmItem): void {
    poster.append(posterTitle);
    posterTitle.className = 'poster__title';
    if (film.nameRu) posterTitle.textContent = film.nameRu;
-   else posterTitle.textContent = film.nameEn;
+   else if (film.nameEn) posterTitle.textContent = film.nameEn;
+   else if (film.nameOriginal) posterTitle.textContent = film.nameOriginal;
 
    poster.append(posterDesc);
    posterDesc.className = 'poster__desc';

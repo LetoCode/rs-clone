@@ -9,14 +9,14 @@ interface professionTranslate {
 }
 
 type listTOP = {
-   isTop: boolean;
+   isTop: true;
    name: string;
    title: string;
    getData: (page?: number) => Promise<string | respTop>;
 }
 
 type listFilms = {
-   isTop: boolean;
+   isTop: false;
    name: string;
    title: string;
    getData: (object: argumentForFilmSearch) => Promise<string | respfilmsWithFilters>;
