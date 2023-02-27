@@ -83,7 +83,7 @@ function createMoviePage(): HTMLElement {
       const actorsBlock: DocumentFragment = getActorsBlock(filmStaff, asideList, id);
       rightBody.append(actorsBlock);
 
-      if (filmVideos.total > 0) {
+      if (filmVideos.items.findIndex((el) => el.site.toLocaleUpperCase() === 'YOUTUBE') >= 0) {
          const trailerBlock: DocumentFragment = getTrailerBlock(filmVideos, asideList);
          rightBody.append(trailerBlock);
       }
