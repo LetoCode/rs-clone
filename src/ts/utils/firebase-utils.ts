@@ -10,7 +10,8 @@ import {
    UserCredential,
    signOut,
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, Firestore, SnapshotOptions, DocumentData, DocumentReference, initializeFirestore } from 'firebase/firestore';
+import { doc, getDoc, setDoc, Firestore, DocumentData, DocumentReference, initializeFirestore, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { router } from '../router/router';
 
 const firebaseConfig: firebaseConfig = {
    apiKey: 'AIzaSyB1xRJRbuP1nkuHZCtLehrxm255iRAjDsA',
@@ -34,8 +35,6 @@ export function sighInWithGooglePopup(): Promise<UserCredential> {
    return signInWithPopup(auth, googleProvider);
 }
 
-// export const db: Firestore = getFirestore();
-
 export const db: Firestore = initializeFirestore(firebaseApp, {
    experimentalForceLongPolling: true,
 });
@@ -45,7 +44,7 @@ export async function createUserDocumentFromAuth(userAuth: User, restInfo: objec
    const getUser = await getDoc(userDocRef);
    if (!getUser.exists()) {
       const { displayName, email } = userAuth;
-      const createdAt: Date = new Date();
+      const createdAt: number = Date.now();
 
       try {
          await setDoc(userDocRef, { displayName, email, createdAt, ...restInfo });
@@ -69,18 +68,33 @@ export async function signIn(email: string, password: string): Promise<UserCrede
    return await signInWithEmailAndPassword(auth, email, password);
 }
 
-export async function signOutUser(/*auth: Auth*/): Promise<void> {
-   //  signOut(auth);
+export async function signOutUser(): Promise<void> {
+   signOut(auth);
    sessionStorage.removeItem('user');
-   console.log('deleted');
+   router('/');
 }
 
-export async function getUserData(uid: string): Promise<DocumentData | undefined> {
-   const userDocRef = doc(db, 'users', uid);
+export async function getUserData(uid: string) {
+   const userDocRef = getUserDocRef(uid);
    const getUser = await getDoc(userDocRef);
    return getUser.data();
 }
 
 export async function storage(uid: string): Promise<void> {
    sessionStorage.setItem('user', JSON.stringify(Object.assign({ uid: uid }, await getUserData(uid))));
+}
+
+export async function updateUserDoc(userDocRef: DocumentReference<DocumentData>, obj: object = {}) {
+   updateDoc(userDocRef, obj);
+}
+
+export function deleteFilm(userDocRef: DocumentReference<DocumentData>, filmId: string) {
+   updateDoc(userDocRef, { movie: arrayRemove(filmId) });
+}
+export function addFilm(userDocRef: DocumentReference<DocumentData>, filmId: string) {
+   updateDoc(userDocRef, { movie: arrayUnion(filmId) });
+}
+
+export function getUserDocRef(uid: string) {
+   return doc(db, 'users', uid);
 }

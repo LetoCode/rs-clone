@@ -26,6 +26,9 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
    transform: translateY(-150px);
    display: flex;
    gap: 30px;
+   @include between-tablet-and-mobile {
+      flex-direction: column;
+   }
 }
 
 .top__poster {
@@ -38,7 +41,11 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
    }
 
    @include between-tablet-and-mobile {
-      display: none;
+      width: 100%;
+      font-size: 14px;
+      & img {
+         display: none;
+      }
    }
 }
 
@@ -699,4 +706,25 @@ $COLOR_OPTIONAL: rgba(255, 255, 255, 0.6);
    padding-bottom: 30px;
    font-weight: 500;
    font-size: 150%;
+}
+
+.top__btn {
+   font-size: 16px;
+   font-weight: 500;
+   margin-top: 17px;
+   padding: 10px 20px;
+   cursor: pointer;
+   display: block;
+   border-radius: 25px;
+   background-color: #fff;
+   color: #000;
+   text-align: center;
+   @include between-tablet-and-mobile {
+      margin-top: 0;
+   }
+}
+
+.active {
+   background: linear-gradient(0deg, rgb(142, 120, 255) 0%, rgb(252, 125, 123) 100%);
+   color: #fff;
 }

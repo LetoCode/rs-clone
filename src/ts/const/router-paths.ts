@@ -1,11 +1,12 @@
-import notFoundPage from "../pages/notFound";
-import homePage from "../pages/home";
-import moviePage from "../pages/movie";
-import testApi from "../pages/testKinopoiskApi";
-import personPage from "../pages/person";
-import staffPage from "../pages/staff";
-import filmsOrSeriesPage from "../pages/filmsSeries";
+import notFoundPage from '../pages/notFound';
+import homePage from '../pages/home';
+import moviePage from '../pages/movie';
+import testApi from '../pages/testKinopoiskApi';
+import personPage from '../pages/person';
+import staffPage from '../pages/staff';
+import filmsOrSeriesPage from '../pages/filmsSeries';
 import authenticationPage from '../pages/authentication';
+import authPage from '../pages/auth-page';
 
 const ROUTER_PATHS: Paths = {
    '404': {
@@ -34,11 +35,11 @@ const ROUTER_PATHS: Paths = {
    },
    films: {
       cb: filmsOrSeriesPage,
-      title: 'films'
+      title: 'films',
    },
    series: {
       cb: filmsOrSeriesPage,
-      title: 'series'
+      title: 'series',
    },
    testapi: {
       cb: testApi,
@@ -47,6 +48,10 @@ const ROUTER_PATHS: Paths = {
    authentication: {
       cb: authenticationPage,
       title: 'authentication',
+   },
+   auth: {
+      cb: authPage,
+      title: 'auth',
    },
 };
 

@@ -6,9 +6,9 @@
 @import 'scss/abstarct/mixins';
 
 // Base
-@import "scss/base/nullstyle";
-@import "scss/base/base";
-@import "scss/base/buttons";
+@import 'scss/base/nullstyle';
+@import 'scss/base/base';
+@import 'scss/base/buttons';
 
 //Layouts
 @import 'scss/layouts/header';
@@ -19,8 +19,9 @@
 @import 'scss/layouts/person';
 @import 'scss/layouts/staff';
 @import 'scss/layouts/authentication';
+@import 'scss/layouts/auth';
 
 // Components
-@import "scss/components/sections";
-@import "scss/components/news";
-@import "scss/components/lists";
+@import 'scss/components/sections';
+@import 'scss/components/news';
+@import 'scss/components/lists';

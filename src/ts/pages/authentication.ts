@@ -63,7 +63,7 @@ function addSignInListener(): void {
          router('/');
       } catch (err: unknown) {
          if (err instanceof Error) {
-            alert(`Error: ${err.name}, Message: ${err.message}`);
+            alert(`${err.message}`);
          } else {
             console.error(`Unknown error: ${err}`);
          }
@@ -98,7 +98,7 @@ function addSignUpListener(): void {
          router('/');
       } catch (err: unknown) {
          if (err instanceof Error) {
-            console.error(`Error: ${err.name}, Message: ${err.message}`);
+            alert(`${err.message}`);
          } else {
             console.error(`Unknown error: ${err}`);
          }

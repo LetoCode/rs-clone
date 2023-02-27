@@ -1,0 +1,83 @@
+.main {
+   margin: 0 15px;
+   font-size: 16px;
+   @include between-tablet-and-mobile {
+      font-size: 14px;
+   }
+   @include media-mobile {
+      font-size: 12px;
+   }
+}
+
+.auth__top {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 40px;
+   @include media-mobile {
+      display: block;
+   }
+}
+
+.auth__title {
+   font-size: 2.4em;
+   @include media-mobile {
+      font-size: 2em;
+   }
+}
+
+.auth__name {
+   margin-top: 10px;
+}
+
+.auth__sign-out-btn {
+   font-size: 16px;
+   font-weight: 500;
+   margin-top: 17px;
+   padding: 10px 20px;
+   cursor: pointer;
+   display: block;
+   border-radius: 25px;
+   background-color: #fff;
+   color: #000;
+   @include media-mobile {
+      text-align: center;
+   }
+}
+
+.auth__sign-out-btn:hover,
+.auth__sign-out-btn:active {
+   background: linear-gradient(0deg, rgb(142, 120, 255) 0%, rgb(252, 125, 123) 100%);
+   color: #fff;
+}
+
+.auth__movies-section {
+   margin-top: 15px;
+}
+
+.auth__no-movie {
+   margin-top: 10px;
+}
+
+.auth__movies-container {
+   display: grid;
+   grid-gap: 10px;
+   grid-template-columns: repeat(5, 20%);
+   margin-bottom: 40px;
+   @include media-laptop {
+      display: grid;
+      grid-gap: 10px;
+      grid-template-rows: repeat(2, 50%);
+      grid-template-columns: repeat(3, 32.333%);
+      margin-bottom: 40px;
+   }
+
+   @include media-mobile {
+      grid-template-rows: repeat(3, 33.333%);
+      grid-template-columns: repeat(2, 49%);
+   }
+
+   @include media-mobilesmall {
+      display: block;
+   }
+}
