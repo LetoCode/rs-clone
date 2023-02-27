@@ -7,6 +7,7 @@ import { setQueryParamsForLists } from "./handlers/filmsSeriesHandlers";
 let pageNumber = 1;
 let pagesCount = 1000;
 const listAmount = addElement('p', 'list__amount');
+const listPageNumber = addElement('p', 'list__page-number', `Страница: ${pageNumber}`);
 
 const search = window.location.search;
 const params = new URLSearchParams(search);
@@ -105,15 +106,17 @@ function showList(container: HTMLElement, listsItem: HTMLElement, list: listTOP 
    listsItem.classList.add('list_active');
 
    const listItems = addElement('div', 'list__items');
+   const listParams = addElement('div', 'list__params');
    const listControls = addElement('div', 'list__controls');
    const btnPrev = addElement('button', 'btn btn__prev', 'Назад');
    const btnNext = addElement('button', 'btn btn__next', 'Вперед');
 
    listAmount.textContent = '';
-   listsItem.append(listAmount, listItems);
+   listsItem.append(listParams, listItems);
+   listParams.append(listAmount, listPageNumber);
 
    if (queryCategory && queryList && !!Number(queryPage)) {
-      pageNumber = Number(queryPage);
+      if (Number(queryPage) < pagesCount) pageNumber = Number(queryPage);
    }
    showPosters(listItems, list);
 
@@ -196,6 +199,7 @@ async function showPosters(block: HTMLElement, list: listTOP | listFilms): Promi
          arrData = data.items;
          pagesCount = data.totalPages;
          listAmount.textContent = `Найдено: ${data.total}`;
+         listPageNumber.textContent = `Страница: ${pageNumber}`;
       }
    }
 
