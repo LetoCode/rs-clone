@@ -3,6 +3,7 @@ import { getUserData, getUserDocRef, addFilm, deleteFilm, signOutUser } from '..
 import { addElement } from '../utils/elementsBuilder';
 import { getFilm } from '../kinopoiskAPI/controller';
 import { router } from '../router/router';
+import { getIDfromPathname } from '../utils/endpoints';
 import * as App from '../app/app';
 
 export default function authPage(): void {
@@ -76,7 +77,7 @@ function createMoviePoster(block: HTMLElement, data: respFilm): void {
    const posterTitle = document.createElement('p');
    const posterDesc = document.createElement('p');
    const id = film.kinopoiskId;
-   const pathname = `/movie?${id}`;
+   const pathname = `/movie/${id}`;
 
    block.append(poster);
    poster.className = 'section__poster';
@@ -105,7 +106,8 @@ function createMoviePoster(block: HTMLElement, data: respFilm): void {
 }
 
 export function addDeleteFilm(e: Event): void {
-   const filmId: string = window.location.search.replace('?', '');
+   const filmId: string = getIDfromPathname();
+
    if (sessionStorage.getItem('user')) {
       const { uid }: userData = JSON.parse(sessionStorage.getItem('user') as string);
       const userDocRef: DocumentReference<DocumentData> = getUserDocRef(uid);

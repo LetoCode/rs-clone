@@ -21,7 +21,7 @@ module.exports = ({ development }) => ({
    mode: development ? 'development' : 'production',
    devtool: development ? 'source-map' : false,
    optimization: {
-      minimize: false
+      minimize: development ? false : true,
    },
    performance: {
       hints: false
@@ -72,7 +72,7 @@ module.exports = ({ development }) => ({
       ...esLintPlugin(development),
       new HtmlWebpackPlugin({
          template: './src/index.html',
-         favicon: "./src/public/favicon.png"
+         favicon: "./src/public/favicon.svg"
       }),
       new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
       new CopyPlugin({

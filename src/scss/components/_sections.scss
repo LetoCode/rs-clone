@@ -18,11 +18,18 @@
     flex-direction: column;
     gap: 15px;
     margin: 40px;
+    @include between-tablet-and-mobile {
+        width: 70%;
+    }
 }
 
 .greeting__title {
     font-size: 4rem;
     line-height: normal;
+
+    @include between-tablet-and-mobile {
+        font-size: 3rem;
+    }
 }
 
 .greeting__params {

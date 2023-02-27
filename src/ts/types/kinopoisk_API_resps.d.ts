@@ -1,6 +1,6 @@
 interface allKinopoiskAPIs {
    name: string;
-   cb: Function;
+   cb: typeof cb;
 }
 
 //General

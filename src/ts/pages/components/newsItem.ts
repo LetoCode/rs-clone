@@ -1,7 +1,7 @@
 import { addElement } from "../../utils/elementsBuilder";
+import logo from '../../../public/logo.svg';
 
 export function createNewsItem(block: HTMLElement, data: newsArticle) {
-
    const newsItemContainer: HTMLElement = addElement('div', 'section__news-item news-item');
    const newsItemOverlay: HTMLElement = addElement('div', 'news-item-overlay');
    const newsAnchor: HTMLElement = addElement('a', 'news-item__link', '', [{ attr: 'href', attrValue: data.url }]);
@@ -13,8 +13,25 @@ export function createNewsItem(block: HTMLElement, data: newsArticle) {
       newsBody.append(newsSource);
    }
    const newsImage: HTMLElement = addElement('div', 'news-item__image');
-   const newsPhoto: HTMLElement = addElement('img', 'news-item__image-photo', '', [{ attr: 'src', attrValue: data.urlToImage }, { attr: 'alt', attrValue: '' }]);
-   newsImage.append(newsPhoto);
+   checkImagePromise(data.urlToImage)
+      .then(res => {
+         const newsPhoto: HTMLElement = addElement('img', 'news-item__image-photo', '',
+            [{ attr: 'src', attrValue: data.urlToImage }, { attr: 'alt', attrValue: 'no image here  ^_^' }]);
+         newsImage.append(newsPhoto);
+      })
+      .catch(rej => {
+         const newsPhoto: HTMLElement = addElement('img', 'news-item__image-photo', '',
+            [{ attr: 'src', attrValue: logo }, { attr: 'alt', attrValue: 'no image here  ^_^' }]);
+         newsImage.append(newsPhoto);
+      })
+
    newsItemContainer.append(newsItemOverlay, newsAnchor, newsImage, newsBody);
    block.append(newsItemContainer);
 }
+
+const checkImagePromise = (url: string) => new Promise((resolve, reject) => {
+   const img: HTMLImageElement = new Image();
+   img.addEventListener('load', resolve);
+   img.addEventListener('error', reject);
+   img.src = url;
+})

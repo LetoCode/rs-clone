@@ -105,7 +105,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
 
    const rand = Math.floor(Math.random() * dataArr.length);
    const film = dataArr[rand];
-   const pathname = `/movie?${film.kinopoiskId}`;
+   const pathname = `/movie/${film.kinopoiskId}`;
 
    block.append(greeting);
    greeting.className = 'greeting';
@@ -139,7 +139,7 @@ function createMainPoster(block: HTMLElement, dataArr: respFilmItem[]): void {
       greetingInfo.append(greetingParams);
       greetingParams.className = 'greeting__params';
       if (data.year) greetingParams.textContent = `${data.year}`;
-      if (data.genres[0].genre) greetingParams.textContent += ` • ${data.genres[0].genre}`;
+      if (data.genres && data.genres[0].genre) greetingParams.textContent += ` • ${data.genres[0].genre}`;
       if (data.ratingAgeLimits) greetingParams.textContent += ` • ${data.ratingAgeLimits.slice(3)}+`;
    })
 }
@@ -176,10 +176,11 @@ function createNewsSection(block: HTMLElement, title: string, dataNews: respNews
       sectionTitle.textContent = title;
       section.append(sectionItems);
       sectionItems.className = 'section__items_news';
-      for (let i = 0; i < MAX_NEWS; i++) {
-         createNewsItem(sectionItems, dataNews.articles[i]);
+      dataNews.articles.sort(() => Math.random() - Math.random());
+      const filteredDataNews: newsArticle[] = dataNews.articles.filter(el => el.author !== 'Goblin');
+      for (let i = 0; i < Math.min(MAX_NEWS, filteredDataNews.length); i++) {
+         createNewsItem(sectionItems, filteredDataNews[i]);
       }
-
       block.append(section);
    }
 }

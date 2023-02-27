@@ -1,3 +1,4 @@
+import { addBurgerListener } from '../handlers/headerHandler';
 import { addSearchListener } from '../handlers/searchHandlers';
 
 function showHeader(): HTMLElement {
@@ -9,6 +10,7 @@ function showHeader(): HTMLElement {
          <div class="header__logo">
               <a href="/">
                  <img class="logo__img" src="../logo.svg" alt="logo">
+                 <img class="logo__img_short" src="../logo_short.png" alt="logo">
               </a>
          </div>
          <nav class="header__nav">
@@ -19,6 +21,16 @@ function showHeader(): HTMLElement {
          <div class="header__right">
            <input type="search" class="header__search" placeholder="Поиск">
            ${userInOut()}
+         </div>
+         <nav class="header__nav header__nav_burger">
+         <input type="search" class="header__search" placeholder="Поиск">
+            <a class="nav__item" href="/">Главная</a>
+            <a class="nav__item" href="/films">Фильмы</a>
+            <a class="nav__item" href="/series">Сериалы</a>
+            ${userInOut()}
+         </nav>
+         <div class="header__burger">
+            <span></span>
          </div>
       </div>
    </div>

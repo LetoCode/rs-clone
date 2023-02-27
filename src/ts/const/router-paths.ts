@@ -17,6 +17,10 @@ const ROUTER_PATHS: Paths = {
       cb: homePage,
       title: 'PoiskKino',
    },
+   'index.html': {
+      cb: homePage,
+      title: 'PoiskKino',
+   },
    movie: {
       cb: moviePage,
       title: 'movie',

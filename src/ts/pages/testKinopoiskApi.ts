@@ -29,7 +29,7 @@ function createTestPage(): HTMLElement {
    return mainElement;
 }
 
-async function clickOnTestButton(cb: Function) {
+async function clickOnTestButton(cb: allKinopoiskAPIs['cb']) {
    const containerText: HTMLElement = document.querySelector('.test-container__text') as HTMLElement;
    let viewData = 'ERROR may be?';
    let data: Promise<Response>;
@@ -60,7 +60,6 @@ async function clickOnTestButton(cb: Function) {
       } else {
          data = await cb(329);
       }
-      console.log(data);
       if (data) viewData = JSON.stringify(data);
 
       containerText.textContent = viewData;
