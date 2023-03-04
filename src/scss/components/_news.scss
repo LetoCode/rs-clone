@@ -1,0 +1,141 @@
+.section_news {
+   max-height: 650px;
+   width: 100%;
+   margin-bottom: 20px;
+   h2 {
+      margin-bottom: 20px;
+   }
+}
+
+.section__items_news {
+   width: 100%;
+   height: 610px;
+   display: grid !important;
+   grid-template-columns: repeat(4, calc(100% / 4));
+   grid-template-rows: 50% 50%;
+   grid-auto-flow: row dense;
+
+   @include media-tablet {
+      grid-template-columns: repeat(2, calc(100% / 2));
+      grid-template-rows: repeat(4, calc(100% / 4));
+      height: 480px;
+   }
+
+   @include between-tablet-and-mobile {
+      display: block !important;
+   }
+}
+
+.news-item__image {
+   background: rgba(0, 0, 0, 0.5);
+}
+
+.news-item:first-child {
+   grid-column: 1 / 3;
+   grid-row: 1/ 3;
+   padding-left: 0px;
+
+   @include media-tablet {
+      grid-column: 1 / 2;
+      grid-row: 1/ 5;
+      .news-item__image {
+         display: block;
+      }
+   }
+
+   @include between-tablet-and-mobile {
+      display: block;
+   }
+
+   & .news-item__image {
+      height: 80%;
+   }
+
+   & .news-item__body {
+      height: 20%;
+   }
+
+   & .news-item__title {
+      font-size: 100%;
+      @include media-laptop {
+         font-size: 80%;
+      }
+   }
+}
+
+.news-item {
+   width: 100%;
+   height: 100%;
+   position: relative;
+   z-index: 1;
+   padding-left: 10px;
+   padding-bottom: 10px;
+
+   & .news-item-overlay {
+      position: absolute;
+      width: 100%;
+      height: 0;
+      left: 0;
+      bottom: 0;
+      background-color: transparent;
+      transition: all 0.3s ease;
+      z-index: 2;
+      pointer-events: none;
+   }
+
+   &:hover {
+      .news-item-overlay {
+         background-color: rgba(0, 0, 0, 0.4);
+         height: 100%;
+      }
+   }
+
+   @include between-tablet-and-mobile {
+      display: none;
+   }
+}
+
+.news-item__link {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+}
+
+.news-item__image {
+   width: 100%;
+   height: 50%;
+   // object-fit: contain;
+   overflow: hidden;
+   @include media-tablet {
+      display: none;
+   }
+}
+
+.news-item__image img {
+   object-fit: contain;
+   width: 100%;
+   height: 100%;
+}
+
+.news-item__body {
+   width: 100%;
+   height: 50%;
+   overflow: hidden;
+   @include media-tablet {
+      height: 100%;
+   }
+}
+
+.news-item__title {
+   font-size: 80%;
+   margin-top: 10px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   height: 70%;
+}
+
+.news-item__source {
+   height: 30%;
+}
